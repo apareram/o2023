@@ -1,0 +1,2 @@
+1234	alberto parera	fisica	30/7/1999	8.200000
+54321	diego altamirano	fisica	11/10/2000	8.600000
