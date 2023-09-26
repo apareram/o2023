@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
     comprobarLista(inicio);
 
     dibujarNodos(inicio);
-    for(i=0;)
+
     inicio = pop(inicio);
     comprobarLista(inicio);
     

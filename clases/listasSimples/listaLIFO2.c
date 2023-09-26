@@ -50,8 +50,8 @@ int main(int argc, char *argv[])
 
     dibujarNodos(inicio);
 
-    inicio = pop(inicio);
-    comprobarLista(inicio);
+    /*inicio = pop(inicio);
+    comprobarLista(inicio);*/
     
     printf("\nDame la palabra que deseas borrar: ");
     scanf("%s", pal);

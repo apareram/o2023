@@ -116,8 +116,18 @@ extern nodo *eliminarPalabra(char pal[], nodo *pt)
     }
     else
     {
-
+        while(recorre != NULL)
+        {
+            recorre = recorre->next;
+            if((recorre != NULL) && (strcmp(pal, recorre->palabra) == 0))
+            {
+                ubica->next = recorre->next;
+                free(recorre);
+                break;
+            }
+            ubica= recorre;
+        }
     }
-    
+
     return pt;
 }
