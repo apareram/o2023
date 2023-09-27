@@ -218,7 +218,6 @@ extern void imprimirPromedios(nodo1 *pt, float prom)
             }
             else
             {
-                printf("\nNo hay más alumnos con un promedio igual o mayor al ingresado.\n");
             }
             pt = pt->siguiente;
         }

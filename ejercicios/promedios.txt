@@ -1,1 +1,10 @@
+alejandro	8.833333
+jorge	8.200000
+valeria	9.400001
+paula	8.466666
+marco	10.000000
+daniela	9.166667
+ximena	8.733334
+santiago	8.200000
+lorenzo	9.133333
 diego	8.366667
