@@ -1,7 +1,7 @@
 /*
 @file funciones.c
 @brief Este  archivo contiene las funciones que son llamadas desde
-       invertirFrases.c. 
+       invertirFrases.c y alumnos.c. 
 @author Alberto Parera Méndez
 @date 25/09/2023
 */
@@ -10,7 +10,7 @@
 
 /*
 @brief Esta función agrega un nodo al inicio de la lista con la operación
-       en listaLIFO.c.
+       en invertirFrases.c.
 @author Alberto Parera Méndez en la clase de Guillermo Gómez
 @date 21/09/2023
 @param pal[] y es una cadena de chars.
@@ -99,6 +99,16 @@ extern void guardarInvertida(nodo *pt)
     return;
 }
 
+/*
+@brief Esta función agrega un nodo al inicio del struct alumnos con la 
+       operación en alumnos.c.
+@author Alberto Parera Méndez
+@date 26/09/2023
+@param alumno es una estructura de tipo alumno.
+@param *pt es un apuntador del tipo nodo1.
+@return *pt es un apiuntador de tipo nodo1 que devuelve el nuevo inicio de
+        la lista.
+*/
 extern nodo1 *push2(tipoAlumno alumno, nodo1 *pt)
 {
     nodo1 *nuevo1;
@@ -116,6 +126,17 @@ extern nodo1 *push2(tipoAlumno alumno, nodo1 *pt)
     return pt;
 }
 
+/*
+@brief Esta función copia lo que se encuentra en el acrhivo de texto y lo
+       coloca en una lista LIFO.
+@author Alberto Parera Méndez 
+@date 26/09/2023
+@param archNom[] es una cadena que contiene el nombre del archivo de
+       texto.
+@param *pt es un apuntador del tipo nodo1.
+@return *pt es un apuntador de tipo nodo1 que devuelve el nuevo inicio de
+        la lista.
+*/
 extern nodo1 *leerDatos(char nomArch[])
 {
     FILE *fp;
@@ -140,6 +161,13 @@ extern nodo1 *leerDatos(char nomArch[])
     return pt;
 }
 
+/*
+@brief Esta función imprime en pantalla lo que se encuentra en la lista 
+       LIFO.
+@author Alberto Parera Méndez 
+@date 26/09/2023
+@param *pt es un apuntador del tipo nodo1.
+*/
 extern void imprimirLista(nodo1 *pt)
 {
     printf("\nComprobando que la lista está completa:\n");
@@ -158,6 +186,18 @@ extern void imprimirLista(nodo1 *pt)
     return;
 }
 
+/*
+@brief Esta función hace varias cosas:
+       1) Saca el promedio de las calificaciones que se encuentran en la
+          lista LIFO y las imprime en pantalla (mientras sean mayor o igual
+          a lo ingresado en la lista de comandos).
+       2) Crea un archivo de texto y guarda ahí los promedios que sean mayor 
+          o igual a lo ingresado en la lista de comandos.
+@author Alberto Parera Méndez 
+@date 26/09/2023
+@param *pt es un apuntador del tipo nodo1.
+@param prom es un flotante, el número que se ingreso en la linea de comandos.
+*/
 extern void imprimirPromedios(nodo1 *pt, float prom)
 {
     float promedio;
@@ -187,7 +227,7 @@ extern void imprimirPromedios(nodo1 *pt, float prom)
     {
         printf("\nLista vacía\n");
     }
-    
+
     fclose(fp);
 
     return;
