@@ -136,4 +136,59 @@ extern nodo1 *leerDatos(char nomArch[])
         pt = push2(alumno, pt);
     }
     fclose(fp);
+
+    return pt;
+}
+
+extern void imprimirLista(nodo1 *pt)
+{
+    printf("\nComprobando que la lista está completa:\n");
+    if(pt != NULL)
+    {
+        while(pt != NULL)
+        {
+            printf("%s\t%f\t%f\t%f\n", pt->alumno.nombre, pt->alumno.calCalc, pt->alumno.calFis, pt->alumno.calProg);
+            pt = pt->siguiente;
+        }
+    }
+    else
+    {
+        printf("\nLista vacía\n");
+    }
+    return;
+}
+
+extern void imprimirPromedios(nodo1 *pt, float prom)
+{
+    float promedio;
+    FILE *fp;
+
+    fp = fopen("promedios.txt", "w");
+
+    if(pt != NULL)
+    {
+        printf("\nPromedio de los alumnos:\n");
+        while(pt != NULL)
+        {
+            promedio = (pt->alumno.calCalc + pt->alumno.calFis + pt->alumno.calProg)/3.0;
+            if(promedio >= prom)
+            {
+                printf("%s\t%f\n", pt->alumno.nombre, promedio);
+                fprintf(fp, "%s\t%f\n", pt->alumno.nombre, promedio);
+            }
+            else
+            {
+                printf("\nNo hay más alumnos con un promedio igual o mayor al ingresado.\n");
+            }
+            pt = pt->siguiente;
+        }
+    }
+    else
+    {
+        printf("\nLista vacía\n");
+    }
+    
+    fclose(fp);
+
+    return;
 }

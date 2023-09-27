@@ -34,12 +34,17 @@
 #include "tipos.h"
 
 nodo1 *leerDatos(char nomArch[]);
+void imprimirLista(nodo1 *pt);
+void imprimirPromedios(nodo1 *pt, float prom);
 
 int main(int arc, char *argv[])
 {
     nodo1* inicio;
+
     inicio = NULL;
     inicio = leerDatos(argv[1]);
+    imprimirLista(inicio);
+    imprimirPromedios(inicio, atof(argv[2]));
 
     return 0;
 }

@@ -11,19 +11,19 @@ struct elemento
 typedef struct elemento nodo;
 
 struct alumno 
-     {
-        char nombre[40];
-        float calCalc;
-        float calFis;
-        float calProg;
-     };
+{
+    char nombre[40];
+    float calCalc;
+    float calFis;
+    float calProg;
+};
 
 typedef struct alumno tipoAlumno;
 
 struct elemento2
 {
-    tipoAlumno alumno[40];
-    struct elemento *siguiente;
+    tipoAlumno alumno;
+    struct elemento2 *siguiente;
 };
 
 typedef struct elemento2 nodo1;
