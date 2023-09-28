@@ -24,6 +24,7 @@ int main(int arc, char *argv[])
     cliente persona;
     nodo *inicio; //Stack (LIFO)
     nodo *first, *last; //Cola (FIFO)
+    char op;
 
     inicio = NULL;
     first = NULL;
@@ -72,6 +73,35 @@ int main(int arc, char *argv[])
     deQueueHist(&first, &last, fp2);
 
     fclose(fp2);
+
+    printf("\n\nQuieres atender a un cliente (s | n):\n");
+    scanf(" %c", &op);
+    while(op != 'n')
+    {
+        fp2 = fopen("historial.txt", "a");
+    if (fp2 == NULL)
+    {
+        printf("\nNo se pudo abrir el archivo de registro.\n");
+        exit(1);
+    }
+
+    deQueueHist(&first, &last, fp2);
+
+    fclose(fp2);
+
+    printf("\nEstos son los clientes en la cola:\n");
+    imprimirLista(inicio);
+    imprimirListaFIFO(first);
+    latteamericano(first);
+
+    printf("\nQuieres atender a otro cliente (s | n):\n");
+    scanf(" %c", &op);
+    }
+
+    printf("\nEstos son los clientes en la cola:\n");
+    imprimirLista(inicio);
+    imprimirListaFIFO(first);
+    latteamericano(first);
 
     return 0;
 }

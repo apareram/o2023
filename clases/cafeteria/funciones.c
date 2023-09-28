@@ -92,6 +92,28 @@ extern void imprimirListaFIFO(nodo *aux2)
     return;
 }
 
+void deQueue(nodo **ptfirst, nodo **ptlast)
+{
+    if (*ptfirst == NULL)
+    {
+        // La cola está vacía, no se puede eliminar nada.
+        printf("\nLa cola está vacía, no se puede eliminar nada.\n");
+        return;
+    }
+
+    nodo *temp = *ptfirst; // Nodo temporal para almacenar el primer elemento de la cola.
+    *ptfirst = (*ptfirst)->next; // Mover el puntero al primer elemento al siguiente nodo.
+
+    // Si después de eliminar el primer elemento la cola queda vacía, también actualiza el puntero de último.
+    if (*ptfirst == NULL)
+    {
+        *ptlast = NULL;
+    }
+
+    free(temp); // Libera la memoria del nodo eliminado.
+}
+
+
 extern void deQueueHist(nodo **ptfirst, nodo **ptlast, FILE *fp2)
 {
     if (*ptfirst == NULL)
@@ -144,7 +166,7 @@ extern void latteamericano(nodo *aux2)
     printf("\nHay %i clientes en cola de latte.\n", lat);
 
     tot = (35.00 * lat) + (20.00 * ame);
-    printf("\nEl total global de ventas estimado de esa cola es: %f \n", tot);
+    printf("\nEl total global de ventas estimado de esa cola es: %f\n", tot);
 
     return;
 }
