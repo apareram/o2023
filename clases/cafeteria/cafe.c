@@ -79,23 +79,29 @@ int main(int arc, char *argv[])
     while(op != 'n')
     {
         fp2 = fopen("historial.txt", "a");
-    if (fp2 == NULL)
-    {
-        printf("\nNo se pudo abrir el archivo de registro.\n");
-        exit(1);
-    }
+        if (fp2 == NULL)
+        {
+            printf("\nNo se pudo abrir el archivo de registro.\n");
+            exit(1);
+        }
 
-    deQueueHist(&first, &last, fp2);
+        deQueueHist(&first, &last, fp2);
 
-    fclose(fp2);
+        fclose(fp2);
 
-    printf("\nEstos son los clientes en la cola:\n");
-    imprimirLista(inicio);
-    imprimirListaFIFO(first);
-    latteamericano(first);
+        printf("\nEstos son los clientes en la cola:\n");
+        imprimirLista(inicio);
+        imprimirListaFIFO(first);
+        latteamericano(first);
 
-    printf("\nQuieres atender a otro cliente (s | n):\n");
-    scanf(" %c", &op);
+        printf("\nQuieres atender a otro cliente (s | n):\n");
+        scanf(" %c", &op);
+
+        if(&first == NULL && &last== NULL)
+        {
+            printf("\nYa no hay más clientes en la cola\n");
+
+        }
     }
 
     printf("\nEstos son los clientes en la cola:\n");
