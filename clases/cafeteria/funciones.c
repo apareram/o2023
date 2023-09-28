@@ -91,3 +91,60 @@ extern void imprimirListaFIFO(nodo *aux2)
 
     return;
 }
+
+extern void deQueueHist(nodo **ptfirst, nodo **ptlast, FILE *fp2)
+{
+    if (*ptfirst == NULL)
+    {
+        printf("\nLa cola está vacía, no se puede eliminar nada.\n");
+        return;
+    }
+
+    nodo *temp2 = *ptfirst;
+
+    if (fp2 != NULL)
+    {
+        fprintf(fp2, "%s\t%s\t%.2f\n", temp2->ticket.nombre, temp2->ticket.cafe, temp2->ticket.precio);
+    }
+
+    *ptfirst = (*ptfirst)->next; 
+
+    if (*ptfirst == NULL)
+    {
+        *ptlast = NULL;
+    }
+
+    free(temp2);
+
+    return;
+}
+
+extern void latteamericano(nodo *aux2)
+{
+    int ame = 0, lat = 0;
+    float tot;
+
+    nodo *temp = aux2; 
+
+    while (temp != NULL)
+    {
+        if (strcmp(temp->ticket.cafe, "americano") == 0)
+        {
+            ame++;
+        }
+        else if (strcmp(temp->ticket.cafe, "latte") == 0)
+        {
+            lat++;
+        }
+        temp = temp->next;
+        
+    }
+
+    printf("\nHay %i clientes en cola de americano.\n", ame);
+    printf("\nHay %i clientes en cola de latte.\n", lat);
+
+    tot = (35.00 * lat) + (20.00 * ame);
+    printf("\nEl total global de ventas estimado de esa cola es: %f \n", tot);
+
+    return;
+}

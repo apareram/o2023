@@ -14,11 +14,13 @@ nodo *push(cliente datos, nodo *pt);
 void imprimirLista(nodo *aux);
 void enQueue(cliente datos2, nodo **ptfirst, nodo **ptlast);
 void imprimirListaFIFO(nodo *aux2);
-
+void latteamericano(nodo *aux2);
+void deQueueHist(nodo **ptfirst, nodo **ptlast, FILE *fp2);
 
 int main(int arc, char *argv[])
 {
     FILE *fp;
+    FILE *fp2;
     cliente persona;
     nodo *inicio; //Stack (LIFO)
     nodo *first, *last; //Cola (FIFO)
@@ -57,6 +59,19 @@ int main(int arc, char *argv[])
     imprimirLista(inicio);
 
     imprimirListaFIFO(first);
+
+    latteamericano(first);
+
+    fp2 = fopen("historial.txt", "a");
+    if (fp2 == NULL)
+    {
+        printf("\nNo se pudo abrir el archivo de registro.\n");
+        exit(1);
+    }
+
+    deQueueHist(&first, &last, fp2);
+
+    fclose(fp2);
 
     return 0;
 }
