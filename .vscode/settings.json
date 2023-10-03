@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "stdlib.h": "c",
-        "defcircular.h": "c"
+        "defcircular.h": "c",
+        "stdio_ext.h": "c"
     }
 }

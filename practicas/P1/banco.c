@@ -32,48 +32,54 @@ int main(int arc, char *argv[])
     inicio = NULL;
     int edad, cp;
     char nombre[80];
-    
+
+    inicio = leerDatos(argv[1]);
+        
+    system("clear");
     printf("\n\nBienvenido a este programa, a continuación se le mostraran las opciones del menú.\n\n");
     printf("Ingrese la tecla <enter> para continuar\n\n");
     getchar();
+    system("clear");
 
-    while((opmenu == 1) || (opmenu == 2) || (opmenu == 3) || (opmenu == 4) || (opmenu == 5))
+    while((opmenu == 1) || (opmenu == 2) || (opmenu == 3))
     {
         imprimirLista(inicio);
         printf("\n\n------------------------------------Menú------------------------------------\n\n");
-        printf("\nEscriba [1] si quiere guardar los datos en el archivo de texto en una lista LIFO.\n");
-        printf("\nEscriba [2] si quiere imprimir en pantalla en contenido de la lista LIFO.\n");
-        printf("\nEscriba [3] si quiere guardar un informe en un archivo binario de personas que pertenecen a un rango de edad.\n");
-        printf("\nEscriba [4] si quiere incrementar el límite de crédito de un determinado código postal.\n");
-        printf("\nEscriba [5] si quiere eliminar de la lista un cliente y actualizar el archivo.\n");
-        printf("\nEscriba [6] si quiere finalizar el programa.\n\n");
+        printf("\nEscriba [1] si quiere guardar un informe en un archivo binario de personas que pertenecen a un rango de edad.\n");
+        printf("\nEscriba [2] si quiere incrementar el límite de crédito de un determinado código postal.\n");
+        printf("\nEscriba [3] si quiere eliminar de la lista un cliente y actualizar el archivo.\n");
+        printf("\nEscriba [4] si quiere finalizar el programa.\n\n");
         scanf("%d", &opmenu);
         if(opmenu == 1)
         {
-            inicio = leerDatos(argv[1]);
-        }
-        if(opmenu == 2)
-        {
-            imprimirLista(inicio);
-        }
-        if(opmenu == 3)
-        {
+            system("clear");
             printf("\nDame una edad: ");
             scanf("%i",&edad);
             edadBinario(inicio, edad);
+            getchar();
+            printf("\n\nIngrese la tecla <enter> para regresar al menú.\n\n");
+            getchar();
         }
-        if(opmenu == 4)
+        if(opmenu == 2)
         {
+            system("clear");
             printf("\nDame un código postal: ");
             scanf("%i",&cp);
             incrementoDeCredito(inicio, cp);
+            getchar();
+            printf("\n\nIngrese la tecla <enter> para regresar al menú.\n\n");
+            getchar();
         }
-        if(opmenu == 5)
+        if(opmenu == 3)
         {
+            system("clear");
             printf("\nDame el nombre del cliente que quieres borrar: ");
             scanf(" %[^\n]", nombre);
             borrarCliente(&inicio, nombre);
             actualizarArchivo(inicio, argv[1]);
+            getchar();
+            printf("\n\nIngrese la tecla <enter> para regresar al menú.\n\n");
+            getchar();
         }
     }
 
