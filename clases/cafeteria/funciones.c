@@ -96,21 +96,19 @@ void deQueue(nodo **ptfirst, nodo **ptlast)
 {
     if (*ptfirst == NULL)
     {
-        // La cola está vacía, no se puede eliminar nada.
         printf("\nLa cola está vacía, no se puede eliminar nada.\n");
         return;
     }
 
-    nodo *temp = *ptfirst; // Nodo temporal para almacenar el primer elemento de la cola.
-    *ptfirst = (*ptfirst)->next; // Mover el puntero al primer elemento al siguiente nodo.
+    nodo *temp = *ptfirst; 
+    *ptfirst = (*ptfirst)->next;
 
-    // Si después de eliminar el primer elemento la cola queda vacía, también actualiza el puntero de último.
     if (*ptfirst == NULL)
     {
         *ptlast = NULL;
     }
 
-    free(temp); // Libera la memoria del nodo eliminado.
+    free(temp); 
 }
 
 

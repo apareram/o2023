@@ -39,3 +39,30 @@ extern void imprimirListaFIFO(nodo *aux)
 
     return;
 }
+
+extern void deQueue(nodo **ptInicio, nodo **ptUiltmo)
+{
+    nodo *borra;
+    borra = *ptInicio;
+    
+    if((*ptInicio == NULL) && (*ptUiltmo == NULL))
+    {
+        printf("\nLista vacía.\n");
+    }
+    else
+    {
+        if(*ptInicio == *ptUiltmo) //un solo nodo en cola
+        {
+            printf("\nSe va a borrar la palabra: %s", borra->palabra);
+            *ptInicio = NULL;
+            *ptUiltmo = NULL;
+            free(borra);
+        }
+        else
+        {
+            printf("\nSe va a borrar la palabra: %s", borra->palabra);
+            *ptInicio = (*ptInicio)->next;
+            free(borra);
+        }
+    }
+}
