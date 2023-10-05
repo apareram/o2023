@@ -32,23 +32,22 @@ extern void enQueueCirc(nodo **ptPrimero, nodo **ptUltimo, char nom[], int pri)
 
 extern void imprimirColaCirc(nodo *first, nodo *last)
 {
+    nodo *nuevo = first;
+
+
     if ((first == NULL) && (last == NULL))
     {
         printf("\nCola vacía.\n");
         return;
     }
 
-    nodo *nuevo = first;
-
-    while (nuevo != last)
+    do 
     {
         printf("\n%s\t", nuevo->nombre);
         printf("%i\n", nuevo->prioridad);
         nuevo = nuevo->next;
-    }
+    } while (nuevo != first);
 
-    printf("\n%s\t", nuevo->nombre);
-    printf("%i\n", nuevo->prioridad);
 
     return;
 }
