@@ -25,15 +25,15 @@ int main(int argc, char *argv[])
     fp = fopen(argv[1], "r");
     if(fp == NULL)
     {
-        printf("\nArchivo no disponible\n.");
+        printf("\nArchivo no disponible.\n.");
         exit(1);
     }
-    fclose(fp);
 
-    while(fscanf(fp, " %[^\t]%d", nombre, &prioridad));
+    while(fscanf(fp, " %[^\t]%d", nombre, &prioridad) == 2)
     {
         enQueueCirc(&primero, &ultimo, nombre, prioridad);
     }
+    fclose(fp);
 
     imprimirColaCirc(primero, ultimo);
 
