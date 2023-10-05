@@ -36,6 +36,7 @@ int imprimirEnPantallaBin(char nomArch[]);
 void cargarBinMem(tipoAlumno grupo[], int tam, char nomArch[]);
 int contarAlumnosTxt(char nomArch[]);
 void cargarTxtMEm(tipoAlumno grupo[], int tam, char nomArch[]);
+int contarAlumnos(char nomArch[]);
 
 
 int main (int argc, char *argv[])
@@ -80,7 +81,10 @@ int main (int argc, char *argv[])
       scanf(" %c", &opcion);
       if(opcion == 'b')
       {
-         tam = imprimirEnPantallaBin("lista.bin");
+         //tam = imprimirEnPantallaBin("lista.bin");
+         imprimirEnPantallaBin("lista.bin");
+         tam = contarAlumnos("lista.bin");
+         printf("\nHay %d alumnos calculados en la función contar Alumnos\n", tam);
          grupo = (tipoAlumno *)malloc(tam * sizeof(tipoAlumno));
          if(grupo == NULL)
          {
