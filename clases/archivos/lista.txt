@@ -1,2 +1,5 @@
-1234	alberto parera	fisica	30/7/1999	8.200000
-54321	diego altamirano	fisica	11/10/2000	8.600000
+1	Alberto Parera	Ingeniería Física	30/7/1999	8.300000
+2	Diego Altamirano	Ingeniería Física	11/10/2000	8.600000
+3	Lorenzo Orózco	Ingeniería Física	30/7/2000	8.500000
+4	Ramón Parera	Negocios Globales	13/11/2000	8.800000
+5	Isabel Parera	Relaciones internacionales	24/8/1997	8.900000
