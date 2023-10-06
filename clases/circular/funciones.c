@@ -30,8 +30,7 @@ extern void enQueueCirc(nodo **ptPrimero, nodo **ptUltimo, char nom[], int pri)
     return;
 }
 
-extern void imprimirColaCirc(nodo *first, nodo *last)
-{
+extern void imprimirColaCirc(nodo *first, nodo *last){
     nodo *nuevo = first;
 
 
@@ -48,6 +47,32 @@ extern void imprimirColaCirc(nodo *first, nodo *last)
         nuevo = nuevo->next;
     } while (nuevo != first);
 
+
+    return;
+}
+
+extern void deQueueFirst(nodo **ptFirst, nodo **ptLast)
+{
+    nodo *nuevo = *ptFirst;
+
+    if(((*ptFirst == NULL) && (*ptLast == NULL)) || (*ptFirst == *ptLast))
+    {
+        free(nuevo); 
+        *ptFirst = NULL;
+        *ptLast = NULL;
+        printf("\nLa cola está vacía, no se puede eliminar nada.\n");
+        return;
+    }
+    else
+    {
+        if(*ptFirst != *ptLast)
+        {
+            *ptFirst = (*ptFirst)->next;
+            free(nuevo); 
+            nuevo = *ptFirst;
+            (*ptLast)->next = *ptFirst;
+        }
+    }
 
     return;
 }
