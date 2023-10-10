@@ -128,3 +128,54 @@ extern void borrarTodos(nodo **ptPrimero, nodo **ptUltimo)
     }
     return;
 }
+
+extern void borrarPrioridad(nodo **ptPrimero, nodo **ptUltimo)
+{
+    char res;
+    int prioridad;
+    nodo *aux = *ptPrimero;
+    nodo *nuevo;
+    nodo *newptPrimero = NULL;
+    nodo *newptUltimo = NULL;
+
+    printf("\n¿Quieres borrar un nodo segun su prioridad? ['s' | 'n']:\n");
+    scanf(" %c", &res);
+    if(res == 's')
+    {
+        printf("\nDame la prioridad que quieres borrar:\n");
+        scanf(" %i", &prioridad);
+        do
+        {
+            if(prioridad != aux->prioridad)
+            {
+                nuevo = (nodo *)malloc(sizeof(nodo));
+                if(nuevo == NULL)
+                {
+                    printf("\nNo hay memoria disponible.\n");
+                    exit(1);
+                }
+
+                strcpy(nuevo->nombre, aux->nombre);
+                nuevo->prioridad = aux->prioridad;
+
+                if((newptPrimero == NULL) && (newptUltimo == NULL))
+                {
+                    newptPrimero = nuevo;
+                    newptUltimo = nuevo;
+                    nuevo->next = nuevo;
+                }
+                else
+                {
+                    nuevo->next = newptPrimero;
+                    newptUltimo->next = nuevo;
+                    newptUltimo = nuevo;
+                }
+            }
+            aux = aux->next;
+        }while(aux != *ptPrimero);
+    } 
+
+    imprimirColaCirc(newptPrimero, newptUltimo);
+
+    return;
+}
