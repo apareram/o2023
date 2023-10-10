@@ -30,6 +30,15 @@ extern void enQueueCirc(nodo **ptPrimero, nodo **ptUltimo, char nom[], int pri)
     return;
 }
 
+/*
+@brief Esta función imprime los contenidos de una lista circular de clientes
+       con prioridad.
+@author Alberto Parera
+@date 10/10/2023
+@param first es un apuntador de tipo nodo.
+@param last es un apuntador de tipo nodo.
+@return void.
+*/
 extern void imprimirColaCirc(nodo *first, nodo *last){
     nodo *nuevo = first;
 
@@ -101,5 +110,21 @@ extern void deQueueCirc(nodo **ptPrimero, nodo **ptUltimo)
 
     }
 
+    return;
+}
+
+extern void borrarTodos(nodo **ptPrimero, nodo **ptUltimo)
+{
+    char res;
+
+    printf("\n¿Quieres borrar todos los nodos? ['s' | 'n']:\n");
+    scanf(" %c", &res);
+    if(res == 's')
+    {
+        while((*ptPrimero != NULL) && (*ptUltimo != NULL))
+        {
+            deQueueCirc(ptPrimero, ptUltimo);
+        }
+    }
     return;
 }

@@ -13,6 +13,7 @@ void enQueueCirc(nodo **ptPrimero, nodo **ptUltimo, char nom[], int pri);
 void imprimirColaCirc(nodo *first, nodo *last);
 void deQueueFirst(nodo **ptFirst, nodo **ptLast);
 void deQueueCirc(nodo **ptPrimero, nodo **ptUltimo);
+void borrarTodos(nodo **ptPrimero, nodo **ptUltimo);
 
 int main(int argc, char *argv[])
 {
@@ -60,6 +61,9 @@ int main(int argc, char *argv[])
         deQueueCirc(&primero, &ultimo);
         imprimirColaCirc(primero, ultimo);
     }
+
+    borrarTodos(&primero, &ultimo);
+    imprimirColaCirc(primero, ultimo);
 
     return 0;
 }
