@@ -12,6 +12,7 @@
 void enQueueCirc(nodo **ptPrimero, nodo **ptUltimo, char nom[], int pri);
 void imprimirColaCirc(nodo *first, nodo *last);
 void deQueueFirst(nodo **ptFirst, nodo **ptLast);
+void deQueueCirc(nodo **ptPrimero, nodo **ptUltimo);
 
 int main(int argc, char *argv[])
 {
@@ -39,7 +40,7 @@ int main(int argc, char *argv[])
 
     imprimirColaCirc(primero, ultimo);
 
-    printf("\nQuieres borrar un nodo ['s' | 'n']:");
+    printf("\nQuieres borrar un nodo ['s' | 'n']:\n");
     scanf(" %c", &res);
     while(res == 's')
     {
@@ -50,6 +51,14 @@ int main(int argc, char *argv[])
         printf("\nQuieres borrar un nodo ['s' | 'n']:\n");
         scanf(" %c", &res);
             
+    }
+
+    printf("\n¿Quieres borrar el primer nodo? ['s' | 'n']:\n");
+    scanf(" %c", &res);
+    if(res == 's')
+    {
+        deQueueCirc(&primero, &ultimo);
+        imprimirColaCirc(primero, ultimo);
     }
 
     return 0;

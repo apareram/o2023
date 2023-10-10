@@ -1,3 +1,4 @@
+
 /*
 @file funciones.c
 @brief Este  archivo contiene las funciones que son llamadas desde

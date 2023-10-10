@@ -33,7 +33,6 @@ extern void enQueueCirc(nodo **ptPrimero, nodo **ptUltimo, char nom[], int pri)
 extern void imprimirColaCirc(nodo *first, nodo *last){
     nodo *nuevo = first;
 
-
     if ((first == NULL) && (last == NULL))
     {
         printf("\nCola vacía.\n");
@@ -46,7 +45,6 @@ extern void imprimirColaCirc(nodo *first, nodo *last){
         printf("%i\n", nuevo->prioridad);
         nuevo = nuevo->next;
     } while (nuevo != first);
-
 
     return;
 }
@@ -72,6 +70,35 @@ extern void deQueueFirst(nodo **ptFirst, nodo **ptLast)
             nuevo = *ptFirst;
             (*ptLast)->next = *ptFirst;
         }
+    }
+
+    return;
+}
+
+extern void deQueueCirc(nodo **ptPrimero, nodo **ptUltimo)
+{
+    nodo *borra;
+
+    if ((*ptPrimero == NULL) && (*ptUltimo == NULL))
+    {
+        printf("\nNo puedo borrar, lista vacía.\n");
+    }    
+    else
+    {
+        borra = *ptPrimero;
+        if(*ptPrimero == *ptUltimo)
+        {
+            *ptPrimero = NULL;
+            *ptUltimo = NULL;
+            free(borra);
+        }
+        else
+        {
+            *ptPrimero = (*ptPrimero)->next;
+            (*ptUltimo)->next = *ptPrimero;
+            free(borra);
+        }
+
     }
 
     return;
