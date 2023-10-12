@@ -41,6 +41,10 @@ extern void imprimirListaDoble(refs nav)
         printf("Promedio: %f\n", nav.aux->datos.promedio);
         nav.aux = nav.aux->der;
     }
+    if((nav.inicio == NULL) && (nav.fin == NULL))
+    {
+        printf("\nLista vacía.\n");
+    }
 
     return;
 }
@@ -66,6 +70,24 @@ extern void borrarPrimero(refs *nav)
             nav->inicio->izq = NULL;
             free(nav->aux);
         }
+    }
+
+    return;
+}
+
+extern void borrarTodos(refs *nav)
+{
+    char res;
+
+    printf("\n¿Quieres borrar todos los nodos? ['s' | 'n']:\n");
+    scanf(" %c", &res);
+    if(res == 's')
+    {
+        do
+        {
+            borrarPrimero(nav);
+        } while ((nav->inicio != NULL) && (nav->fin != NULL)); 
+        imprimirListaDoble(*nav); 
     }
 
     return;

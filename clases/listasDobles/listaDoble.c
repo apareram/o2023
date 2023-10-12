@@ -22,6 +22,7 @@
 void insertarListaDoble(refs *nav, alum dat);
 void imprimirListaDoble(refs nav);
 void borrarPrimero(refs *nav);
+void borrarTodos(refs *nav);
 
 int main (int argc, char *argv[])
 {
@@ -47,12 +48,14 @@ int main (int argc, char *argv[])
 
     imprimirListaDoble(navegador);
 
-    printf("\nSe borrara un nodo: \n");
+    /*printf("\nSe borrara un nodo: \n");
     borrarPrimero(&navegador);
     imprimirListaDoble(navegador);   
     printf("\nSe borrara otro nodo: \n");
     borrarPrimero(&navegador);
-    imprimirListaDoble(navegador);
+    imprimirListaDoble(navegador);*/
+
+    borrarTodos(&navegador);
 
     return 0;
 }
