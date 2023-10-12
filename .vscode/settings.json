@@ -3,6 +3,7 @@
         "stdlib.h": "c",
         "defcircular.h": "c",
         "stdio_ext.h": "c",
-        "type_traits": "c"
+        "type_traits": "c",
+        "tiposdoble.h": "c"
     }
 }
