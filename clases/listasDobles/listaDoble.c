@@ -23,12 +23,15 @@ void insertarListaDoble(refs *nav, alum dat);
 void imprimirListaDoble(refs nav);
 void borrarPrimero(refs *nav);
 void borrarTodos(refs *nav);
+nodo *buscarAlumno(refs nav, int cuenta);
 
 int main (int argc, char *argv[])
 {
     FILE *fp;
     alum datos;
     refs navegador;
+    int cuenta;
+    nodo *nodoEncontrado;
 
     navegador.inicio = NULL;
     navegador.fin = NULL;
@@ -56,6 +59,22 @@ int main (int argc, char *argv[])
     imprimirListaDoble(navegador);*/
 
     borrarTodos(&navegador);
+
+    printf("\nDame un número de cuenta para buscar un alumno: ");
+    scanf(" %d", &cuenta);
+    nodoEncontrado = buscarAlumno(navegador, cuenta);
+    if(nodoEncontrado == NULL)
+    {
+        printf("\nEl alumno no existe en el catálogo.\n");
+    }
+    else
+    {
+        printf("\nLa cuenta: %d ", cuenta);
+        printf("pertenece al alumno: %s ", nodoEncontrado->datos.nombre);
+        printf("que tiene pormedio: %f ", nodoEncontrado->datos.promedio);
+        printf("y tiene dirección de memoria: %p\n", nodoEncontrado);
+    }
+
 
     return 0;
 }

@@ -92,3 +92,29 @@ extern void borrarTodos(refs *nav)
 
     return;
 }
+
+extern nodo *buscarAlumno(refs nav, int cuenta)
+{
+    nav.aux = nav.inicio;
+
+    if(nav.aux == NULL)
+    {
+        printf("\nLista vacíca\n.");
+    }
+    else
+    {
+        while(nav.aux != NULL)
+        {
+            if(cuenta == nav.aux->datos.cuenta)
+            {
+                return nav.aux; //un break; funcionaria igual
+            }
+            else
+            {
+                nav.aux = nav.aux->der;
+            }
+        }
+    }
+
+    return nav.aux;
+}
