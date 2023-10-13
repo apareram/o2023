@@ -31,7 +31,6 @@ int main (int argc, char *argv[])
 
     promedio = insertarListaDoble(argv[1], &navegador);
 
-
     imprimirListaDoble(navegador);
 
     printf("\n El promedio de los canes es: %f\n", promedio);

@@ -17,14 +17,6 @@ extern float insertarListaDoble(char nomArch[], refs *nav)
         exit(1);
     }
 
-    nav = (refs *)malloc(sizeof(refs));
-    if (nav == NULL) {
-        printf("\nNo hay memoria disponible.\n");
-        exit(1);
-    }
-    nav->inicio = NULL;
-    nav->fin = NULL;
-
     nuevo = (nodo *)malloc(sizeof(nodo));
     if(nuevo == NULL)
     {
@@ -34,7 +26,7 @@ extern float insertarListaDoble(char nomArch[], refs *nav)
     nuevo->izq = NULL;
     nuevo->der = NULL;
 
-    while(fscanf(fp, " %[^\t] %f\t %i\n", nuevo->datos.raza, &nuevo->datos.peso, &nuevo->datos.edad) == 3)
+    while(fscanf(fp, "%[^\t] %f\t %i\n", nuevo->datos.raza, &nuevo->datos.peso, &nuevo->datos.edad) == 3)
     {
         if((nav->inicio == NULL) && (nav->fin == NULL))
         {
@@ -61,17 +53,18 @@ extern float insertarListaDoble(char nomArch[], refs *nav)
 extern void imprimirListaDoble(refs nav)
 {
     nav.aux = nav.inicio;
-
-    while(nav.aux != NULL)
-    {
-        printf("\nCueta: %s\t", nav.aux->datos.raza);
-        printf("Nombre: %f\t", nav.aux->datos.peso);
-        printf("Promedio: %i\n", nav.aux->datos.edad);
-        nav.aux = nav.aux->der;
-    }
-    if((nav.inicio == NULL) && (nav.fin == NULL))
+    if (nav.inicio == NULL && nav.fin == NULL) 
     {
         printf("\nLista vacía.\n");
+    }
+    else
+    {
+        printf("\nRAZA\tPESO\tEDAD\n");
+        while (nav.aux != NULL) 
+        {
+            printf("%s\t%f\t%i\n", nav.aux->datos.raza, nav.aux->datos.peso, nav.aux->datos.edad);
+            nav.aux = nav.aux->der;
+        }
     }
 
     return;
