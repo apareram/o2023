@@ -24,6 +24,7 @@ void imprimirListaDoble(refs nav);
 void borrarPrimero(refs *nav);
 void borrarTodos(refs *nav);
 nodo *buscarAlumno(refs nav, int cuenta);
+void borrarNodoCuenta(refs *nav, nodo *borra);
 
 int main (int argc, char *argv[])
 {
@@ -75,6 +76,18 @@ int main (int argc, char *argv[])
         printf("y tiene dirección de memoria: %p\n", nodoEncontrado);
     }
 
+    printf("\nDame un número de cuenta para borrar ese nodo de un alumno: ");
+    scanf(" %d", &cuenta);
+    nodoEncontrado = buscarAlumno(navegador, cuenta);
+    if(nodoEncontrado == NULL)
+    {
+        printf("\nEl alumno no existe en el catálogo.\n");
+    }
+    else
+    {
+        borrarNodoCuenta(&navegador, nodoEncontrado);
+        imprimirListaDoble(navegador);
+    }
 
     return 0;
 }
