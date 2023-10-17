@@ -1,0 +1,5 @@
+23	Michael Jordan	10
+6	LeBron James	9.9
+24	Kobe Bryant	9.7
+45	Michael Jordan	10
+8	Kobe Bryant	9.7
