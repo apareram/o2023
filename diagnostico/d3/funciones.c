@@ -1,4 +1,5 @@
 
+
 #include "typedef.h"
 
 extern float insertarListaDoble(char nomArch[], refs *nav)
