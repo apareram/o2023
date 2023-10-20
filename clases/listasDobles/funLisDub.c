@@ -1,5 +1,30 @@
+/*
+@file funLisDub.c
+@brief Este archivo contiene las funciones que son llamadas desde
+       listaDoble.c. 
+@author Alberto Parera Méndez en el examenm de Guillermo Gómez
+@date 16/10/2023
+*/
+
 #include "tiposDoble.h"
 
+/*
+@brief Esta función agrega un nodo en una lista doble, en donde se validan
+       dos condiciones:
+       1) Si la lista esta vacía, nuevo toma el valor de los datos que se
+          están leyendo del archivo de texto e inicio y fin apuntan a donde
+          apunta nuevo, que en esta caso es NULL.
+       3) Si la lista contiene un elemento, agrega el nuevo nodo a la 
+          derecha del existente, hace esto asignando a el apuntador de la 
+          izquierda del nuevo nodo el valor de fin, mueve nav para que 
+          apunte a este nuevo elemento y manda fin a apintar a este también.
+@author Alberto Parera Méndez en la clase de Guillermo Gómez
+@date 16/10/2023
+@param *nav es un apuntador de tipo refs, una caja con tres apuntadores: 
+       inicio, aux y fin.
+@param dat es un dato del tipo alum, que contienee la información de un
+       alumno.
+*/
 extern void insertarListaDoble(refs *nav, alum dat)
 {
     nodo *nuevo;
@@ -30,6 +55,14 @@ extern void insertarListaDoble(refs *nav, alum dat)
     return;
 }
 
+/*
+@brief Esta función imprime en pantalla lo que se encuentra en la lista 
+       doble.
+@author Alberto Parera Méndez en la clase de Guillermo Gómez
+@date 16/10/2023
+@param *nav es un apuntador de tipo refs, una caja con tres apuntadores: 
+       inicio, aux y fin.
+*/
 extern void imprimirListaDoble(refs nav)
 {
     nav.aux = nav.inicio;
@@ -49,6 +82,18 @@ extern void imprimirListaDoble(refs nav)
     return;
 }
 
+/*
+@brief Esta función borrael primer nodo que se encuentra en la lista doble. 
+       Para hacerlo verifica que la lista no se encuentre vacía. Después 
+       verifica a donde apuntan inicio y fin, si son iguales solo hay un
+       elemento, los manda a apuntar a NULL y borra lo que se encuentre en 
+       el nodo. Si son diferentes, recorre las referencias para que no se 
+       pierda la integridad de la lista y borra ese nodo.
+@author Alberto Parera Méndez en la clase de Guillermo Gómez
+@date 16/10/2023
+@param *nav es un apuntador de tipo refs, una caja con tres apuntadores: 
+       inicio, aux y fin.
+*/
 extern void borrarPrimero(refs *nav)
 {
     nav->aux = nav->inicio;
@@ -75,6 +120,17 @@ extern void borrarPrimero(refs *nav)
     return;
 }
 
+/*
+@brief Esta función borra todos los nodos que se encuentran en la lista 
+       doble. Para hacerlo se utiliza la función borrarPrimero en un bucle
+       do while, la condición es que se ejecute esa funcion mientras inicio
+       y fin sean diferentes de NULL, esto significa que borra la lista 
+       hasta que se encuentre vacía.
+@author Alberto Parera Méndez en la clase de Guillermo Gómez
+@date 16/10/2023
+@param *nav es un apuntador de tipo refs, una caja con tres apuntadores: 
+       inicio, aux y fin.
+*/
 extern void borrarTodos(refs *nav)
 {
     char res;
@@ -93,6 +149,23 @@ extern void borrarTodos(refs *nav)
     return;
 }
 
+/*
+@brief Esta función busca un alumno según su número de cuenta. Para hacerlo
+       verifica que la lista no este vacía. Si no lo esta recorre la lista
+       hasta que el apuntador aux sea NULL, es decir hasta el final de esta.
+       Mientras se recorre la lista va comparando si el número de cuenta de 
+       donde apunta aux es igual al proporcionado por el usuario, si lo es
+       regresa esta dirección de memoria y si no lo es mueve aux al siguiente
+       elemento de la lista.
+@author Alberto Parera Méndez en la clase de Guillermo Gómez
+@date 16/10/2023
+@param nav es un apuntador de tipo refs, una caja con tres apuntadores: 
+       inicio, aux y fin.
+@param cuenta es un entero que proporcona el alumno en la función main, 
+       este es el número de cuenta del alumno que se quiere encontrar.
+@return es la direccion de memoria del apuntador aux, que esta apuntando
+        al nodo del alumno con el número de cuenta que proprciono el usuario.
+*/
 extern nodo *buscarAlumno(refs nav, int cuenta)
 {
     nav.aux = nav.inicio;
@@ -119,6 +192,26 @@ extern nodo *buscarAlumno(refs nav, int cuenta)
     return nav.aux;
 }
 
+/*
+@brief Esta función borra el nodo borra de la lista doble. Para esto 
+       verifica la posición de este nodo en la lista con cuatro condiciones:
+       1) Si es el único nodo en la lista nada más manda a los apuntadores
+          inicio y fin a NULL y libera el nodo borra.
+       2) Si es el primer nodo manda a apuntar a inicio al siguiente nodo,
+          después, hace que apunte a NULL y por ultimo libera el nodo borra.
+       3) Si es el último nodo hace que el apuntador fin apunte al nodo a 
+          la derecha, después lo manda a apuntar a NULL y por último libera
+          el nodo borra.
+       4) Si el nodo se encuentra en medio de la lista hace que el nodo a la
+          izquierda del nodo borra apunte al nodo que se encuentra la derecha 
+          de borra y que el nodo a la derecha apunte al de la izquierda. 
+          Después libera el nodo borra.
+@author Alberto Parera Méndez en la clase de Guillermo Gómez
+@date 16/10/2023
+@param *nav es un apuntador de tipo refs, una caja con tres apuntadores: 
+       inicio, aux y fin.
+@param *borra es el nodo que se encontró en la función buscarAlumno.
+*/
 extern void borrarNodoCuenta(refs *nav, nodo *borra)
 {
 
