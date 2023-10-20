@@ -1,5 +1,34 @@
+/*
+@file funListDob.c
+@brief Este archivo contiene las funciones que son llamadas desde
+       listaDobleCircular.c. 
+@author Alberto Parera Méndez en el examenm de Guillermo Gómez
+@date 19/10/2023
+*/
+
 #include "tiposDoble.h"
 
+/*
+@brief Esta función agrega un nodo en una lista doble circular, en donde se validan
+       dos condiciones:
+       1) Si la lista esta vacía, nuevo toma el valor de los datos que se
+          están leyendo del archivo de texto e inicio y fin apuntan a donde
+          apunta nuevo, que en esta caso es a si mismo por que es una lista
+          circular.
+       2) Si la lista contiene un elemento, agrega el nuevo nodo a la 
+          derecha del existente, hace esto asignando a el apuntador de la 
+          izquierda del nuevo nodo el valor de fin de la lista, hace que 
+          el apuntador de la derecha de este nuevo nodo apunte al inicio
+          de la lista (por que es una lista circular) y manda a los 
+          apuntadores de referencia (inicio, aux y fin) a que apunten a
+          este nuevo nodo.
+@author Alberto Parera Méndez en la clase de Guillermo Gómez
+@date 19/10/2023
+@param *fila es un apuntador de tipo refs, una caja con tres apuntadores: 
+       inicio, aux y fin.
+@param dat es un dato del tipo alum, que contienee la información de un
+       alumno.
+*/
 extern void insertarCola(alum dat, refs *fila)
 {
     nodo *nuevo;
@@ -32,6 +61,14 @@ extern void insertarCola(alum dat, refs *fila)
     return;
 }
 
+/*
+@brief Esta función imprime en pantalla lo que se encuentra en la lista 
+       doble circular.
+@author Alberto Parera Méndez en la clase de Guillermo Gómez
+@date 19/10/2023
+@param *fila es un apuntador de tipo refs, una caja con tres apuntadores: 
+       inicio, aux y fin.
+*/
 extern void imprimirListaDoble(refs fila)
 {
     fila.aux = fila.inicio;
@@ -54,6 +91,52 @@ extern void imprimirListaDoble(refs fila)
     return;
 }
 
+/*
+@brief Esta función ordena según el número de cuenta de alumnos que se 
+       encuentran en un archivo de texto, pra esto se validan las  
+       siguientes condiciones:
+       1) Si la lista esta vacía, inserta el úncio alumno en la lista
+          doble circular.
+       2) Si la lista contiene más de un elemento: 
+          2.1) Si es mayor al primero: simplemente inserta este alúmno a
+               la derecha de el primer nodo y recorre los demás una 
+               posicion a la derecha. Para esto el apuntador de la derecha
+               de nuevo lo manda a apuntar al inicio de la fila, el de la
+               izquierda de nuevo lo manda a apauntar al final de la lista,
+               el aountador de la izquierda del primer nodo de la lista lo
+               manda a apuntar al nuevo nodo (que es el últmo de la lista),
+               el apuntador de la derecha del fin de la lista lo manda a 
+               apuntar al nuevo nodo y por último el apuntador de inico de
+               la lista lo manda a nuevo.
+          2.2) Si es menor al último: simplemente inserta este alúmno a
+               la izquierda del último nodo y recorre los demás una 
+               posicion a la izquierda. Para esto el apuntador de la 
+               izquierda de nuevo lo manda a apuntar al dfin de la fila, el 
+               de la derecha de nuevo lo manda a apauntar al inicio de la 
+               lista, el apuntador de la derecha del último nodo de la lista 
+               lo manda a apuntar al nuevo nodo, el apuntador de la izquierda 
+               del inicio de la lista lo manda a apuntar al nuevo nodo y por 
+               último el apuntador de fin de la lista lo manda a nuevo.
+          2.3) Si se encuentra entre el ultimo y el primero: primero posiciona
+               al apuntador auxiliar en el inicio de la lista, después se hace 
+               un ciclo; Mientras la cuenta del nuevo dato sea mayor a la 
+               cuenta que apunte el axuliar, va a ir recorriendo la posición
+               del auxiliar hasta que esta condicion no se cumpla, esto nos
+               indica donde tenemos que incertar este nuevo nodo.
+               Para incertarlo mandamos al apiuntador de la derecha de este
+               nuevo nodo a donde se encuentra aux, mandamos el de la izquierda
+               del nuevo nodo al apuntador de la izquierda de donde se encuentr
+               el auxiliar, despúes movemos el nodo que apunte auxilar a la 
+               derecha (moviendo su apuntador de la izquierda a la derecha de 
+               del nuevo) y por último movemos el apuntador de la izquierda de
+               este nodo a donde esta el nodo nuevo.
+@author Alberto Parera Méndez en la clase de Guillermo Gómez
+@date 16/10/2023
+@param *fila es un apuntador de tipo refs, una caja con tres apuntadores: 
+       inicio, aux y fin.
+@param dat es un dato del tipo alum, que contienee la información de un
+       alumno.
+*/
 extern void insertarColaOrdenada(alum dat, refs *filaO)
 {
     nodo *nuevo;
@@ -86,7 +169,7 @@ extern void insertarColaOrdenada(alum dat, refs *filaO)
         }
         else 
         {
-            if(nuevo->datos.cuenta > filaO->fin->datos.cuenta)
+            if(nuevo->datos.cuenta > filaO->fin->datos.cuenta) 
             {
                 nuevo->izq = filaO->fin;
                 nuevo->der = filaO->inicio;
@@ -94,7 +177,7 @@ extern void insertarColaOrdenada(alum dat, refs *filaO)
                 filaO->inicio->izq = nuevo;
                 filaO->fin = nuevo;
             }
-            else
+            else 
             {
                 filaO->aux = filaO->inicio->der;
                 while(nuevo->datos.cuenta > filaO->aux->datos.cuenta)
