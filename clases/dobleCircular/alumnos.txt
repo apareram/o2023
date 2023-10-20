@@ -3,3 +3,4 @@
 24	Kobe Bryant	9.7
 45	Michael Jordan	10
 8	Kobe Bryant	9.7
+30	Stephen Curry	9.5
