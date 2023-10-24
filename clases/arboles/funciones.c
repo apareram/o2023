@@ -8,7 +8,6 @@
  * @param *num es un entero.
  * @return pt es un puntero de tipo nodo que apunta al raíz del árbol construido.
  */
-
 extern nodo *insertarNodArbol(nodo *pt, int num)
 {
     nodo *nuevo, *aux;
@@ -25,28 +24,45 @@ extern nodo *insertarNodArbol(nodo *pt, int num)
     nuevo->izq = NULL;
     nuevo->der = NULL;
 
-    if(aux == NULL) pt = nuevo;
-    while((aux != NULL) && (salir != 0))
+    if(aux == NULL)
     {
-        if(num > aux->num) //mover a la derecha
+        pt = nuevo;
+        return pt;  // Retorna el nuevo nodo cuando el árbol está vacío
+    }
+    while(aux != NULL && salir != 0) 
+    {
+        if(num == aux->num) 
         {
-            if(aux->der != NULL) aux = aux->der;
-            else
+            printf("El número %i ya existe en el árbol y no será insertado nuevamente.\n", num);
+            free(nuevo); // Libera la memoria del nodo que no vamos a insertar.
+            return pt; // Salimos de la función ya que el número ya existe en el árbol.
+        } 
+        else if(num > aux->num) 
+        {
+            if(aux->der != NULL) 
+            {
+                aux = aux->der;
+            } 
+            else 
             {
                 aux->der = nuevo;
                 salir = 0;
             }
-        }
-        if(num <= aux->num) //mover a la izquierda
+        } 
+        else 
         {
-            if(aux->izq != NULL) aux = aux->izq;
-            else
+            if(aux->izq != NULL) 
+            {
+                aux = aux->izq;
+            } 
+            else 
             {
                 aux->izq = nuevo;
                 salir = 0;
             }
         }
     }
+
     return pt;
 }
 
@@ -58,7 +74,6 @@ extern nodo *insertarNodArbol(nodo *pt, int num)
  * @param *aux es un puntero de tipo nodo.
  * @return aux es un puntero de tipo nodo que apunta al raíz del árbol construido.
  */
-
 extern void recorrer(nodo *aux) // en orden ascendente
 {
     if(aux != NULL)
@@ -71,3 +86,13 @@ extern void recorrer(nodo *aux) // en orden ascendente
     return;
 }
 
+extern void imprimirEnTxt(nodo *aux, FILE *fp2)
+{
+    if(aux != NULL)
+    {
+        imprimirEnTxt(aux->izq, fp2);  
+        fprintf(fp2, "%i\n", aux->num);
+        imprimirEnTxt(aux->der, fp2);  
+    }
+    return;
+}

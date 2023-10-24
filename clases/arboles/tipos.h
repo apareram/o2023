@@ -3,9 +3,8 @@
 #include <string.h>
 
 struct elemento
-    {
-        int num;
-        struct elemnto *izq, *der;
-    };
+{
+    int num;
+    struct elemento *izq, *der;
+};
 typedef struct elemento nodo;
-

@@ -22,26 +22,42 @@
 
 nodo *insertarNodArbol(nodo *pt, int num);
 void recorrer(nodo *pt);
+void imprimirEnTxt(nodo *pt, FILE *fp2);
 
 int main(int argc, char *argv[])
 {
-    nodo *raiz;
-    int numero, resultado;
-    FILE *fp;
+   nodo *raiz;
+   int numero, resultado;
+   FILE *fp;
+   FILE *fp2;
 
-    raiz = NULL;
-    fp = fopen(argv[1], "r");
-    if(fp == NULL)
-    {
-        printf("Archivo no disponible.");
-        exit(1);
-    }
-    while(fscanf(fp, "%i", &numero) == 1)
-    {
-        raiz = insertarNodArbol(raiz, numero);
-    }
-    fclose(fp);
-    recorrer(raiz);
+   raiz = NULL;
+   fp = fopen(argv[1], "r");
+   if(fp == NULL)
+   {
+      printf("Archivo no disponible.");
+      exit(1);
+   }
 
-    return 0;
+   while(fscanf(fp, "%i", &numero) == 1)
+   {
+      raiz = insertarNodArbol(raiz, numero);
+   }
+
+   fclose(fp);
+
+   recorrer(raiz);
+
+   fp2 = fopen("numOrdenados.txt", "w");
+   if(fp2 == NULL)
+   {
+      printf("Archivo no disponible.");
+      exit(1);
+   }
+
+   imprimirEnTxt(raiz, fp2);
+   
+   fclose(fp2);
+
+   return 0;
 }
