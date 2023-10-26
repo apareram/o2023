@@ -5,6 +5,7 @@
         "stdio_ext.h": "c",
         "type_traits": "c",
         "tiposdoble.h": "c",
-        "string.h": "c"
+        "string.h": "c",
+        "tiposaereos.h": "c"
     }
 }
