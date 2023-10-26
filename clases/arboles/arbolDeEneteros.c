@@ -29,9 +29,11 @@ int main(int argc, char *argv[])
    nodo *raiz;
    int numero, resultado;
    FILE *fp;
-   FILE *fp2;
+   //FILE *fp2;
 
    raiz = NULL;
+   remove("ordenados.txt"); //borra el archivo para que la lista ordenada empieze de cero
+
    fp = fopen(argv[1], "r");
    if(fp == NULL)
    {
@@ -47,7 +49,7 @@ int main(int argc, char *argv[])
    fclose(fp);
 
    recorrer(raiz);
-
+   /*
    fp2 = fopen("numOrdenados.txt", "w");
    if(fp2 == NULL)
    {
@@ -55,9 +57,9 @@ int main(int argc, char *argv[])
       exit(1);
    }
 
-   imprimirEnTxt(raiz, fp2);
+   imprimirEnTxt(raiz, fp2); //esta función sirve pero no es recomendado dejar un archivo abierto mucho tiempo
    
    fclose(fp2);
-
+   */
    return 0;
 }

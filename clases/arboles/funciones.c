@@ -66,6 +66,23 @@ extern nodo *insertarNodArbol(nodo *pt, int num)
     return pt;
 }
 
+void guardarOrdEnt(int entero)
+{
+    FILE *fp;
+
+    fp = fopen("ordenados.txt", "a");
+    if(fp == NULL)
+    {
+        printf("Archivo no disponible.");
+        exit(1);
+    }
+
+    fprintf(fp, "%d\n", entero);
+
+    fclose(fp);
+
+   return;
+}
 /*
  * @brief Esta función recibe un puntero de referencia y recorre
  * el árbol de izquierda a derecha de forma recursiva.
@@ -80,6 +97,7 @@ extern void recorrer(nodo *aux) // en orden ascendente
     {
         recorrer(aux->izq);
         printf("%i\n", aux->num);
+        guardarOrdEnt(aux->num);
         recorrer(aux->der);
     }
 
