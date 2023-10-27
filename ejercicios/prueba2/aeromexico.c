@@ -4,7 +4,7 @@ void insertarCola(pasa dat, refs *fila);
 void imprimirListaDoble(refs fila);
 void insertarColaOrdenada(pasa dat, refs *filaO);
 void filtrarPasajeros(refs fila, char let);
-void navegarCola(refs fila, nav *nave);
+void navegarCola(refs *fila, nav *nave);
 
 int main (int argc, char *argv[])
 {
@@ -65,7 +65,7 @@ int main (int argc, char *argv[])
     scanf(" %c", &op);
     if(op == 's')
     {
-        navegarCola(cola, &nave);
+        navegarCola(&cola, &nave);
     }
 
     return 0;

@@ -23,10 +23,7 @@ struct referencias
     };
 typedef struct referencias refs;
 
-struct navegador 
-     {
-        char nombre[40];
-        int zona;
-        struct nav *refInicio, *aux;
-     };
+struct navegador {
+    nodo *refInicio, *aux;
+};
 typedef struct navegador nav;

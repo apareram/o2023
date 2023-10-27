@@ -190,6 +190,7 @@ extern void insertarColaOrdenada(pasa dat, refs *filaO)
 
 extern void filtrarPasajeros(refs fila, char let)
 {
+    int encontrado = 0;
     fila.aux = fila.inicio;
 
     if((fila.inicio == NULL) && (fila.fin == NULL))
@@ -205,32 +206,45 @@ extern void filtrarPasajeros(refs fila, char let)
             {
                 printf("\nPasajero: %s", fila.aux->datos.nombre);
                 printf("\tZona: %i\n", fila.aux->datos.zona);
+                encontrado = 1;
             }
             fila.aux = fila.aux->der;
        }while(fila.aux != fila.inicio); 
+
+       if(encontrado = 0)
+       {
+            printf("No se encontraron pasajeros cuyo nombre empiece con la letra '%c'.\n", let);
+       }
     }
 
     return;
 }
 
-void navegarCola(refs fila, nav *nave)
+void navegarCola(refs *fila, nav *nave)
 {
     char op;
 
-    nave.refInicio = fila.inicio;
-    nave.aux = fila.inicio;
+    nave->refInicio = fila->inicio;
+    nave->aux = fila->inicio;
 
     printf("\n¿Quieres navegar al siguiente pasajero? ['s' para avanzar | 'x' para salir]\n");
     scanf(" %c", &op);
-    while(op != 'x')
+    do 
     {
-        nave.aux->nav.nombre = fila.aux->datos.nombre;
-        nave.aux->nav.zona = fila.aux->datos.zona;
-        printf("\nPasajero: %s", nave.aux->datos.nombre);
-        printf("\tZona: %i\n", nave.aux->datos.zona);
-        fila.aux = fila.aux->der;
-        fila.aux = fila.aux->der;
-    }
+        printf("\nPasajero: %s", nave->aux->datos.nombre);
+        printf("\tZona: %i\n", nave->aux->datos.zona);
+        printf("\n¿Quieres navegar al siguiente o al anterior pasajero? ['s' siguiente | 'a' anterior | 'x' salir]\n");
+        scanf(" %c", &op);
+
+        if(op == 's') 
+        {
+            nave->aux = nave->aux->der;
+        } 
+        else if(op == 'a') 
+        {
+            nave->aux = nave->aux->izq;
+        }
+    } while(op != 'x');
 
     return;
 }
