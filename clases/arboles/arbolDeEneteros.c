@@ -23,10 +23,11 @@
 nodo *insertarNodArbol(nodo *pt, int num);
 void recorrer(nodo *pt);
 void imprimirEnTxt(nodo *pt, FILE *fp2);
+nodo *buscarDirecto(int busca, nodo *aux);
 
 int main(int argc, char *argv[])
 {
-   nodo *raiz;
+   nodo *raiz, *resBusqueda;
    int numero, resultado;
    FILE *fp;
    //FILE *fp2;
@@ -49,6 +50,17 @@ int main(int argc, char *argv[])
    fclose(fp);
 
    recorrer(raiz);
+   printf("\nDame el número que deseas buscar por búsqueda directa: \n");
+   scanf(" %d", &numero);
+   resBusqueda = buscarDirecto(numero, raiz);
+   if(resBusqueda == NULL)
+   {
+      printf("\nBusqueda sin éxito, el dato no está en el árbol.\n");
+   }
+   else
+   {
+      printf("\nEn la dirección %p está %d.\n", resBusqueda, resBusqueda->num);
+   }
    /*
    fp2 = fopen("numOrdenados.txt", "w");
    if(fp2 == NULL)
@@ -58,8 +70,9 @@ int main(int argc, char *argv[])
    }
 
    imprimirEnTxt(raiz, fp2); //esta función sirve pero no es recomendado dejar un archivo abierto mucho tiempo
-   
+
    fclose(fp2);
    */
+
    return 0;
 }

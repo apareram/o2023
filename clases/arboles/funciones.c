@@ -114,3 +114,25 @@ extern void imprimirEnTxt(nodo *aux, FILE *fp2)
     }
     return;
 }
+
+nodo *buscarDirecto(int busca, nodo *aux)
+{
+    int comparaciones = 1;
+    while((aux != NULL) && (busca != aux->num))
+    {
+        if(busca < aux->num)
+        {
+            aux = aux->izq;
+        }
+        else
+        {
+            aux = aux->der;
+        }
+        comparaciones++;
+    }
+
+    printf("\nSe realizaron %d comparaciones.\n", comparaciones);
+    printf("\nSe llegó al nivel %d.\n", (comparaciones - 1));
+
+    return aux;
+}
