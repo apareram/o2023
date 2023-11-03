@@ -16,22 +16,38 @@
 int calcularTam(char nomArch[]);
 void colocarEnteros(char nomArch[], int arr[]);
 void imprimirArreglo(int arr[], int size);
-void bubbleSort(int arr[], int size);
-void colocarEnteros(char nomArch[], int arr[]);
-void quickSort(int arr[], int size);
+void insertarListaDoble(referencias *nav, entero dat);
+void insertarListaOrdenada(entero dat, referencias *filaO);
+void imprimirListaDoble (referencias filaO);
+nodo *buscarNumero(referencias filaO, int numero);
+void guardarArchText (referencias filaO);
 void crearArbol(char nomArch[], nodo **raiz);
 nodo *buscarDirecto(int busca, nodo *aux);
-extern void recorrer(nodo *aux);
+void recorrer(nodo *aux);
+void bubbleSort(int arr[], int size);
+void agregarArch(int arr[], int size);
+void quickSort(int arr[], int n);
+int busquedaBinariaLineal (int x, int arr[], int n);
+extern int busquedaLineal(int x, int arr[], int n);
 
 int main(int argc, char *argv[])
 {
-   nodo *raiz = NULL, *resBusqueda;
-   int *enteros, tam, numBusq;
+   FILE *fp;
+   nodo *raiz = NULL, *resBusqueda, *nodoEncontrado;
+   int *enteros, tam, numBusq, num;
    double tiempo;
    clock_t tInicial, tFinal;
 
-   remove("ordenados.txt"); 
+   entero datos;
+   referencias navegador, listaO;
 
+   navegador.inicio = NULL;
+   navegador.fin = NULL;
+   navegador.actual = NULL;
+
+   listaO.inicio = NULL;
+   listaO.fin = NULL;
+   listaO.actual = NULL;
 
    tam = calcularTam(argv[1]);
    enteros = (int *)malloc(tam * sizeof(int));
@@ -44,6 +60,44 @@ int main(int argc, char *argv[])
    colocarEnteros(argv[1], enteros);
    printf("\nNuúmeros desordenados:\n");
    imprimirArreglo(enteros, tam);
+
+   fp = fopen(argv[1], "r");
+   printf("\nOrdenamiento con un incerción:\n");
+   //tiempo inicial
+   tInicial = clock();
+   if(fp == NULL)
+   {
+      printf("\nArchivo no disponible.\n");
+      exit (1);
+   }
+   while(fscanf(fp, "%d\n", &datos.numero) == 1)
+   {
+      insertarListaDoble(&navegador, datos);
+      insertarListaOrdenada(datos, &listaO);
+   }
+   fclose(fp);
+   guardarArchText(listaO);
+   imprimirListaDoble(listaO);
+   //tiempo final
+   tFinal = clock();
+   tiempo = (double)(tFinal - tInicial) / CLOCKS_PER_SEC;
+   printf("\nLa función insertarListaOrdenada tardó %.4f segundos en ejecutarse.\n", tiempo);
+
+   printf("\n\nDame el número que quieres buscar: \n");
+   scanf("%d", &num);
+
+   nodoEncontrado = buscarNumero(listaO, num);
+   if(nodoEncontrado == NULL)
+   {
+      printf("\nEl número no existe en el catálogo.\n\n");
+   }
+   else
+   {
+      printf("\nEl número: %d está en la dirección de memoria: %p\n\n", num, nodoEncontrado);
+   }
+
+   remove("ordenados.txt"); 
+
    printf("\nOrdenamiento con un Árbol:\n");
    //tiempo inicial
    tInicial = clock();
@@ -52,7 +106,7 @@ int main(int argc, char *argv[])
    //tiempo final
    tFinal = clock();
    tiempo = (double)(tFinal - tInicial) / CLOCKS_PER_SEC;
-   printf("La función crearArbol y recorrer tardó %.4f segundos en ejecutarse.\n", tiempo);
+   printf("\nLa función crearArbol y recorrer tardó %.4f segundos en ejecutarse.\n", tiempo);
    printf("\nDame el número que deseas buscar por búsqueda directa: \n");
    scanf(" %d", &numBusq);
    //tiempo inicial
@@ -69,10 +123,8 @@ int main(int argc, char *argv[])
    tFinal = clock();
    tiempo = (double)(tFinal - tInicial) / CLOCKS_PER_SEC;
    printf("La función buscarDirecto se tardó %.4f segundos en ejecutarse.\n", tiempo);
-
    //tiempo final
 
-   /*
    printf("\nOrdenamiento Blubblesort\n");
    //tiempo inicial
    tInicial = clock();
@@ -83,8 +135,10 @@ int main(int argc, char *argv[])
    printf("La función bubbleSort se tardó %.4f segundos en ejecutarse.\n", tiempo);
    //tiempo final
    imprimirArreglo(enteros, tam);
+   agregarArch(enteros, tam);
 
    colocarEnteros(argv[1], enteros);
+
    printf("\nOrdenamiento QuickSort:\n");
    //tiempo inicial
    tInicial = clock();
@@ -94,6 +148,8 @@ int main(int argc, char *argv[])
    printf("La función quickSort se tardó %.4f segundos en ejecutarse.\n", tiempo);
    //tiempo final
    imprimirArreglo(enteros, tam);
-   */
+   //busquedaBinariaLineal (int x, int arr[], int n);
+   // int busquedaLineal(int x, int arr[], int n);
+
    return 0;
 }
