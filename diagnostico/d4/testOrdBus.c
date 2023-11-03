@@ -13,16 +13,25 @@
            el archivo.
  */
 
-int calcularTam(char nomArch);
-void colocarEnteros(char nomArch, int arr[]);
+int calcularTam(char nomArch[]);
+void colocarEnteros(char nomArch[], int arr[]);
 void imprimirArreglo(int arr[], int size);
 void bubbleSort(int arr[], int size);
-void colocarEnteros(char nomArch, int arr[]);
+void colocarEnteros(char nomArch[], int arr[]);
 void quickSort(int arr[], int size);
+void crearArbol(char nomArch[], nodo **raiz);
+nodo *buscarDirecto(int busca, nodo *aux);
+extern void recorrer(nodo *aux);
 
 int main(int argc, char *argv[])
 {
-   int *enteros, tam;
+   nodo *raiz = NULL, *resBusqueda;
+   int *enteros, tam, numBusq;
+   double tiempo;
+   clock_t tInicial, tFinal;
+
+   remove("ordenados.txt"); 
+
 
    tam = calcularTam(argv[1]);
    enteros = (int *)malloc(tam * sizeof(int));
@@ -31,21 +40,60 @@ int main(int argc, char *argv[])
       printf("\nNo hay memoria dispible.\n");
       exit(1);
    }
+
    colocarEnteros(argv[1], enteros);
    printf("\nNuúmeros desordenados:\n");
    imprimirArreglo(enteros, tam);
+   printf("\nOrdenamiento con un Árbol:\n");
+   //tiempo inicial
+   tInicial = clock();
+   crearArbol(argv[1], &raiz);
+   recorrer(raiz);
+   //tiempo final
+   tFinal = clock();
+   tiempo = (double)(tFinal - tInicial) / CLOCKS_PER_SEC;
+   printf("La función crearArbol y recorrer tardó %.4f segundos en ejecutarse.\n", tiempo);
+   printf("\nDame el número que deseas buscar por búsqueda directa: \n");
+   scanf(" %d", &numBusq);
+   //tiempo inicial
+   tInicial = clock();
+   resBusqueda = buscarDirecto(numBusq, raiz);
+   if(resBusqueda == NULL)
+   {
+      printf("\nBusqueda sin éxito, el dato no está en el árbol.\n");
+   }
+   else
+   {
+      printf("\nEn la dirección %p está %d.\n", resBusqueda, resBusqueda->dato);
+   }
+   tFinal = clock();
+   tiempo = (double)(tFinal - tInicial) / CLOCKS_PER_SEC;
+   printf("La función buscarDirecto se tardó %.4f segundos en ejecutarse.\n", tiempo);
+
+   //tiempo final
+
+   /*
    printf("\nOrdenamiento Blubblesort\n");
    //tiempo inicial
+   tInicial = clock();
+   resBusqueda = buscarDirecto(numBusq, raiz);
    bubbleSort(enteros, tam);
+   tFinal = clock();
+   tiempo = (double)(tFinal - tInicial) / CLOCKS_PER_SEC;
+   printf("La función bubbleSort se tardó %.4f segundos en ejecutarse.\n", tiempo);
    //tiempo final
    imprimirArreglo(enteros, tam);
 
    colocarEnteros(argv[1], enteros);
    printf("\nOrdenamiento QuickSort:\n");
    //tiempo inicial
+   tInicial = clock();
    quickSort(enteros, tam);
+   tFinal = clock();
+   tiempo = (double)(tFinal - tInicial) / CLOCKS_PER_SEC;
+   printf("La función quickSort se tardó %.4f segundos en ejecutarse.\n", tiempo);
    //tiempo final
    imprimirArreglo(enteros, tam);
-
+   */
    return 0;
 }
