@@ -4,7 +4,7 @@ void leerTxt(char *nomArch, nav *nav);
 void leerBin(char *nomArch, nav *nav);
 void imprimirListaDobleCirc(refs refcirc);
 void imprimirListaDoble(refs reflin);
-void navegar(nav *nav);
+void navegar(nav *nav, refs refcirc, refs reflin);
 
 int main (int argc, char *argv[])
 {
@@ -66,7 +66,7 @@ int main (int argc, char *argv[])
     getchar();
     system("clear");
 
-    navegar(navegador);
+    navegar(navegador, *(navegador->refscirc), *(navegador->refslin));
 
     return 0;
 }

@@ -194,7 +194,7 @@ extern void agregarCarrito1(nav *nav)
 
     printf("El inventario es: %i\n", nav->refscirc->aux->datos1.inventario);
 
-    printf("El prod es: %s\n", nav->refscirc->aux->datos1.producto);
+    printf("El prodúcto es: %s\n", nav->refscirc->aux->datos1.producto);
     printf("¿Cuántos artículos desea agregar?\n");
     scanf(" %i", &compra);
     if(compra > nav->refscirc->aux->datos1.inventario)
@@ -221,7 +221,7 @@ extern void agregarCarrito2(nav *nav)
 
     printf("El inventario es: %i\n", nav->refslin->aux->datos2.inventario);
 
-    printf("El prod es: %s\n", nav->refslin->aux->datos2.producto);
+    printf("El prodúcto es: %s\n", nav->refslin->aux->datos2.producto);
     printf("¿Cuántos artículos desea agregar?\n");
     scanf(" %i", &compra);
     if(compra > nav->refslin->aux->datos2.inventario)
@@ -243,14 +243,20 @@ extern void agregarCarrito2(nav *nav)
 
 extern void mostrarCarrito(nodocar *pt)
 {
-    printf("\n Artículos guardados en el carrito:\n");
+    float precTot = 0.0;
+    int artTot = 0; 
+
+    printf("\nArtículos guardados en el carrito:\n");
     if(pt != NULL)
     {
         while(pt != NULL)
         {
-            printf(" %s", pt->datos.producto);
+            printf("%s (%d)\n", pt->datos.producto, pt->datos.cantidad);
+            precTot += (pt->datos.precio * pt->datos.cantidad);
+            artTot += pt->datos.cantidad;
             pt = pt->next;
         }
+        printf("\nSubtotal (%d productos): $%f\n", artTot, precTot);
     }
     else
     {
@@ -384,16 +390,119 @@ extern void navegarCategoria2(nav *nav)
     return;
 }
 
-
-extern void navegar(nav *nav)
+void ticket(nodocar *pt)
 {
-    char opcion;
+    FILE *fp;
+    float precTot = 0.0;
+    int artTot = 0; 
+
+    fp = fopen("ticket.txt", "w");
+    if(fp == NULL)
+    {
+        printf("\nArchivo no disponible.\n");
+        exit(1);
+    }
+    if(pt == NULL)
+    {
+        printf("\nCarrito vacío.\n");
+    }
+    else
+    {
+        printf("\nTu ticket es el siguiente: \n");
+        printf("\n------------------------------------------------------------------------\n");
+        fprintf(fp, "\n------------------------------------------------------------------------\n");
+        printf("CANTIDAD\tPRODÚCTO\tPRECIO\n");
+        fprintf(fp, "CANTIDAD\tPRODÚCTO\tPRECIO\n");
+        printf("\n------------------------------------------------------------------------\n");
+        fprintf(fp, "\n------------------------------------------------------------------------\n");
+        while(pt != NULL)
+        {
+            printf("%d\t%s\t$%f\n", pt->datos.cantidad, pt->datos.producto, pt->datos.precio);
+            fprintf(fp, "%d\t%s\t$%f\n", pt->datos.cantidad, pt->datos.producto, pt->datos.precio);
+            precTot += (pt->datos.precio * pt->datos.cantidad);
+            artTot += pt->datos.cantidad;
+            pt = pt->next;
+        }
+        printf("------------------------------------------------------------------------\n");
+        fprintf(fp, "\n------------------------------------------------------------------------\n");
+        printf("%d productos:\n", artTot);
+        fprintf(fp, "%d productos:\n", artTot);
+        printf("Subtotal: $%f\n", precTot);
+        fprintf(fp, "Subtotal: $%f\n", precTot);
+        printf("------------------------------------------------------------------------\n");
+        fprintf(fp, "\n------------------------------------------------------------------------\n");
+    }
+    fclose(fp);
+
+    return;
+}
+
+void crearBin(refs refscirc, refs refslin)
+{
+    FILE *fp;
+    nodo *actual1;
+    nodo *actual2;
+
+    actual1 = refscirc.inicio;
+    actual2 = refslin.inicio;
+
+    fp = fopen("inventario.bin", "wb");
+    if(fp == NULL)
+    {
+        printf("\nArchivo no disponible.\n");
+        exit(1);
+    }
+
+    if(actual1 == NULL)
+    {
+        printf("\nNo hay elementos en la categoría 1 para escribir en el archivo.\n");
+    }
+    else
+    {
+        do
+        {
+            fwrite(&(actual1->datos1), sizeof(cat1), 1, fp);
+            actual1 = actual1->der;
+        } while(actual1 != refscirc.inicio);
+    }
+
+    if(actual2 == NULL)
+    {
+        printf("\nNo hay elementos en la categoría 2 para escribir en el archivo.\n");
+    }
+    else
+    {
+        while(actual2 != NULL)
+        {
+            fwrite(&(actual2->datos2), sizeof(cat2), 1, fp);
+            actual2 = actual2->der;
+        }
+    }
+
+    fclose(fp);
+
+    return;
+}
+
+void modificarCarrito(nodocar *pt, nav *nav)
+{
+    mostrarCarrito(nav->iniciocar);
+
+    printf("\nDeseas aumentar o disminuir la cantidad de un prodúcto en tu carrito ");
+   
+
+    return;
+}
+
+extern void navegar(nav *nav, refs refcirc, refs reflin)
+{
+    char opcion, opcar;
     int bandera;
 
     bandera = 0;
 
     do {
-        printf("A) Visualizar categoría 1\nB) Visualizar categoría 2 \nC) Comprar\nD) Salir\n");
+        printf("A) Visualizar categoría 1\nB) Visualizar categoría 2 \nC) Carrito\nD) Salir\n");
         printf("Seleccione una opción: ");
         scanf(" %c", &opcion);
         if(opcion == 'A' || opcion == 'a') {
@@ -411,6 +520,17 @@ extern void navegar(nav *nav)
         else if(opcion == 'C' || opcion == 'c'){
             opcion = '\0';
             mostrarCarrito(nav->iniciocar);
+            printf("\n\nDeseeas finalizar tu compra [A] o modificar lo que se encuentra en tu carrito [B]: ");
+            scanf(" %c", &opcar);
+            if(opcar == 'A' || opcar == 'a')
+            {
+                ticket(nav->iniciocar);
+                crearBin(*(nav->refscirc), *(nav->refslin));
+            }
+            else if(opcar == 'B' || opcar == 'b')
+            {
+                modificarCarrito(nav->iniciocar, nav);
+            }
             printf("\n\n");
         }
         else if(opcion == 'D' || opcion == 'd'){
