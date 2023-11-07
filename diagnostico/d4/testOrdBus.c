@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
 
    colocarEnteros(argv[1], enteros);
    printf("\nNuúmeros desordenados:\n");
-   imprimirArreglo(enteros, tam);
+//   imprimirArreglo(enteros, tam);
 
    fp = fopen(argv[1], "r");
    printf("\nOrdenamiento con un incerción:\n");
@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
    }
    fclose(fp);
    guardarArchText(listaO);
-   imprimirListaDoble(listaO);
+  // imprimirListaDoble(listaO);
    //tiempo final
    tFinal = clock();
    tiempo = (double)(tFinal - tInicial) / CLOCKS_PER_SEC;
@@ -102,7 +102,7 @@ int main(int argc, char *argv[])
    //tiempo inicial
    tInicial = clock();
    crearArbol(argv[1], &raiz);
-   recorrer(raiz);
+//   recorrer(raiz);
    //tiempo final
    tFinal = clock();
    tiempo = (double)(tFinal - tInicial) / CLOCKS_PER_SEC;
@@ -134,7 +134,7 @@ int main(int argc, char *argv[])
    tiempo = (double)(tFinal - tInicial) / CLOCKS_PER_SEC;
    printf("La función bubbleSort se tardó %.4f segundos en ejecutarse.\n", tiempo);
    //tiempo final
-   imprimirArreglo(enteros, tam);
+  // imprimirArreglo(enteros, tam);
    agregarArch(enteros, tam);
 
    colocarEnteros(argv[1], enteros);
@@ -147,7 +147,7 @@ int main(int argc, char *argv[])
    tiempo = (double)(tFinal - tInicial) / CLOCKS_PER_SEC;
    printf("La función quickSort se tardó %.4f segundos en ejecutarse.\n", tiempo);
    //tiempo final
-   imprimirArreglo(enteros, tam);
+   //imprimirArreglo(enteros, tam);
    //busquedaBinariaLineal (int x, int arr[], int n);
    // int busquedaLineal(int x, int arr[], int n);
 
