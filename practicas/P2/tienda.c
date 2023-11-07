@@ -4,7 +4,7 @@ void leerTxt(char *nomArch, nav *nav);
 void leerBin(char *nomArch, nav *nav);
 void imprimirListaDobleCirc(refs refcirc);
 void imprimirListaDoble(refs reflin);
-void navegar(nav *nav, refs refcirc, refs reflin);
+void navegar(nav *nav);
 
 int main (int argc, char *argv[])
 {
@@ -17,15 +17,15 @@ int main (int argc, char *argv[])
         exit(1);
     }
     navegador->refscirc = (refs *)malloc(sizeof(refs));
-    if (navegador == NULL) 
+    if (navegador->refscirc == NULL)
     {
-        printf("No hay memoria suficiente\n");
+        printf("No hay memoria suficiente para refscirc\n");
         exit(1);
     } 
     navegador->refslin = (refs *)malloc(sizeof(refs));
-    if (navegador == NULL) 
+    if (navegador->refslin == NULL) 
     {
-        printf("No hay memoria suficiente\n");
+        printf("No hay memoria suficiente para refslin\n");
         exit(1);
     }
 
@@ -38,6 +38,7 @@ int main (int argc, char *argv[])
     navegador->refslin->aux = NULL;
 
     navegador->iniciocar = NULL;
+    navegador->fincar = NULL;
 
     if(argc != 3) 
     {
@@ -66,7 +67,7 @@ int main (int argc, char *argv[])
     getchar();
     system("clear");
 
-    navegar(navegador, *(navegador->refscirc), *(navegador->refslin));
+    navegar(navegador);
 
     return 0;
 }

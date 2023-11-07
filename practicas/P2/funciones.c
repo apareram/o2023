@@ -170,7 +170,7 @@ extern void imprimirListaDoble(refs refslin)
     return;
 }
 
-extern nodocar *push(nodocar *pt, datcar data)
+extern nodocar *enqueue(nav *nav, datcar data)
 {
     nodocar *nuevo;
 
@@ -181,10 +181,44 @@ extern nodocar *push(nodocar *pt, datcar data)
         exit(1);
     }
     nuevo->datos = data;
-    nuevo->next = pt;
-    pt = nuevo;
+    nuevo->next = NULL;
+    if((nav->iniciocar == NULL) && (nav->fincar == NULL))
+    {
+        nav->iniciocar = nuevo;
+        nav->fincar = nuevo;
+    }
+    else
+    {
+        nav->fincar->next = nuevo;
+        nav->fincar = nuevo;
+    }
+    return nav->iniciocar;
+}
 
-    return pt;
+extern void deQueue(nodocar **iniciocar, nodocar **fincar)
+{
+    nodocar *borra;
+    if(*iniciocar == NULL) // Si la cola está vacía, no hay nada que desencolar
+    {
+        printf("\nLa cola está vacía.\n");
+        return; // Salir de la función si la cola está vacía
+    }
+
+    borra = *iniciocar; // Guardar el nodo actual a borrar
+
+    if(*iniciocar == *fincar) // Si hay un solo nodo en la cola
+    {
+        *iniciocar = NULL;
+        *fincar = NULL;
+    }
+    else // Si hay más de un nodo
+    {
+        *iniciocar = (*iniciocar)->next; // Mover el inicio al siguiente nodo
+    }
+
+    free(borra); // Liberar la memoria del nodo borrado
+
+    return;
 }
 
 extern void agregarCarrito1(nav *nav)
@@ -194,7 +228,7 @@ extern void agregarCarrito1(nav *nav)
 
     printf("El inventario es: %i\n", nav->refscirc->aux->datos1.inventario);
 
-    printf("El prodúcto es: %s\n", nav->refscirc->aux->datos1.producto);
+    printf("El prod es: %s\n", nav->refscirc->aux->datos1.producto);
     printf("¿Cuántos artículos desea agregar?\n");
     scanf(" %i", &compra);
     if(compra > nav->refscirc->aux->datos1.inventario)
@@ -208,7 +242,7 @@ extern void agregarCarrito1(nav *nav)
         strcpy(articulo.producto, nav->refscirc->aux->datos1.producto);
         articulo.precio = nav->refscirc->aux->datos1.precio;
         articulo.cantidad = compra;
-        nav->iniciocar = push(nav->iniciocar, articulo);
+        nav->iniciocar = enqueue(nav, articulo);
     }
 
     return;
@@ -221,7 +255,7 @@ extern void agregarCarrito2(nav *nav)
 
     printf("El inventario es: %i\n", nav->refslin->aux->datos2.inventario);
 
-    printf("El prodúcto es: %s\n", nav->refslin->aux->datos2.producto);
+    printf("El prod es: %s\n", nav->refslin->aux->datos2.producto);
     printf("¿Cuántos artículos desea agregar?\n");
     scanf(" %i", &compra);
     if(compra > nav->refslin->aux->datos2.inventario)
@@ -235,7 +269,7 @@ extern void agregarCarrito2(nav *nav)
         strcpy(articulo.producto, nav->refslin->aux->datos2.producto);
         articulo.precio = nav->refslin->aux->datos2.precio;
         articulo.cantidad = compra;
-        nav->iniciocar = push(nav->iniciocar, articulo);
+        nav->iniciocar = enqueue(nav, articulo);
     }
 
     return;
@@ -390,19 +424,24 @@ extern void navegarCategoria2(nav *nav)
     return;
 }
 
-void ticket(nodocar *pt)
+void ticket(nav *nav)
 {
     FILE *fp;
     float precTot = 0.0;
-    int artTot = 0; 
+    int artTot = 0, i = 1; 
+    char nomArch[100];
+    static int ticket_number = 0; 
 
-    fp = fopen("ticket.txt", "w");
+    ticket_number++;
+    sprintf(nomArch, "ticket_%i.txt", ticket_number);
+
+    fp = fopen(nomArch, "w");
     if(fp == NULL)
     {
         printf("\nArchivo no disponible.\n");
         exit(1);
     }
-    if(pt == NULL)
+    if(nav->iniciocar == NULL)
     {
         printf("\nCarrito vacío.\n");
     }
@@ -415,13 +454,13 @@ void ticket(nodocar *pt)
         fprintf(fp, "CANTIDAD\tPRODÚCTO\tPRECIO\n");
         printf("\n------------------------------------------------------------------------\n");
         fprintf(fp, "\n------------------------------------------------------------------------\n");
-        while(pt != NULL)
+        while(nav->iniciocar != NULL)
         {
-            printf("%d\t%s\t$%f\n", pt->datos.cantidad, pt->datos.producto, pt->datos.precio);
-            fprintf(fp, "%d\t%s\t$%f\n", pt->datos.cantidad, pt->datos.producto, pt->datos.precio);
-            precTot += (pt->datos.precio * pt->datos.cantidad);
-            artTot += pt->datos.cantidad;
-            pt = pt->next;
+            printf("%d\t%s\t$%f\n", nav->iniciocar->datos.cantidad, nav->iniciocar->datos.producto, nav->iniciocar->datos.precio);
+            fprintf(fp, "%d\t%s\t$%f\n", nav->iniciocar->datos.cantidad, nav->iniciocar->datos.producto, nav->iniciocar->datos.precio);
+            precTot += (nav->iniciocar->datos.precio * nav->iniciocar->datos.cantidad);
+            artTot += nav->iniciocar->datos.cantidad;
+            deQueue(&nav->iniciocar, &nav->fincar);            
         }
         printf("------------------------------------------------------------------------\n");
         fprintf(fp, "\n------------------------------------------------------------------------\n");
@@ -489,12 +528,11 @@ void modificarCarrito(nodocar *pt, nav *nav)
     mostrarCarrito(nav->iniciocar);
 
     printf("\nDeseas aumentar o disminuir la cantidad de un prodúcto en tu carrito ");
-   
 
     return;
 }
 
-extern void navegar(nav *nav, refs refcirc, refs reflin)
+extern void navegar(nav *nav)
 {
     char opcion, opcar;
     int bandera;
@@ -502,7 +540,7 @@ extern void navegar(nav *nav, refs refcirc, refs reflin)
     bandera = 0;
 
     do {
-        printf("A) Visualizar categoría 1\nB) Visualizar categoría 2 \nC) Carrito\nD) Salir\n");
+        printf("A) Visualizar categoría 1\nB) Visualizar categoría 2 \nC) Comprar\nD) Salir\n");
         printf("Seleccione una opción: ");
         scanf(" %c", &opcion);
         if(opcion == 'A' || opcion == 'a') {
@@ -524,7 +562,7 @@ extern void navegar(nav *nav, refs refcirc, refs reflin)
             scanf(" %c", &opcar);
             if(opcar == 'A' || opcar == 'a')
             {
-                ticket(nav->iniciocar);
+                ticket(nav);
                 crearBin(*(nav->refscirc), *(nav->refslin));
             }
             else if(opcar == 'B' || opcar == 'b')
