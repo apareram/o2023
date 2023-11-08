@@ -538,6 +538,129 @@ void crearBin(refs refscirc, refs refslin)
     return;
 }
 
+void borrarTodoCarrito(nav *nav)
+{
+    if(nav->iniciocar == NULL)
+    {
+        printf("\nCarrito vacío.\n");
+    }
+    else
+    {   
+        while(nav->iniciocar != NULL)
+        {
+            printf("Borrando producto: %s\n", nav->iniciocar->datos.producto); // Impresión de depuración
+            if(strcmp(nav->refscirc->aux->datos1.categoria, nav->iniciocar->datos.categoria) == 0)
+            {
+                do {
+                    if(strcmp(nav->refscirc->inicio->datos1.producto, nav->iniciocar->datos.producto) == 0) 
+                    {
+                        nav->refscirc->inicio->datos1.inventario += nav->iniciocar->datos.cantidad;
+                        exit(1);
+                    }
+                    nav->refscirc->inicio = nav->refscirc->inicio->der;
+                } while(nav->refscirc->inicio != nav->refscirc->inicio);
+            }
+            else if(strcmp(nav->refslin->inicio->datos2.categoria, nav->iniciocar->datos.categoria) == 0)
+            {
+                if(nav->refscirc->inicio == nav->refscirc->inicio) 
+                {
+                    while(nav->refslin->inicio != NULL) 
+                    {
+                        if(strcmp(nav->refslin->inicio->datos2.producto, nav->iniciocar->datos.producto) == 0) 
+                        {
+                            nav->refslin->inicio->datos2.inventario += nav->iniciocar->datos.cantidad;
+                            exit(1);
+                        }
+                        nav->refslin->inicio = nav->refslin->inicio->der;
+                    }
+                }
+            }
+            deQueue(&nav->iniciocar, &nav->fincar);            
+        }
+        printf("Todos los productos han sido borrados del carrito.\n");
+    }
+
+    return;
+}
+
+void borrarProducto(nav *nav)
+{
+    char borrar[100];
+    nodocar *actual = nav->iniciocar;
+    nodocar *anterior = NULL;
+    int encontrado = 0;
+
+    if(actual == NULL)
+    {
+        printf("\nCarrito vacío.\n");
+        exit(1);
+    }
+
+    printf("\n¿Qué producto deseas eliminar de tu carrito?\n");
+    scanf(" %s", borrar); 
+
+    while(actual != NULL)
+    {
+        if(strcmp(borrar, actual->datos.producto) == 0)
+        {
+            encontrado = 1;
+            if(strcmp(nav->refscirc->inicio->datos1.categoria, actual->datos.categoria) == 0)
+            {
+                do {
+                    if(strcmp(nav->refscirc->inicio->datos1.producto, actual->datos.producto) == 0) 
+                    {
+                        nav->refscirc->inicio->datos1.inventario += actual->datos.cantidad;
+                        exit(1);
+                    }
+                    nav->refscirc->inicio = nav->refscirc->inicio->der;
+                } while(nav->refscirc->inicio != nav->refscirc->inicio);
+            }
+            else if(strcmp(nav->refslin->inicio->datos2.categoria, actual->datos.categoria) == 0)
+            {
+                while(nav->refslin->inicio != NULL) 
+                {
+                    if(strcmp(nav->refslin->inicio->datos2.producto, actual->datos.producto) == 0) 
+                    {
+                        nav->refslin->inicio->datos2.inventario += actual->datos.cantidad;
+                        exit(1);
+                    }
+                    nav->refslin->inicio = nav->refslin->inicio->der;
+                }
+            }
+
+            if(anterior == NULL) //Primer elemento.
+            { 
+                nav->iniciocar = actual->next;
+                if(nav->iniciocar == NULL) //único elemento.
+                { 
+                    nav->fincar = NULL;
+                }
+            } 
+            else  //en medio o último.
+            {
+                anterior->next = actual->next;
+                if(actual == nav->fincar) //último elemento.
+                {
+                    nav->fincar = anterior;
+                }
+            }
+            free(actual);
+            exit(1);
+        }
+        anterior = actual;
+        actual = actual->next;
+    }
+
+    if(encontrado == 0)
+    {
+        printf("\nProducto no encontrado en el carrito.\n");
+    }
+    else
+    {
+        printf("\nProducto eliminado del carrito.\n");
+    }
+}
+
 void modificarCarrito(nav *nav)
 {
     nodocar *aux;
@@ -557,14 +680,15 @@ void modificarCarrito(nav *nav)
             printf("\tProducto: %s", nav->iniciocar->datos.producto);
             printf("\tPrecio: %f\n\n", nav->iniciocar->datos.precio);
             printf("\t cantidad: %d\n\n", nav->iniciocar->datos.cantidad);
-            printf("a) Ir al inicio del carrito\tb) Regresar al menú\td) Siguiente ->, e) Salir del programa\n");
-            printf("f) Borrar producto\tg) modificar cantidad\th) Borrar todo el carrito\n");
+            printf("a) Ir al inicio del carrito\tb) Regresar al menú\td) Siguiente ->\te) Salir del programa\n");
+            printf("f) Borrar producto\tg) Modificar cantidad\th) Borrar todo el carrito\n");
             printf("\n\nSeleccione una opción: ");
             scanf(" %c", &opc);
             if(opc == 'A' || opc == 'a')
             {
                 flag = 0;
-                if( aux == nav->iniciocar){
+                if( aux == nav->iniciocar)
+                {
                     printf("Inicio de la lista. Ya no hay más elementos\n\n");
                 }
                 else{
@@ -593,12 +717,14 @@ void modificarCarrito(nav *nav)
                 scanf(" %c", &opc);
                 if(opc == 's')
                 {
+                    borrarTodoCarrito(nav);
                     exit(1);
                 }
             }
             if(opc == 'F'||opc == 'f')
             {
-                
+                borrarProducto(nav);
+                flag = 1;
             }
             if(opc == 'G'||opc == 'g')
             {
@@ -606,7 +732,8 @@ void modificarCarrito(nav *nav)
             }
             if(opc == 'H'||opc == 'h')
             {
-
+                borrarTodoCarrito(nav);
+                flag = 1;
             }
         }while(flag == 0);
 
