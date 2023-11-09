@@ -555,7 +555,7 @@ void borrarTodoCarrito(nav *nav)
                     if(strcmp(nav->refscirc->inicio->datos1.producto, nav->iniciocar->datos.producto) == 0) 
                     {
                         nav->refscirc->inicio->datos1.inventario += nav->iniciocar->datos.cantidad;
-                        exit(1);
+                        break;
                     }
                     nav->refscirc->inicio = nav->refscirc->inicio->der;
                 } while(nav->refscirc->inicio != nav->refscirc->inicio);
@@ -569,7 +569,7 @@ void borrarTodoCarrito(nav *nav)
                         if(strcmp(nav->refslin->inicio->datos2.producto, nav->iniciocar->datos.producto) == 0) 
                         {
                             nav->refslin->inicio->datos2.inventario += nav->iniciocar->datos.cantidad;
-                            exit(1);
+                            break;
                         }
                         nav->refslin->inicio = nav->refslin->inicio->der;
                     }
@@ -593,13 +593,13 @@ void borrarProducto(nav *nav)
     if(actual == NULL)
     {
         printf("\nCarrito vacío.\n");
-        exit(1);
+        return;
     }
 
     printf("\n¿Qué producto deseas eliminar de tu carrito?\n");
     scanf(" %s", borrar); 
 
-    while(actual != NULL)
+    while(actual != NULL && encontrado == 0)
     {
         if(strcmp(borrar, actual->datos.producto) == 0)
         {
@@ -610,7 +610,7 @@ void borrarProducto(nav *nav)
                     if(strcmp(nav->refscirc->inicio->datos1.producto, actual->datos.producto) == 0) 
                     {
                         nav->refscirc->inicio->datos1.inventario += actual->datos.cantidad;
-                        exit(1);
+                        break;
                     }
                     nav->refscirc->inicio = nav->refscirc->inicio->der;
                 } while(nav->refscirc->inicio != nav->refscirc->inicio);
@@ -622,7 +622,7 @@ void borrarProducto(nav *nav)
                     if(strcmp(nav->refslin->inicio->datos2.producto, actual->datos.producto) == 0) 
                     {
                         nav->refslin->inicio->datos2.inventario += actual->datos.cantidad;
-                        exit(1);
+                        break;
                     }
                     nav->refslin->inicio = nav->refslin->inicio->der;
                 }
@@ -645,7 +645,8 @@ void borrarProducto(nav *nav)
                 }
             }
             free(actual);
-            exit(1);
+            anterior = actual;
+            actual = actual->next;
         }
         anterior = actual;
         actual = actual->next;
