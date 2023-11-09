@@ -35,15 +35,14 @@ struct elemento
     {
         cat1 datos1;
         cat2 datos2;
-        struct elemento *izq, *der;
-        
+        struct elemento *izq, *der;  
     };
 typedef struct elemento nodo;
 
 struct elementotipocarro
     {
         datcar datos;
-        struct elementotipocarro *next ;
+        struct elementotipocarro *next;
     };
 typedef struct elementotipocarro nodocar;
 
