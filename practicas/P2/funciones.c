@@ -585,81 +585,182 @@ void borrarTodoCarrito(nav *nav)
 
 void borrarProducto(nav *nav)
 {
-    char borrar[100];
-    nodocar *actual = nav->iniciocar;
-    nodocar *anterior = NULL;
-    int encontrado = 0;
-
-    if(actual == NULL)
+    if(nav->iniciocar == NULL && nav->fincar == NULL)
     {
+        printf("\nNo se puede eliminar una cola vacía.\n");
+        return;
+    }
+    else if(nav->iniciocar == nav->fincar)
+    {
+        deQueue(&nav->iniciocar, &nav->fincar);            
+        printf("\nProducto eliminado del carrito.\n");
+        nav->iniciocar = NULL; 
+        nav->fincar = NULL;
+        return;
+    }
+    else if(nav->iniciocar != nav->fincar)
+    {
+        deQueue(&nav->iniciocar, &nav->fincar);            
+        printf("\nProducto eliminado del carrito.\n");
+    }
+
+    return;
+}
+
+void editarCantidad(nav *nav)
+{
+    int nuevaCantidad, temp;
+    nodocar *actual = nav->iniciocar;
+    nodo *aux;
+    
+    if (actual == NULL) {
         printf("\nCarrito vacío.\n");
         return;
     }
 
-    printf("\n¿Qué producto deseas eliminar de tu carrito?\n");
-    scanf(" %s", borrar); 
+    printf("Dame la nueva cantidad que deseas: ");
+    scanf("%d", &nuevaCantidad);
 
-    while(actual != NULL && encontrado == 0)
+    if (nuevaCantidad < 0) {
+        printf("\nLa cantidad no puede ser negativa.\n");
+        return;
+    }
+
+    if (nuevaCantidad == 0) {
+        printf("\nCantidad modificada a 0. El producto se eliminará del carrito.\n");
+        borrarProducto(nav);
+        return;
+    }
+
+    while(actual != NULL)
     {
-        if(strcmp(borrar, actual->datos.producto) == 0)
+        if(strcmp(nav->refscirc->inicio->datos1.categoria, actual->datos.categoria) == 0)
         {
-            encontrado = 1;
-            if(strcmp(nav->refscirc->inicio->datos1.categoria, actual->datos.categoria) == 0)
-            {
-                do {
-                    if(strcmp(nav->refscirc->inicio->datos1.producto, actual->datos.producto) == 0) 
-                    {
-                        nav->refscirc->inicio->datos1.inventario += actual->datos.cantidad;
-                        break;
-                    }
-                    nav->refscirc->inicio = nav->refscirc->inicio->der;
-                } while(nav->refscirc->inicio != nav->refscirc->inicio);
-            }
-            else if(strcmp(nav->refslin->inicio->datos2.categoria, actual->datos.categoria) == 0)
-            {
-                while(nav->refslin->inicio != NULL) 
+            aux = nav->refscirc->inicio;
+            do {
+                if (strcmp(aux->datos1.producto, actual->datos.producto) == 0) 
                 {
-                    if(strcmp(nav->refslin->inicio->datos2.producto, actual->datos.producto) == 0) 
-                    {
-                        nav->refslin->inicio->datos2.inventario += actual->datos.cantidad;
-                        break;
+                    if (nav->refscirc->inicio->datos1.inventario < nuevaCantidad)
+                    {   
+                        printf("\nNo hay suficiente inventario para hacer esta modificación.\n");
+                        return;
                     }
-                    nav->refslin->inicio = nav->refslin->inicio->der;
                 }
+                aux = aux->der;
+            } while(aux != nav->refscirc->inicio);
+        }
+        else if (strcmp(nav->refslin->inicio->datos2.categoria, actual->datos.categoria) == 0)
+        {
+            aux = nav->refslin->inicio;
+            while (aux != NULL) 
+            {
+                if (strcmp(aux->datos2.producto, actual->datos.producto) == 0) 
+                {
+                    if (nav->refscirc->inicio->datos2.inventario < nuevaCantidad)
+                    {   
+                        printf("\nNo hay suficiente inventario para hacer esta modificación.\n");
+                        return;
+                    }
+                }
+                aux = aux->der;
             }
+        }
+    }
 
-            if(anterior == NULL) //Primer elemento.
-            { 
-                nav->iniciocar = actual->next;
-                if(nav->iniciocar == NULL) //único elemento.
-                { 
-                    nav->fincar = NULL;
-                }
-            } 
-            else  //en medio o último.
+    while(actual != NULL)
+    {
+        if (actual->datos.cantidad > nuevaCantidad) 
+        {
+            // Aumentar el inventario si disminuye la cantidad en el carrito
+            temp = actual->datos.cantidad - nuevaCantidad;
+            actual->datos.cantidad = nuevaCantidad;
+            // Actualizar el inventario antes de borrar el producto del carrito
+            if (strcmp(nav->refscirc->inicio->datos1.categoria, actual->datos.categoria) == 0)
             {
-                anterior->next = actual->next;
-                if(actual == nav->fincar) //último elemento.
-                {
-                    nav->fincar = anterior;
-                }
+                aux = nav->refscirc->inicio;
+                do {
+                    if (strcmp(aux->datos1.producto, actual->datos.producto) == 0) 
+                    {
+                        if (aux->datos1.inventario == 0)
+                        {   
+                            printf("\nLa cantidad de este producto en el inventario es cero.\n");
+                            break;
+                        }
+                        aux->datos1.inventario += temp; 
+                        break;
+                    }
+                    aux = aux->der;
+                } while(aux != nav->refscirc->inicio);
             }
-            free(actual);
-            anterior = actual;
+            else if (strcmp(nav->refslin->inicio->datos2.categoria, actual->datos.categoria) == 0)
+            {
+                aux = nav->refslin->inicio;
+                while (aux != NULL) 
+                {
+                    if (strcmp(aux->datos2.producto, actual->datos.producto) == 0) 
+                    {
+                        if (aux->datos2.inventario == 0)
+                        {   
+                            printf("\nLa cantidad de este producto en el inventario es cero.\n");
+                            break;
+                        }
+                        aux->datos2.inventario += temp; 
+                        break;
+                    }
+                    aux = aux->der;
+                }
+            }            
+            break;
+        } 
+        else if (actual->datos.cantidad < nuevaCantidad) 
+        {
+            // Reducir el inventario si aumenta la cantidad en el carrito
+            temp = nuevaCantidad - actual->datos.cantidad;
+            actual->datos.cantidad = nuevaCantidad;
+            if (strcmp(nav->refscirc->inicio->datos1.categoria, actual->datos.categoria) == 0)
+            {
+                aux = nav->refscirc->inicio;
+                do {
+                    if (strcmp(aux->datos1.producto, actual->datos.producto) == 0) 
+                    {
+                        if (aux->datos1.inventario == 0)
+                        {   
+                            printf("\nLa cantidad de este producto en el inventario es cero.\n");
+                            break;
+                        }
+                        aux->datos1.inventario -= temp; 
+                        break;
+                    }
+                    aux = aux->der;
+                } while(aux != nav->refscirc->inicio);
+            }
+            else if (strcmp(nav->refslin->inicio->datos2.categoria, actual->datos.categoria) == 0)
+            {
+                aux = nav->refslin->inicio;
+                while (aux != NULL) 
+                {
+                    if (strcmp(aux->datos2.producto, actual->datos.producto) == 0) 
+                    {
+                        if (aux->datos2.inventario == 0)
+                        {   
+                            printf("\nLa cantidad de este producto en el inventario es cero.\n");
+                            break;
+                        }
+                        aux->datos2.inventario -= temp; 
+                        break;
+                    }
+                    aux = aux->der;
+                }
+            }            
+            break;
+        } 
+        else 
+        {
             actual = actual->next;
         }
-        anterior = actual;
-        actual = actual->next;
     }
 
-    if(encontrado == 0)
-    {
-        printf("\nProducto no encontrado en el carrito.\n");
-    }
-    else
-    {
-        printf("\nProducto eliminado del carrito.\n");
-    }
+    return;
 }
 
 void modificarCarrito(nav *nav)
@@ -725,11 +826,12 @@ void modificarCarrito(nav *nav)
             if(opc == 'F'||opc == 'f')
             {
                 borrarProducto(nav);
-                flag = 1;
+                flag = 0;
             }
             if(opc == 'G'||opc == 'g')
             {
-
+                editarCantidad(nav);
+                flag = 0;
             }
             if(opc == 'H'||opc == 'h')
             {
