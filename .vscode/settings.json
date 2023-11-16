@@ -6,6 +6,7 @@
         "type_traits": "c",
         "tiposdoble.h": "c",
         "string.h": "c",
-        "tiposaereos.h": "c"
+        "tiposaereos.h": "c",
+        "deftiposgtk.h": "c"
     }
 }

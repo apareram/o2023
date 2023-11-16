@@ -1,5 +1,13 @@
 #include "defTiposGTK.h"
 
+// Funciones de GTK, callbacks
+gboolean delete_event_handler(GtkWidget *widget, GdkEvent *event, gpointer user_data);
+void closeTheApp(GtkWidget *botSalir, gpointer data);
+
+// Funciones de C
+void crearListaDoble(char nomArch[], refsApp *pMiAPP);
+void imprimirListaDobleCirc(refsApp pMiApp);
+
 int main(int argc, char *argv[])
 {
     refsApp miApp;
@@ -10,6 +18,9 @@ int main(int argc, char *argv[])
     miApp.inicio = NULL;
     miApp.fin = NULL;
     miApp.aux = NULL;
+
+    crearListaDoble(argv[1], &miApp);
+    imprimirListaDobleCirc(miApp)
 
     // 1. Se inicializa el entorno
     gtk_init(&argc, &argv);
@@ -45,7 +56,9 @@ int main(int argc, char *argv[])
     gtk_container_set_border_width(GTK_CONTAINER(window2), 100);
 
     // 3. Registro de callbacks
-
+    g_signal_connect(G_OBJECT(window1), "delete_event", G_CALLBACK(delete_event_handler), NULL);
+    g_signal_connect(G_OBJECT(window2), "delete_event", G_CALLBACK(delete_event_handler), NULL);
+    g_signal_connect(G_OBJECT(botSalir), "clicked", GTK_SIGNAL_FUNC(closeTheApp), NULL);
 
     // 4. Define jerarquía de instancias (pack de widgets)
     gtk_container_add(GTK_CONTAINER(window1), vBox1);
