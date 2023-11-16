@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
     miApp.aux = NULL;
 
     crearListaDoble(argv[1], &miApp);
-    imprimirListaDobleCirc(miApp)
+    imprimirListaDobleCirc(miApp);
 
     // 1. Se inicializa el entorno
     gtk_init(&argc, &argv);
