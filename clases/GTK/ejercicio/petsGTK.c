@@ -3,6 +3,8 @@
 // Funciones de GTK, callbacks
 gboolean delete_event_handler(GtkWidget *widget, GdkEvent *event, gpointer user_data);
 void closeTheApp(GtkWidget *botSalir, gpointer data);
+void visualizarVentanaAlta(GtkWidget *botAlta, gpointer pVentana);
+void darAltaMascota(GtkWidget *auxi, gpointer pMiApp);
 
 // Funciones de C
 void crearListaDoble(char nomArch[], refsApp *pMiAPP);
@@ -14,6 +16,7 @@ int main(int argc, char *argv[])
     GtkWidget *window1, *window2, *botAlta, *botSalir, *hBox1, *vBox1;
     GtkWidget *clienteLbl2, *razaLbl2, *pesoLbl2, *inCliente, *inRaza, *inPeso;
     GtkWidget *hBox21, *hBox22, *hBox23, *vBox2;
+    GtkWidget *auxi;
 
     miApp.inicio = NULL;
     miApp.fin = NULL;
@@ -50,6 +53,8 @@ int main(int argc, char *argv[])
     miApp.inPeso = gtk_entry_new();
     miApp.insertarNodo = gtk_button_new_with_label("Insertar mascota");
 
+    auxi = miApp.insertarNodo;
+
     gtk_window_set_title(GTK_WINDOW(window1), "Mascotas");
     gtk_container_set_border_width(GTK_CONTAINER(window1), 100);
     gtk_window_set_title(GTK_WINDOW(window2), "Alta de mascotas");
@@ -59,6 +64,8 @@ int main(int argc, char *argv[])
     g_signal_connect(G_OBJECT(window1), "delete_event", G_CALLBACK(delete_event_handler), NULL);
     g_signal_connect(G_OBJECT(window2), "delete_event", G_CALLBACK(delete_event_handler), NULL);
     g_signal_connect(G_OBJECT(botSalir), "clicked", GTK_SIGNAL_FUNC(closeTheApp), NULL);
+    g_signal_connect(G_OBJECT(botAlta), "clicked", GTK_SIGNAL_FUNC(visualizarVentanaAlta), window2);
+    g_signal_connect(G_OBJECT(auxi), "clicked", GTK_SIGNAL_FUNC(darAltaMascota), &miApp);
 
     // 4. Define jerarquía de instancias (pack de widgets)
     gtk_container_add(GTK_CONTAINER(window1), vBox1);
@@ -87,7 +94,6 @@ int main(int argc, char *argv[])
 
     // 5. Mostrar los widgets
     gtk_widget_show_all(window1);
-    gtk_widget_show_all(window2);
 
     // 6. El programa se queda en loop
     gtk_main();

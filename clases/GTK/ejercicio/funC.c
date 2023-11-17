@@ -1,6 +1,6 @@
 #include "defTiposGTK.h"
 
-void insertarCola(tipoMascota dat1, refsApp *pMiApp)
+extern void insertarCola(tipoMascota dat1, refsApp *pMiApp)
 {
     nodo *nuevo;
     
@@ -41,9 +41,9 @@ extern void imprimirListaDobleCirc(refsApp pMiApp)
     {
         do
        {
-            printf("Cliente: %d\n", pMiApp.aux->datos.cliente);
+            printf("Cliente: %d\t", pMiApp.aux->datos.cliente);
             printf("Raza: %s\t", pMiApp.aux->datos.raza);
-            printf("Peso: %f\t", pMiApp.aux->datos.peso);
+            printf("Peso: %f\n", pMiApp.aux->datos.peso);
             pMiApp.aux = pMiApp.aux->der;
        }while(pMiApp.aux != pMiApp.inicio); 
     }
