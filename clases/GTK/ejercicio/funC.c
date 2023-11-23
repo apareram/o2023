@@ -70,3 +70,17 @@ extern void crearListaDoble(char nomArch[], refsApp *pMiAPP)
 
     return;
 }
+
+extern void moverIzq(refsApp *pRefs)
+{
+    pRefs->aux = pRefs->aux->izq;
+
+    return;
+}
+
+extern void moverDer(refsApp *pRefs)
+{
+    pRefs->aux = pRefs->aux->der;
+
+    return;
+}

@@ -2,6 +2,8 @@
 
 void insertarCola(tipoMascota dat1, refsApp *pMiApp);
 void imprimirListaDobleCirc(refsApp pMiApp);
+void moverIzq(refsApp *pRefs);
+void moverDer(refsApp *pRefs);
 
 extern gboolean delete_event_handler(GtkWidget *widget, GdkEvent *event, gpointer user_data)
 {
@@ -24,7 +26,7 @@ extern void visualizarVentanaAlta(GtkWidget *botAlta, gpointer pVentana)
     return;
 }
 
-void darAltaMascota(GtkWidget *auxi, gpointer pMiApp)
+extern void darAltaMascota(GtkWidget *pBotInsertar, gpointer pMiApp)
 {
     refsApp *refs; 
     tipoMascota datos;
@@ -36,8 +38,46 @@ void darAltaMascota(GtkWidget *auxi, gpointer pMiApp)
     sscanf(gtk_entry_get_text(GTK_ENTRY(refs->inPeso)), "%f", &datos.peso);
 
     insertarCola(datos, refs);
-    system(clear);
+    system("clear");
     imprimirListaDobleCirc(*refs);
+
+    return;
+}
+
+extern void recorrerIzq(GtkWidget *pBotIzq, gpointer pMiApp)
+{
+    refsApp *refs; 
+    tipoMascota datos;
+    char cliente[10], peso[10];
+
+    refs = (refsApp *)pMiApp;
+
+    moverIzq(refs);
+
+    sprintf(cliente, "%d", refs->aux->datos.cliente);
+    gtk_label_set_text(GTK_LABEL(refs->clienteLbl), cliente);
+    gtk_label_set_text(GTK_LABEL(refs->razaLbl), refs->aux->datos.raza);
+    sprintf(peso, "%f", refs->aux->datos.peso);
+    gtk_label_set_text(GTK_LABEL(refs->pesoLbl), peso);
+
+    return;
+}
+
+extern void recorrerDer(GtkWidget *pBotDer, gpointer pMiApp)
+{
+    refsApp *refs; 
+    tipoMascota datos;
+    char cliente[10], peso[10];
+
+    refs = (refsApp *)pMiApp;
+
+    moverDer(refs);
+
+    sprintf(cliente, "%d", refs->aux->datos.cliente);
+    gtk_label_set_text(GTK_LABEL(refs->clienteLbl), cliente);
+    gtk_label_set_text(GTK_LABEL(refs->razaLbl), refs->aux->datos.raza);
+    sprintf(peso, "%f", refs->aux->datos.peso);
+    gtk_label_set_text(GTK_LABEL(refs->pesoLbl), peso);
 
     return;
 }
