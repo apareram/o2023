@@ -46,6 +46,7 @@ int main(int argc, char *argv[])
     miApp.pesoLbl = gtk_label_new(cadPeso);
     miApp.botonDer = gtk_button_new_with_label("->");
     miApp.botonIzq = gtk_button_new_with_label("<-");
+    miApp.imagenPet = gtk_image_new_from_file(miApp.aux->datos.raza);
 
     window2 = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     hBox21 = gtk_hbox_new(FALSE, 10);
@@ -76,6 +77,7 @@ int main(int argc, char *argv[])
 
     // 4. Define jerarquía de instancias (pack de widgets)
     gtk_container_add(GTK_CONTAINER(window1), vBox1);
+    gtk_box_pack_start_defaults(GTK_BOX(vBox1), miApp.imagenPet);
     gtk_box_pack_start_defaults(GTK_BOX(vBox1), miApp.clienteLbl);
     gtk_box_pack_start_defaults(GTK_BOX(vBox1), miApp.razaLbl);
     gtk_box_pack_start_defaults(GTK_BOX(vBox1), miApp.pesoLbl);

@@ -21,5 +21,6 @@ struct appGTK
     GtkWidget *clienteLbl, *razaLbl, *pesoLbl;
     GtkWidget *botonIzq, *botonDer, *insertarNodo;
     GtkWidget *inCliente, *inRaza, *inPeso;
+    GtkWidget *imagenPet;
 };
 typedef struct appGTK refsApp;

@@ -1,4 +1,7 @@
 labrador	32.5	1
 poodle	10.3	23
-chichuahua	2.2	12
-dalmata	25.8	3
+doverman	2.2	12
+cocker	25.8	3
+yorkshire	5.8	4
+setter	10.8	7
+beagle	12.3	10

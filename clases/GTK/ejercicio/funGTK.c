@@ -54,6 +54,7 @@ extern void recorrerIzq(GtkWidget *pBotIzq, gpointer pMiApp)
 
     moverIzq(refs);
 
+    gtk_image_set_from_file(GTK_IMAGE(refs->imagenPet), refs->aux->datos.raza);
     sprintf(cliente, "%d", refs->aux->datos.cliente);
     gtk_label_set_text(GTK_LABEL(refs->clienteLbl), cliente);
     gtk_label_set_text(GTK_LABEL(refs->razaLbl), refs->aux->datos.raza);
@@ -73,6 +74,7 @@ extern void recorrerDer(GtkWidget *pBotDer, gpointer pMiApp)
 
     moverDer(refs);
 
+    gtk_image_set_from_file(GTK_IMAGE(refs->imagenPet), refs->aux->datos.raza);
     sprintf(cliente, "%d", refs->aux->datos.cliente);
     gtk_label_set_text(GTK_LABEL(refs->clienteLbl), cliente);
     gtk_label_set_text(GTK_LABEL(refs->razaLbl), refs->aux->datos.raza);
