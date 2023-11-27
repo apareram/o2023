@@ -58,7 +58,7 @@ extern void insertarListaDoble(refsApp *refs, secc *secci)
         refs->fin->fin->der = secci;
         refs->fin->fin = secci;
     }
-
+    printf("prueba1");
     return;
 }
 

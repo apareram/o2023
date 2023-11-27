@@ -76,6 +76,10 @@ extern void crearLibro(GtkWidget *n, gpointer *pmiApp)
     libro->inicio = NULL;
     libro->fin = NULL;
     libro->aux = NULL;
+    
+    refs->fin->inicio = NULL;
+    refs->fin->fin = NULL;
+    refs->fin->aux = NULL;
 
     libro = (rep *)malloc(sizeof(rep));
     refs = (refsApp *)pmiApp;
