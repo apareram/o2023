@@ -2,6 +2,7 @@
 
 gboolean delete_event_handler(GtkWidget *widget, GdkEvent *event, gpointer user_data);
 void closeTheApp(GtkWidget *botSalir, gpointer data);
+void regresarAVentanaAnterior(GtkWidget *botRegresar, gpointer pVentana);
 void visualizarVentanaCrear(GtkWidget *botCrear, gpointer pVentana);
 void visualizarVentanaEditar(GtkWidget *botEditar, gpointer pVentana);
 void visualizarVentanaAviso(GtkWidget *botEditar, gpointer pVentana);
@@ -134,11 +135,16 @@ int main(int argc, char *argv[])
     g_signal_connect(G_OBJECT(window1), "delete_event", G_CALLBACK(delete_event_handler), NULL);
     g_signal_connect(G_OBJECT(botSalir), "clicked", GTK_SIGNAL_FUNC(closeTheApp), NULL);
     g_signal_connect(G_OBJECT(botCrear), "clicked", GTK_SIGNAL_FUNC(visualizarVentanaCrear), window2);
+    g_signal_connect(G_OBJECT(miApp.botRegresar), "clicked", G_CALLBACK(regresarAVentanaAnterior), window1);
     g_signal_connect(G_OBJECT(botEditar), "clicked", GTK_SIGNAL_FUNC(visualizarVentanaEditar), window3);
+    g_signal_connect(G_OBJECT(miApp.edBotReg), "clicked", G_CALLBACK(regresarAVentanaAnterior), window1);
     g_signal_connect(G_OBJECT(miApp.botCrear), "clicked", GTK_SIGNAL_FUNC(visualizarVentanaAviso), window4);
+    g_signal_connect(G_OBJECT(miApp.avBotReg), "clicked", G_CALLBACK(regresarAVentanaAnterior), window2);
     g_signal_connect(G_OBJECT(miApp.avBotSig), "clicked", GTK_SIGNAL_FUNC(visualizarVentanaSecc), window5);
+    g_signal_connect(G_OBJECT(miApp.botSeccReg), "clicked", G_CALLBACK(regresarAVentanaAnterior), window4);
     g_signal_connect(G_OBJECT(miApp.btoSeccSig), "clicked", GTK_SIGNAL_FUNC(visualizarVentanaEscribir), window6);
     g_signal_connect(G_OBJECT(miApp.edBotEdit), "clicked", GTK_SIGNAL_FUNC(visualizarVentanaEscribir), window6);
+    g_signal_connect(G_OBJECT(miApp.botReg), "clicked", G_CALLBACK(regresarAVentanaAnterior), window1);
 
     //4. Definiendo jerarquias
     gtk_box_pack_start_defaults(GTK_BOX(vBox1), bienvenidoLbl);

@@ -17,8 +17,15 @@ extern void closeTheApp(GtkWidget *botSalir, gpointer data)
     return;
 }
 
+extern void regresarAVentanaAnterior(GtkWidget *botRegresar, gpointer pVentana)
+{
+    gtk_widget_hide(gtk_widget_get_toplevel(botRegresar)); 
+    gtk_widget_show_all(pVentana); 
+}
+
 extern void visualizarVentanaCrear(GtkWidget *botAlta, gpointer pVentana)
 {
+    gtk_widget_hide(gtk_widget_get_toplevel(botAlta));
     gtk_widget_show_all(pVentana);
 
     return;
@@ -26,6 +33,7 @@ extern void visualizarVentanaCrear(GtkWidget *botAlta, gpointer pVentana)
 
 extern void visualizarVentanaEditar(GtkWidget *botAlta, gpointer pVentana)
 {
+    gtk_widget_hide(gtk_widget_get_toplevel(botAlta));
     gtk_widget_show_all(pVentana);
 
     return;
@@ -33,6 +41,7 @@ extern void visualizarVentanaEditar(GtkWidget *botAlta, gpointer pVentana)
 
 extern void visualizarVentanaAviso(GtkWidget *botAlta, gpointer pVentana)
 {
+    gtk_widget_hide(gtk_widget_get_toplevel(botAlta));
     gtk_widget_show_all(pVentana);
 
     return;
@@ -40,6 +49,7 @@ extern void visualizarVentanaAviso(GtkWidget *botAlta, gpointer pVentana)
 
 extern void visualizarVentanaSecc(GtkWidget *botAlta, gpointer pVentana)
 {
+    gtk_widget_hide(gtk_widget_get_toplevel(botAlta));
     gtk_widget_show_all(pVentana);
 
     return;
@@ -47,6 +57,7 @@ extern void visualizarVentanaSecc(GtkWidget *botAlta, gpointer pVentana)
 
 extern void visualizarVentanaEscribir(GtkWidget *botAlta, gpointer pVentana)
 {
+    gtk_widget_hide(gtk_widget_get_toplevel(botAlta));
     gtk_widget_show_all(pVentana);
 
     return;
