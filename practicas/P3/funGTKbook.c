@@ -3,10 +3,8 @@
 #define MAX_CHARS 1800
 #define MAX_CHARS_PER_LINE 60
 
-void insertarCola(rep *libro, refsApp *refs);
-void imprimirListaDoble(refsApp refs);
-void insertarListaDoble(refsApp *refs, secc *secci);
-void imprimirListaDobleSecc(refsApp refs);
+void instertarTodo(char tituloLibro[], int numeroSeccion, refsApp *refs);
+void imprimirRepisa(refsApp refs);
 
 extern gboolean delete_event_handler(GtkWidget *widget, GdkEvent *event, gpointer user_data)
 {
@@ -68,48 +66,23 @@ extern void visualizarVentanaEscribir(GtkWidget *botAlta, gpointer pVentana)
     return;
 }
 
-extern void crearLibro(GtkWidget *n, gpointer *pmiApp)
+extern void crearTodo(gpointer *pmiApp)
 {
-    rep *libro;
-    refsApp *refs = (refsApp *)pmiApp;
+    refsApp *refs;
+    
+    refs = (refsApp *)pmiApp;
 
-    libro = (rep *)malloc(sizeof(rep));
-    if (libro == NULL) 
-    {
-        printf("\nNo hay memoria suficiente\n");
-        return;
-    }
+    int numeroSeccion;
+    char tituloLibro[40];
 
-    libro->inicio = NULL;
-    libro->fin = NULL;
-    libro->aux = NULL;
+    strcpy(tituloLibro, gtk_entry_get_text(GTK_ENTRY(refs->titulo)));
+    sscanf(gtk_entry_get_text(GTK_ENTRY(refs->numSecc)), "%d", &numeroSeccion);
 
-    strcpy(libro->titulo, gtk_entry_get_text(GTK_ENTRY(refs->titulo)));
-    sscanf(gtk_entry_get_text(GTK_ENTRY(refs->numSecc)), "%d", &libro->numSeccs);
+    instertarTodo(tituloLibro, numeroSeccion, refs);
 
-    insertarCola(libro, refs);
+    imprimirRepisa(*refs);
 
-    imprimirListaDoble(*refs);
-}
-
-extern void crearSeccion(GtkWidget *n, gpointer *pmiApp)
-{
-    secc *secci;
-    refsApp *refs = (refsApp *)pmiApp;
-
-    secci = (secc *)malloc(sizeof(secc));
-    if (secci == NULL) 
-    {
-        printf("\nNo hay memoria suficiente\n");
-        return;
-    }
-
-    strcpy(secci->titSeccion, gtk_entry_get_text(GTK_ENTRY(refs->nomSecc)));
-    secci->numSecc = 1;
-
-    insertarListaDoble(refs, secci);
-
-    imprimirListaDobleSecc(*refs);
+    return;
 }
 
 extern void on_insert_text(GtkTextBuffer *buffer, GtkTextIter *location, gchar *text, gint len, gpointer data) 

@@ -8,8 +8,8 @@ void visualizarVentanaEditar(GtkWidget *botEditar, gpointer pVentana);
 void visualizarVentanaAviso(GtkWidget *botEditar, gpointer pVentana);
 void visualizarVentanaSecc(GtkWidget *botEditar, gpointer pVentana);
 void visualizarVentanaEscribir(GtkWidget *botEditar, gpointer pVentana);
-void crearLibro(GtkWidget *n, gpointer *pmiApp);
-void crearSeccion(GtkWidget *n, gpointer *pmiApp);
+
+void crearTodo(gpointer *pmiApp);
 
 /*
 void print_and_quit(GtkButton *was_clicked, gpointer user_data);
@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
     GtkWidget *avisoLbl, *texto1Lbl, *texto2Lbl;
     GtkWidget *seccLbl, *preguntaLbl;
     GtkWidget *hBox51, *hBox52, *vBox5; 
-    GtkWidget *scrollWin, *texto, *separator;
+    GtkWidget *scrollWin, *separator;
     GtkWidget *capLbl, *hojaLbl;
     GtkWidget *hBox61, *hBox62, *hBox63, *vBox6; 
 
@@ -106,8 +106,8 @@ int main(int argc, char *argv[])
     vBox6 = gtk_vbox_new(FALSE, 10);
     capLbl = gtk_label_new("Capítulo: ");
     hojaLbl = gtk_label_new("Hoja: ");
-    texto = gtk_text_view_new();
-    gtk_widget_set_size_request(texto, 400, 300);
+    miApp.texto = gtk_text_view_new();
+    gtk_widget_set_size_request(miApp.texto, 400, 300);
     scrollWin = gtk_scrolled_window_new(NULL, NULL);
     separator = gtk_hseparator_new();
     miApp.capNom = gtk_label_new("1");
@@ -142,7 +142,7 @@ int main(int argc, char *argv[])
 
     g_signal_connect(G_OBJECT(botCrear), "clicked", GTK_SIGNAL_FUNC(visualizarVentanaCrear), window2);
     g_signal_connect(G_OBJECT(miApp.botRegresar), "clicked", G_CALLBACK(regresarAVentanaAnterior), window1);
-    g_signal_connect(G_OBJECT(miApp.botCrear), "clicked", G_CALLBACK(crearLibro), &miApp);
+    g_signal_connect(G_OBJECT(miApp.botCrear), "clicked", G_CALLBACK(crearTodo), &miApp);
 
     g_signal_connect(G_OBJECT(botEditar), "clicked", GTK_SIGNAL_FUNC(visualizarVentanaEditar), window3);
     g_signal_connect(G_OBJECT(miApp.edBotReg), "clicked", G_CALLBACK(regresarAVentanaAnterior), window1);
@@ -152,11 +152,11 @@ int main(int argc, char *argv[])
 
     g_signal_connect(G_OBJECT(miApp.avBotSig), "clicked", GTK_SIGNAL_FUNC(visualizarVentanaSecc), window5);
     g_signal_connect(G_OBJECT(miApp.botSeccReg), "clicked", G_CALLBACK(regresarAVentanaAnterior), window4);
-    g_signal_connect(G_OBJECT(miApp.btoSeccSig), "clicked", G_CALLBACK(crearSeccion), &miApp);
 
     g_signal_connect(G_OBJECT(miApp.btoSeccSig), "clicked", GTK_SIGNAL_FUNC(visualizarVentanaEscribir), window6);
     g_signal_connect(G_OBJECT(miApp.edBotEdit), "clicked", GTK_SIGNAL_FUNC(visualizarVentanaEscribir), window6);
     g_signal_connect(G_OBJECT(miApp.botReg), "clicked", G_CALLBACK(regresarAVentanaAnterior), window1);
+
 
     //4. Definiendo jerarquias
     gtk_box_pack_start_defaults(GTK_BOX(vBox1), bienvenidoLbl);
@@ -215,7 +215,7 @@ int main(int argc, char *argv[])
     gtk_box_pack_start_defaults(GTK_BOX(hBox61), hojaLbl);
     gtk_box_pack_start_defaults(GTK_BOX(hBox61), miApp.numHoj);
     gtk_box_pack_start_defaults(GTK_BOX(vBox6), hBox61);
-    gtk_container_add(GTK_CONTAINER(scrollWin), texto);
+    gtk_container_add(GTK_CONTAINER(scrollWin), miApp.texto);
     gtk_box_pack_start_defaults(GTK_BOX(vBox6), scrollWin);
     gtk_box_pack_start_defaults(GTK_BOX(vBox6), separator);
     gtk_box_pack_start_defaults(GTK_BOX(vBox6), miApp.botSigPag);
