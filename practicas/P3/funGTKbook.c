@@ -3,8 +3,10 @@
 #define MAX_CHARS 1800
 #define MAX_CHARS_PER_LINE 60
 
-void insertarCola(rep libro, refsApp *refs);
+void insertarCola(rep *libro, refsApp *refs);
 void imprimirListaDoble(refsApp refs);
+void insertarListaDoble(refsApp *refs, secc *secci);
+void imprimirListaDobleSecc(refsApp refs);
 
 extern gboolean delete_event_handler(GtkWidget *widget, GdkEvent *event, gpointer user_data)
 {
@@ -66,10 +68,14 @@ extern void visualizarVentanaEscribir(GtkWidget *botAlta, gpointer pVentana)
     return;
 }
 
-void crearLibro(GtkWidget *n, gpointer *pmiApp)
+extern void crearLibro(GtkWidget *n, gpointer *pmiApp)
 {
     rep *libro;
     refsApp *refs;
+
+    libro->inicio = NULL;
+    libro->fin = NULL;
+    libro->aux = NULL;
 
     libro = (rep *)malloc(sizeof(rep));
     refs = (refsApp *)pmiApp;
@@ -77,9 +83,27 @@ void crearLibro(GtkWidget *n, gpointer *pmiApp)
     strcpy(libro->titulo, gtk_entry_get_text(GTK_ENTRY(refs->titulo)));
     sscanf(gtk_entry_get_text(GTK_ENTRY(refs->numSecc)), "%d", &libro->numSeccs);
 
-    insertarCola(*libro, refs);
+    insertarCola(libro, refs);
 
     imprimirListaDoble(*refs);
+
+    return;
+}
+
+extern void crearSeccion(GtkWidget *n, gpointer *pmiApp)
+{
+    secc *secci;
+    refsApp *refs;
+
+    secci = (secc *)malloc(sizeof(secc));
+    refs = (refsApp *)pmiApp;
+
+    strcpy(secci->titSeccion, gtk_entry_get_text(GTK_ENTRY(refs->nomSecc)));
+    secci->numSecc = 1;
+
+    insertarListaDoble(refs, secci);
+
+    imprimirListaDobleSecc(*refs);
 
     return;
 }

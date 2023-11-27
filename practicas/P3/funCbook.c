@@ -41,3 +41,41 @@ extern void imprimirListaDoble(refsApp refs)
 
     return;
 }
+
+extern void insertarListaDoble(refsApp *refs, secc *secci)
+{
+    secci->izq = NULL;
+    secci->der = NULL;
+
+    if((refs->fin->inicio == NULL) && (refs->fin->fin == NULL))
+    {
+        refs->fin->inicio = secci;
+        refs->fin->fin = secci;
+    }
+    else
+    {
+        secci->izq = refs->fin->fin;
+        refs->fin->fin->der = secci;
+        refs->fin->fin = secci;
+    }
+
+    return;
+}
+
+extern void imprimirListaDobleSecc(refsApp refs)
+{
+    refs.fin->aux = refs.fin->inicio;
+
+    while(refs.fin->aux != NULL)
+    {
+        printf("\nNombre de sección: %s\t", refs.fin->aux->titSeccion);
+        printf("Número de sección: %d\n", refs.fin->aux->numSecc);
+        refs.fin->aux = refs.fin->aux->der;
+    }
+    if((refs.fin->inicio == NULL) && (refs.fin->fin == NULL))
+    {
+        printf("\nLista vacía.\n");
+    }
+
+    return;
+}

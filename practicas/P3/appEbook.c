@@ -9,6 +9,7 @@ void visualizarVentanaAviso(GtkWidget *botEditar, gpointer pVentana);
 void visualizarVentanaSecc(GtkWidget *botEditar, gpointer pVentana);
 void visualizarVentanaEscribir(GtkWidget *botEditar, gpointer pVentana);
 void crearLibro(GtkWidget *n, gpointer *pmiApp);
+void crearSeccion(GtkWidget *n, gpointer *pmiApp);
 
 /*
 void print_and_quit(GtkButton *was_clicked, gpointer user_data);
@@ -151,6 +152,7 @@ int main(int argc, char *argv[])
 
     g_signal_connect(G_OBJECT(miApp.avBotSig), "clicked", GTK_SIGNAL_FUNC(visualizarVentanaSecc), window5);
     g_signal_connect(G_OBJECT(miApp.botSeccReg), "clicked", G_CALLBACK(regresarAVentanaAnterior), window4);
+    g_signal_connect(G_OBJECT(miApp.btoSeccSig), "clicked", G_CALLBACK(crearSeccion), &miApp);
 
     g_signal_connect(G_OBJECT(miApp.btoSeccSig), "clicked", GTK_SIGNAL_FUNC(visualizarVentanaEscribir), window6);
     g_signal_connect(G_OBJECT(miApp.edBotEdit), "clicked", GTK_SIGNAL_FUNC(visualizarVentanaEscribir), window6);
