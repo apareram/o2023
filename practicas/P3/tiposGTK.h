@@ -22,18 +22,13 @@ struct repisa
         char titulo[40];
         int numSeccs;
         secc *inicio, *fin, *aux;
+        struct repisa *izq, *der;
      };
 typedef struct repisa rep;
 
-struct referencias
-    {
-        rep *inicio, *fin, *aux;
-    };
-typedef struct referencias nomad;
-
 struct appGTK
 {
-    nomad *inicio, *fin, *aux;
+    rep *inicio, *fin, *aux;
     GtkWidget *titulo, *numSecc, *botRegresar, *botCrear;
     GtkWidget *avBotReg, *avBotSig;
     GtkWidget *edTitLbl, *edSeccLbl, *edPagLbl, *edBotReg, *edBotEdit;

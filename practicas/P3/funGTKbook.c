@@ -3,6 +3,9 @@
 #define MAX_CHARS 1800
 #define MAX_CHARS_PER_LINE 60
 
+void insertarCola(rep libro, refsApp *refs);
+void imprimirListaDoble(refsApp refs);
+
 extern gboolean delete_event_handler(GtkWidget *widget, GdkEvent *event, gpointer user_data)
 {
     gtk_main_quit();
@@ -62,6 +65,25 @@ extern void visualizarVentanaEscribir(GtkWidget *botAlta, gpointer pVentana)
 
     return;
 }
+
+void crearLibro(GtkWidget *n, gpointer *pmiApp)
+{
+    rep libro;
+    refsApp *refs;
+
+    libro = (rep *)malloc(sizeof(rep));
+    refs = (refsApp *)pmiApp;
+
+    strcpy(libro.titulo, gtk_entry_get_text(GTK_ENTRY(refs->titulo)));
+    sscanf(gtk_entry_get_text(GTK_ENTRY(refs->numSecc)), "%d", &libro.numSeccs);
+
+    insertarCola(libro, refs);
+
+    imprimirListaDoble(&refs);
+
+    return;
+}
+
 
 extern void on_insert_text(GtkTextBuffer *buffer, GtkTextIter *location, gchar *text, gint len, gpointer data) 
 {
