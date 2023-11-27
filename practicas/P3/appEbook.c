@@ -9,7 +9,7 @@ void visualizarVentanaAviso(GtkWidget *botEditar, gpointer pVentana);
 void visualizarVentanaSecc(GtkWidget *botEditar, gpointer pVentana);
 void visualizarVentanaEscribir(GtkWidget *botEditar, gpointer pVentana);
 
-void crearTodo(gpointer *pmiApp);
+void crearTodo(GtkWidget *n, gpointer *pmiApp);
 
 /*
 void print_and_quit(GtkButton *was_clicked, gpointer user_data);

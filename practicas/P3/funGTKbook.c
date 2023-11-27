@@ -66,8 +66,7 @@ extern void visualizarVentanaEscribir(GtkWidget *botAlta, gpointer pVentana)
     return;
 }
 
-extern void crearTodo(gpointer *pmiApp)
-{
+extern void crearTodo(GtkWidget *n, gpointer *pmiApp){
     refsApp *refs;
     
     refs = (refsApp *)pmiApp;

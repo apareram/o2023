@@ -21,6 +21,7 @@ extern void instertarTodo(char tituloLibro[], int numeroSeccion, refsApp *refs)
     newLibro->aux = NULL;
     strncpy(newLibro->titulo, tituloLibro, sizeof(newLibro->titulo) - 1);
     newLibro->titulo[sizeof(newLibro->titulo) - 1] = '\0';
+    newLibro->numSeccs = numeroSeccion;
 
 
     for (int cont = 1; cont <= numeroSeccion; cont++) 
