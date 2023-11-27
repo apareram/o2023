@@ -68,16 +68,16 @@ extern void visualizarVentanaEscribir(GtkWidget *botAlta, gpointer pVentana)
 
 void crearLibro(GtkWidget *n, gpointer *pmiApp)
 {
-    rep libro;
+    rep *libro;
     refsApp *refs;
 
-    //libro = (rep *)malloc(sizeof(rep));
+    libro = (rep *)malloc(sizeof(rep));
     refs = (refsApp *)pmiApp;
 
-    strcpy(libro.titulo, gtk_entry_get_text(GTK_ENTRY(refs->titulo)));
-    sscanf(gtk_entry_get_text(GTK_ENTRY(refs->numSecc)), "%d", &libro.numSeccs);
+    strcpy(libro->titulo, gtk_entry_get_text(GTK_ENTRY(refs->titulo)));
+    sscanf(gtk_entry_get_text(GTK_ENTRY(refs->numSecc)), "%d", &libro->numSeccs);
 
-    insertarCola(libro, refs);
+    insertarCola(*libro, refs);
 
     imprimirListaDoble(*refs);
 
