@@ -98,7 +98,7 @@ int main(int argc, char *argv[])
     gtk_box_pack_start_defaults(GTK_BOX(vBox2), hBox22);
     gtk_box_pack_start_defaults(GTK_BOX(vBox2), hBox23);
     gtk_box_pack_start_defaults(GTK_BOX(vBox2), miApp.insertarNodo);
-
+    
     gtk_container_add(GTK_CONTAINER(window2), vBox2);
 
     // 5. Mostrar los widgets

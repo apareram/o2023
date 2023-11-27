@@ -33,7 +33,7 @@ typedef struct referencias nomad;
 struct appGTK
 {
     nomad *inicio, *fin, *aux;
-    GtkWidget *tituloLbl, *numSeccLbl, *botRegresar, *inBotCrear;
+    GtkWidget *titulo, *numSecc, *botRegresar, *botCrear;
     GtkWidget *avBotReg, *avBotSig;
     GtkWidget *edTitLbl, *edSeccLbl, *edPagLbl, *edBotReg, *edBotSig;
     GtkWidget *textoSeccLbl, *texto, *botSigPag, *botReg, *botInsertarImg;
