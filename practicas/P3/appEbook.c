@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
 {
     refsApp miApp;
     GtkWidget *window1, *window2, *window3, *window4, *window5;
-    GtkWidget *bienvenidoLbl, *introLbl, numSeccLbl2;
+    GtkWidget *bienvenidoLbl, *introLbl;
     GtkWidget *botEditar, *botCrear, *botSalir;
     GtkWidget *hBox1, *vBox1;    
     GtkWidget *hBox21, *hBox22, *hBox23, *vBox2;    
