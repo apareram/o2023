@@ -102,6 +102,7 @@ int main(int argc, char *argv[])
     capLbl = gtk_label_new("Capítulo: ");
     hojaLbl = gtk_label_new("Hoja: ");
     texto = gtk_text_view_new();
+    gtk_widget_set_size_request(texto, 400, 300);
     scrollWin = gtk_scrolled_window_new(NULL, NULL);
     separator = gtk_hseparator_new();
     miApp.capNom = gtk_label_new("1");
@@ -128,7 +129,6 @@ int main(int argc, char *argv[])
     gtk_container_set_border_width(GTK_CONTAINER(window5), 100);
 
     gtk_window_set_title(GTK_WINDOW(window6), "Sección");
-    //gtk_window_resize(GTK_WINDOW(window6), 500, 500);
     gtk_container_set_border_width(GTK_CONTAINER(window6), 100);
 
     //3. Registro de callbacks

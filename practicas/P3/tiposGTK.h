@@ -20,6 +20,7 @@ typedef struct seccion secc;
 struct repisa 
      {
         char titulo[40];
+        int numSeccs;
         secc *inicio, *fin, *aux;
      };
 typedef struct repisa rep;
