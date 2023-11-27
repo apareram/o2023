@@ -1,78 +1,89 @@
 #include "tiposGTK.h"
 
-void instertarTodo(char tituloLibro[], int numeroSeccion, refsApp *refs)
+extern void instertarTodo(char tituloLibro[], int numeroSeccion, refsApp *refs)
 {
-    int cont = 1;
-    rep *newLibro;
-
-    newLibro = (rep *)malloc(sizeof(rep));
-    if (newLibro == NULL) 
+    if (numeroSeccion <= 0) 
     {
-        printf("\nNo hay memoria suficiente\n");
+        printf("Número de secciones debe ser mayor a 0.\n");
         return;
     }
 
+    rep *newLibro = (rep *)malloc(sizeof(rep));
+    if (newLibro == NULL)
+    {
+        printf("\nNo hay memoria suficiente para el libro\n");
+        return;
+    }
+
+    // Inicialización de la estructura rep
     newLibro->inicio = NULL;
     newLibro->fin = NULL;
     newLibro->aux = NULL;
-
-    strcpy(newLibro->titulo, tituloLibro);
+    strncpy(newLibro->titulo, tituloLibro, sizeof(newLibro->titulo) - 1);
     newLibro->numSeccs = numeroSeccion;
 
-    while(cont <= numeroSeccion)
+    for (int cont = 1; cont <= numeroSeccion; cont++) 
     {
-        secc *newSecc;
-        newSecc = (secc *)malloc(sizeof(secc));
+        secc *newSecc = (secc *)malloc(sizeof(secc));
+        if (newSecc == NULL) 
+        {
+            printf("\nNo hay memoria suficiente para la sección\n");
+            // Aquí deberías liberar la memoria previamente asignada
+            return;
+        }
 
-        hoja *newPag;
-        newPag = (hoja *)malloc(sizeof(hoja));
-
+        // Inicialización de la estructura secc
         newSecc->izq = NULL;
         newSecc->der = NULL;
         newSecc->primPag = NULL;
         newSecc->ultPag = NULL;
-
         newSecc->numSecc = cont;
 
+        // Crear y inicializar la primera página
+        hoja *newPag = (hoja *)malloc(sizeof(hoja));
+        if (newPag == NULL) 
+        {
+            printf("\nNo hay memoria suficiente para la página\n");
+            // Aquí deberías liberar la memoria previamente asignada
+            return;
+        }
         newPag->next = NULL;
 
         newSecc->primPag = newPag;
         newSecc->ultPag = newPag;
 
-        if((newLibro->inicio == NULL) && (newLibro->fin == NULL))
+        // Enlazar la nueva sección en el libro
+        if (newLibro->inicio == NULL) 
         {
             newLibro->inicio = newSecc;
             newLibro->fin = newSecc;
-            newLibro->aux = newSecc;
-        }
-        else
+        } 
+        else 
         {
-            newSecc->izq = newLibro->fin;
             newLibro->fin->der = newSecc;
+            newSecc->izq = newLibro->fin;
             newLibro->fin = newSecc;
         }
-
-        cont++;
     }
 
-    if((refs->inicio == NULL) && ( refs->fin == NULL))
+    // Enlazar el nuevo libro en la repisa
+    if (refs->inicio == NULL) 
     {
-        newLibro->der = newLibro;
-        newLibro->izq = newLibro;
         refs->inicio = newLibro;
         refs->fin = newLibro;
-    }
+        newLibro->izq = newLibro;
+        newLibro->der = newLibro;
+    } 
     else
     {
         newLibro->izq = refs->fin;
-        newLibro->der = refs->inicio;
         refs->fin->der = newLibro;
+        newLibro->der = refs->inicio;
         refs->inicio->izq = newLibro;
         refs->fin = newLibro;
     }
-
-    return;
 }
+
 
 void imprimirLibro(rep refs)
 {
