@@ -35,7 +35,7 @@ struct appGTK
     nomad *inicio, *fin, *aux;
     GtkWidget *titulo, *numSecc, *botRegresar, *botCrear;
     GtkWidget *avBotReg, *avBotSig;
-    GtkWidget *edTitLbl, *edSeccLbl, *edPagLbl, *edBotReg, *edBotSig;
+    GtkWidget *edTitLbl, *edSeccLbl, *edPagLbl, *edBotReg, *edBotEdit;
     GtkWidget *textoSeccLbl, *texto, *botSigPag, *botReg, *botInsertarImg;
     GtkWidget *botGurdaryVer;
 };

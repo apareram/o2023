@@ -24,6 +24,13 @@ extern void visualizarVentanaCrear(GtkWidget *botAlta, gpointer pVentana)
     return;
 }
 
+extern void visualizarVentanaEditar(GtkWidget *botAlta, gpointer pVentana)
+{
+    gtk_widget_show_all(pVentana);
+
+    return;
+}
+
 extern void on_insert_text(GtkTextBuffer *buffer, GtkTextIter *location, gchar *text, gint len, gpointer data) 
 {
     GtkTextIter start, end;
