@@ -71,18 +71,18 @@ extern void visualizarVentanaEscribir(GtkWidget *botAlta, gpointer pVentana)
 extern void crearLibro(GtkWidget *n, gpointer *pmiApp)
 {
     rep *libro;
-    refsApp *refs;
+    refsApp *refs = (refsApp *)pmiApp;
+
+    libro = (rep *)malloc(sizeof(rep));
+    if (libro == NULL) 
+    {
+        printf("\nNo hay memoria suficiente\n");
+        return;
+    }
 
     libro->inicio = NULL;
     libro->fin = NULL;
     libro->aux = NULL;
-    
-    refs->fin->inicio = NULL;
-    refs->fin->fin = NULL;
-    refs->fin->aux = NULL;
-
-    libro = (rep *)malloc(sizeof(rep));
-    refs = (refsApp *)pmiApp;
 
     strcpy(libro->titulo, gtk_entry_get_text(GTK_ENTRY(refs->titulo)));
     sscanf(gtk_entry_get_text(GTK_ENTRY(refs->numSecc)), "%d", &libro->numSeccs);
@@ -90,17 +90,19 @@ extern void crearLibro(GtkWidget *n, gpointer *pmiApp)
     insertarCola(libro, refs);
 
     imprimirListaDoble(*refs);
-
-    return;
 }
 
 extern void crearSeccion(GtkWidget *n, gpointer *pmiApp)
 {
     secc *secci;
-    refsApp *refs;
+    refsApp *refs = (refsApp *)pmiApp;
 
     secci = (secc *)malloc(sizeof(secc));
-    refs = (refsApp *)pmiApp;
+    if (secci == NULL) 
+    {
+        printf("\nNo hay memoria suficiente\n");
+        return;
+    }
 
     strcpy(secci->titSeccion, gtk_entry_get_text(GTK_ENTRY(refs->nomSecc)));
     secci->numSecc = 1;
@@ -108,8 +110,6 @@ extern void crearSeccion(GtkWidget *n, gpointer *pmiApp)
     insertarListaDoble(refs, secci);
 
     imprimirListaDobleSecc(*refs);
-
-    return;
 }
 
 extern void on_insert_text(GtkTextBuffer *buffer, GtkTextIter *location, gchar *text, gint len, gpointer data) 
