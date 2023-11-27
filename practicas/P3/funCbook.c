@@ -1,6 +1,6 @@
 #include "tiposGTK.h"
 
-extern void insertarCola(rep libro, refsApp *refs)
+extern void insertarCola(rep *libro, refsApp *refs)
 {
     if((refs->inicio == NULL) && (refs->fin == NULL))
     {

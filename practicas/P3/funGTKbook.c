@@ -71,7 +71,7 @@ void crearLibro(GtkWidget *n, gpointer *pmiApp)
     rep libro;
     refsApp *refs;
 
-    libro = (rep *)malloc(sizeof(rep));
+    //libro = (rep *)malloc(sizeof(rep));
     refs = (refsApp *)pmiApp;
 
     strcpy(libro.titulo, gtk_entry_get_text(GTK_ENTRY(refs->titulo)));
@@ -79,11 +79,10 @@ void crearLibro(GtkWidget *n, gpointer *pmiApp)
 
     insertarCola(libro, refs);
 
-    imprimirListaDoble(&refs);
+    imprimirListaDoble(*refs);
 
     return;
 }
-
 
 extern void on_insert_text(GtkTextBuffer *buffer, GtkTextIter *location, gchar *text, gint len, gpointer data) 
 {
