@@ -37,7 +37,7 @@ struct appGTK
     GtkWidget *avBotReg, *avBotSig;
     GtkWidget *edTitLbl, *edSeccLbl, *edPagLbl, *edBotReg, *edBotEdit;
     GtkWidget *btoSeccSig, *botSeccReg, *nomSecc, *seccNum;
-    GtkWidget *textoSeccLbl, *texto, *botSigPag, *botReg, *botInsertarImg;
-    GtkWidget *botGurdaryVer;
+    GtkWidget *botSigPag, *botReg, *botInsertarImg, *botGurdaryVer, *botSigSecc;
+    GtkWidget *capNom, *numHoj;
 };
 typedef struct appGTK refsApp;
