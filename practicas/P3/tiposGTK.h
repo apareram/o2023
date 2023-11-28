@@ -1,4 +1,7 @@
 #include <gtk-2.0/gtk/gtk.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 struct elemnto 
      {
@@ -32,6 +35,7 @@ typedef struct repisa rep;
 struct appGTK
 {
     rep *inicio, *fin, *aux;
+    rep *libroActual;
     GtkWidget *titulo, *numSecc, *botRegresar, *botCrear;
     GtkWidget *avBotReg, *avBotSig;
     GtkWidget *edTitLbl, *edSeccLbl, *edPagLbl, *edBotReg, *edBotEdit;

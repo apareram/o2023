@@ -19,6 +19,7 @@ extern void instertarTodo(char tituloLibro[], int numeroSeccion, refsApp *refs)
     newLibro->inicio = NULL;
     newLibro->fin = NULL;
     newLibro->aux = NULL;
+    newLibro->aux = newLibro->fin;
     strcpy(newLibro->titulo, tituloLibro);
     newLibro->numSeccs = numeroSeccion;
 
@@ -68,7 +69,6 @@ extern void instertarTodo(char tituloLibro[], int numeroSeccion, refsApp *refs)
         }
     }
 
-    // Enlazar el nuevo libro en la repisa
     if (refs->inicio == NULL) 
     {
         refs->inicio = newLibro;
@@ -84,7 +84,11 @@ extern void instertarTodo(char tituloLibro[], int numeroSeccion, refsApp *refs)
         refs->inicio->izq = newLibro;
         refs->fin = newLibro;
     }
+
+    // Asignar el nuevo libro al puntero libroActual
+    refs->libroActual = newLibro;
 }
+
 
 void imprimirLibro(rep refs)
 {
@@ -124,4 +128,96 @@ extern void imprimirRepisa(refsApp refs)
     }
 
     return;
+}
+
+extern void modificarNomSeccion(rep *libro, char nomSecc[]) 
+{
+    secc *seccionActual;
+    
+    if (libro == NULL || nomSecc == NULL) 
+    {
+        printf("Error: libro o nombre de sección no válido.\n");
+        return;
+    }
+
+    seccionActual = libro->inicio;
+    if (seccionActual != NULL) 
+    {
+        strcpy(seccionActual->titSeccion, nomSecc);
+        seccionActual = seccionActual->der;
+    }
+}
+
+extern void guardarLibroEnBin(rep *libro) 
+{
+    FILE *archivo;
+    secc *seccionActual;
+    hoja *paginaActual;
+    char nombreArchivo[45];
+    
+    if (libro == NULL || nombreArchivo == NULL) 
+    {
+        printf("Error: libro o nombre de archivo no válido.\n");
+        return;
+    }
+
+    snprintf(nombreArchivo, sizeof(nombreArchivo), "%s.bin", libro->titulo);
+    archivo = fopen(nombreArchivo, "wb");
+    if (archivo == NULL) {
+        perror("Error al abrir el archivo");
+        return;
+    }
+
+    seccionActual = libro->inicio;
+    while (seccionActual != NULL) 
+    {
+        paginaActual = seccionActual->primPag;
+        while (paginaActual != NULL) 
+        {
+            fwrite(libro->titulo, sizeof(libro->titulo), 1, archivo);
+            fwrite(seccionActual->titSeccion, sizeof(seccionActual->titSeccion), 1, archivo);
+            fwrite(&(paginaActual->numero), sizeof(paginaActual->numero), 1, archivo);
+            fwrite(paginaActual->texto, sizeof(paginaActual->texto), 1, archivo);
+            paginaActual = paginaActual->next;
+        }
+        seccionActual = seccionActual->der;
+    }
+    fclose(archivo);
+}
+
+extern void guardarLibroEnTxt(rep *libro) 
+{
+    FILE *archivo;
+    secc *seccionActual;
+    hoja *paginaActual;
+    char nombreArchivo[45]; 
+    
+    if (libro == NULL || nombreArchivo == NULL) 
+    {
+        printf("Error: libro o nombre de archivo no válido.\n");
+        return;
+    }
+
+    snprintf(nombreArchivo, sizeof(nombreArchivo), "%s.txt", libro->titulo);
+    archivo = fopen(nombreArchivo, "w");
+    if (archivo == NULL) {
+        perror("Error al abrir el archivo");
+        return;
+    }
+
+    seccionActual = libro->inicio;
+    while (seccionActual != NULL) 
+    {
+        paginaActual = seccionActual->primPag;
+        while (paginaActual != NULL) 
+        {
+            fprintf(archivo, "Título: %s\n", libro->titulo);
+            fprintf(archivo, "Sección: %s\n", seccionActual->titSeccion);
+            fprintf(archivo, "Número de página: %d\n", paginaActual->numero);
+            fprintf(archivo, "Texto: %s\n", paginaActual->texto);
+            paginaActual = paginaActual->next;
+        }
+        seccionActual = seccionActual->der;
+    }
+    fclose(archivo);
 }
