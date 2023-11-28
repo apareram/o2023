@@ -10,6 +10,8 @@ void visualizarVentanaSecc(GtkWidget *botEditar, gpointer pVentana);
 void visualizarVentanaEscribir(GtkWidget *botEditar, gpointer pVentana);
 
 void crearTodo(GtkWidget *n, gpointer *pmiApp);
+void nombrarSeccion(GtkWidget *widget, gpointer *pmiApp);
+void navegarYNombrarSeccion(GtkWidget *widget, gpointer data);
 
 /*
 void print_and_quit(GtkButton *was_clicked, gpointer user_data);
@@ -19,6 +21,7 @@ void on_insert_text(GtkTextBuffer *buffer, GtkTextIter *location, gchar *text, g
 int main(int argc, char *argv[]) 
 {
     refsApp miApp;
+    //int NumSecc;
     GtkWidget *window1, *window2, *window3, *window4, *window5, *window6;
     GtkWidget *bienvenidoLbl, *introLbl;
     GtkWidget *botEditar, *botCrear, *botSalir;
@@ -38,6 +41,8 @@ int main(int argc, char *argv[])
     miApp.inicio = NULL;
     miApp.fin = NULL;
     miApp.aux = NULL;
+
+    //sprintf(NumSecc, "%d", miApp.aux->aux->numSecc);
 
     //1. inicializar entorno
     gtk_init(&argc, &argv);
@@ -152,11 +157,15 @@ int main(int argc, char *argv[])
 
     g_signal_connect(G_OBJECT(miApp.avBotSig), "clicked", GTK_SIGNAL_FUNC(visualizarVentanaSecc), window5);
     g_signal_connect(G_OBJECT(miApp.botSeccReg), "clicked", G_CALLBACK(regresarAVentanaAnterior), window4);
+    g_signal_connect(G_OBJECT(miApp.btoSeccSig), "clicked", G_CALLBACK(nombrarSeccion), &miApp);
 
     g_signal_connect(G_OBJECT(miApp.btoSeccSig), "clicked", GTK_SIGNAL_FUNC(visualizarVentanaEscribir), window6);
     g_signal_connect(G_OBJECT(miApp.edBotEdit), "clicked", GTK_SIGNAL_FUNC(visualizarVentanaEscribir), window6);
     g_signal_connect(G_OBJECT(miApp.botReg), "clicked", G_CALLBACK(regresarAVentanaAnterior), window1);
-
+    g_signal_connect(G_OBJECT(miApp.botSigSecc), "clicked", G_CALLBACK(navegarYNombrarSeccion), &miApp);
+    g_signal_connect(G_OBJECT(miApp.avBotSig), "clicked", GTK_SIGNAL_FUNC(visualizarVentanaSecc), window5);
+    g_signal_connect(G_OBJECT(miApp.btoSeccSig), "clicked", G_CALLBACK(nombrarSeccion), &miApp);
+    g_signal_connect(G_OBJECT(miApp.botSeccReg), "clicked", G_CALLBACK(regresarAVentanaAnterior), window6);
 
     //4. Definiendo jerarquias
     gtk_box_pack_start_defaults(GTK_BOX(vBox1), bienvenidoLbl);

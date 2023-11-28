@@ -5,6 +5,7 @@
 
 void instertarTodo(char tituloLibro[], int numeroSeccion, refsApp *refs);
 void imprimirRepisa(refsApp refs);
+void sigeSec(char tituloSeccion[], rep *nRefs);
 
 extern gboolean delete_event_handler(GtkWidget *widget, GdkEvent *event, gpointer user_data)
 {
@@ -82,6 +83,43 @@ extern void crearTodo(GtkWidget *n, gpointer *pmiApp){
     imprimirRepisa(*refs);
 
     return;
+}
+
+extern void nombrarSeccion(GtkWidget *n, gpointer data)
+{
+    secc *seccionActual = (secc *)data; // Asegúrate de que data sea de tipo secc *
+
+    if (seccionActual != NULL) {
+        const char *nombreSeccion = gtk_entry_get_text(GTK_ENTRY(n));
+        strncpy(seccionActual->titSeccion, nombreSeccion, sizeof(seccionActual->titSeccion) - 1);
+        seccionActual->titSeccion[sizeof(seccionActual->titSeccion) - 1] = '\0';
+    }
+}
+
+
+extern void navegarYNombrarSeccion(GtkWidget *widget, gpointer data)
+{
+    refsApp *app = (refsApp *)data;
+    secc *seccActual;
+    seccActual = (secc *)(app->aux);
+
+    // Navegación: Supongamos que usamos botones para navegar
+    if (widget == app->botSigSecc) {
+        if (app->aux && app->aux->der) {
+            app->aux = app->aux->der;
+        }
+    } else if (widget == app->botReg) {
+        if (app->aux && app->aux->izq) {
+            app->aux = app->aux->izq;
+        }
+    }
+
+    // Actualizar la interfaz con la información de la sección actual
+    if (app->aux) 
+    {
+        gtk_label_set_text(GTK_LABEL(app->seccNum), g_strdup_printf("%d", app->aux->numSeccs));
+        gtk_entry_set_text(GTK_ENTRY(app->nomSecc), seccActual->titSeccion);
+    }
 }
 
 extern void on_insert_text(GtkTextBuffer *buffer, GtkTextIter *location, gchar *text, gint len, gpointer data) 

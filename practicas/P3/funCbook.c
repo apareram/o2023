@@ -40,6 +40,8 @@ extern void instertarTodo(char tituloLibro[], int numeroSeccion, refsApp *refs)
         newSecc->primPag = NULL;
         newSecc->ultPag = NULL;
         newSecc->numSecc = cont;
+        strncpy(newSecc->titSeccion, "nada", sizeof(newSecc->titSeccion) - 1);
+        newSecc->titSeccion[sizeof(newSecc->titSeccion) - 1] = '\0';
 
         // Crear y inicializar la primera página
         hoja *newPag = (hoja *)malloc(sizeof(hoja));
@@ -122,6 +124,14 @@ extern void imprimirRepisa(refsApp refs)
             refs.aux = refs.aux->der;
        }while(refs.aux != refs.inicio); 
     }
+
+    return;
+}
+
+void sigeSec(char tituloSeccion[], rep *nRefs)
+{
+
+
 
     return;
 }
