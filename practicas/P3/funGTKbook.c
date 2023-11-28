@@ -5,6 +5,7 @@ void imprimirRepisa(refsApp refs);
 void modificarNomSeccion(rep *libro, char nomSecc[]);
 void guardarLibroEnBin(rep *libro);
 void guardarLibroEnTxt(rep *libro);
+void moverPagina(rep *libro);
 
 extern gboolean delete_event_handler(GtkWidget *widget, GdkEvent *event, gpointer user_data)
 {
@@ -99,29 +100,37 @@ extern void nombrarSecciones(GtkWidget *n, gpointer *pmiApp)
     return;
 }
 
-extern void tomarTexto(GtkButton *was_clicked, gpointer *pmiApp) 
+extern void tomarTexto(GtkWidget *was_clicked, gpointer *pmiApp)
 {
+    refsApp *refs;
     GtkTextBuffer *buffer; 
     GtkTextIter inicio, fin; 
     const gchar *textoEnVentana;
-    refsApp *refs;
+    secc *seccionActual;
+    hoja *paginaActual;
+
     refs = (refsApp *)pmiApp;
 
-    if (!refs || !refs->aux || !refs->aux->aux || !refs->aux->aux->primPag) {
-        printf("Error: puntero NULL encontrado.\n");
+    if(refs->libroActual == NULL)
+    {
+        printf("\no un un libro actualmente en edición\n");
         return;
+    }
+
+    seccionActual = refs->libroActual->inicio;
+    paginaActual = seccionActual->primPag;
+    while (paginaActual != NULL) 
+    {
+        paginaActual = paginaActual->next;
     }
 
     buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(refs->texto));
     gtk_text_buffer_get_bounds(GTK_TEXT_BUFFER(buffer), &inicio, &fin);
     textoEnVentana = gtk_text_buffer_get_text(GTK_TEXT_BUFFER(buffer), &inicio, &fin, FALSE); 
 
-    strncpy(refs->aux->aux->primPag->texto, textoEnVentana, sizeof(refs->aux->aux->primPag->texto) - 1);
-    refs->aux->aux->primPag->texto[sizeof(refs->aux->aux->primPag->texto) - 1] = '\0';
-   
-    printf("\n%s\n", refs->aux->aux->primPag->texto);
+    strncpy(paginaActual->texto, textoEnVentana, sizeof(paginaActual->texto) - 1);
+    paginaActual->texto[sizeof(paginaActual->texto) - 1] = '\0';
 
-    return; 
 }
 
 extern void guardarEnBin(GtkWidget *was_clicked, gpointer *pmiApp)
@@ -150,4 +159,14 @@ extern void guardarEnTxt(GtkWidget *was_clicked, gpointer *pmiApp)
     }
 
     guardarLibroEnTxt(refs->libroActual);
+}
+
+extern void siguientePagina(GtkWidget *was_clicked, gpointer *pmiApp)
+{   
+    refsApp *refs;
+    refs = (refsApp *)pmiApp;
+
+    moverPagina(refs->libroActual);
+
+    return;
 }

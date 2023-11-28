@@ -148,6 +148,46 @@ extern void modificarNomSeccion(rep *libro, char nomSecc[])
     }
 }
 
+extern void moverPagina(rep *libro)
+{
+    secc *seccionActual;
+    hoja *nuevaPagina;
+
+    seccionActual = libro->inicio;
+    nuevaPagina = (hoja *)malloc(sizeof(hoja));
+
+    if (libro == NULL || libro->inicio == NULL) 
+    {
+        printf("Libro no válido o vacío.\n");
+        return;
+    }
+
+    if (nuevaPagina == NULL) 
+    {
+        printf("No se pudo asignar memoria para una nueva página.\n");
+        return;
+    }
+
+    // Inicializar la nueva página
+    nuevaPagina->next = NULL;
+    nuevaPagina->numero = seccionActual->ultPag->numero + 1;
+    strcpy(nuevaPagina->titulo, libro->titulo);
+    strcpy(nuevaPagina->titSeccion, seccionActual->titSeccion);
+    nuevaPagina->numSecc = seccionActual->numSecc;
+    memset(nuevaPagina->texto, 0, sizeof(nuevaPagina->texto)); // Inicializar el texto con una cadena vacía
+
+    // Agregar la nueva página al final de la lista de páginas
+    if (seccionActual->ultPag == NULL) 
+    {
+        seccionActual->primPag = nuevaPagina;
+    } 
+    else 
+    {
+        seccionActual->ultPag->next = nuevaPagina;
+    }
+    seccionActual->ultPag = nuevaPagina;
+}
+
 extern void guardarLibroEnBin(rep *libro) 
 {
     FILE *archivo;
