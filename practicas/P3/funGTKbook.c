@@ -109,7 +109,7 @@ void moverSeccion(GtkWidget *was_clicked, gpointer *pmiApp)
 
     return;
 }
-
+/*
 extern void tomarTexto(GtkWidget *was_clicked, gpointer *pmiApp)
 {
     refsApp *refs;
@@ -141,7 +141,51 @@ extern void tomarTexto(GtkWidget *was_clicked, gpointer *pmiApp)
     strncpy(paginaActual->texto, textoEnVentana, sizeof(paginaActual->texto) - 1);
     paginaActual->texto[sizeof(paginaActual->texto) - 1] = '\0';
 
+}*/
+
+extern void tomarTexto(GtkWidget *was_clicked, gpointer *pmiApp)
+{
+    refsApp *refs;
+    GtkTextBuffer *buffer; 
+    GtkTextIter inicio, fin; 
+    const gchar *textoEnVentana;
+    secc *seccionActual;
+    hoja *paginaActual;
+
+    refs = (refsApp *)pmiApp;
+
+    if(refs->libroActual == NULL)
+    {
+        printf("\nNo hay un libro actualmente en edición\n");
+        return;
+    }
+
+    seccionActual = refs->libroActual->inicio;
+    if (seccionActual == NULL) {
+        printf("\nNo hay secciones en el libro actual\n");
+        return;
+    }
+
+    paginaActual = seccionActual->primPag;
+    if (paginaActual == NULL) {
+        printf("\nNo hay páginas en la sección actual\n");
+        return;
+    }
+
+    // Avanzar hasta la última página no nula
+    while (paginaActual->next != NULL) 
+    {
+        paginaActual = paginaActual->next;
+    }
+
+    buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(refs->texto));
+    gtk_text_buffer_get_bounds(GTK_TEXT_BUFFER(buffer), &inicio, &fin);
+    textoEnVentana = gtk_text_buffer_get_text(GTK_TEXT_BUFFER(buffer), &inicio, &fin, FALSE); 
+
+    strncpy(paginaActual->texto, textoEnVentana, sizeof(paginaActual->texto) - 1);
+    paginaActual->texto[sizeof(paginaActual->texto) - 1] = '\0';
 }
+
 
 extern void guardarEnBin(GtkWidget *was_clicked, gpointer *pmiApp)
 {
