@@ -21,7 +21,7 @@ void on_insert_text(GtkTextBuffer *buffer, GtkTextIter *location, gchar *text, g
 int main(int argc, char *argv[]) 
 {
     refsApp miApp;
-    //int NumSecc;
+    char NumSecc[100];
     GtkWidget *window1, *window2, *window3, *window4, *window5, *window6;
     GtkWidget *bienvenidoLbl, *introLbl;
     GtkWidget *botEditar, *botCrear, *botSalir;
@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
     miApp.fin = NULL;
     miApp.aux = NULL;
 
-    //sprintf(NumSecc, "%d", miApp.aux->aux->numSecc);
+    sprintf(NumSecc, "%d", miApp.aux->aux->numSecc);
 
     //1. inicializar entorno
     gtk_init(&argc, &argv);
@@ -100,7 +100,7 @@ int main(int argc, char *argv[])
     seccLbl = gtk_label_new("Sección:");
     preguntaLbl = gtk_label_new("¿Cuál es el título de esta sección?");
     miApp.nomSecc = gtk_entry_new();
-    miApp.seccNum = gtk_label_new("1");
+    miApp.seccNum = gtk_label_new(NumSecc);
     miApp.botSeccReg = gtk_button_new_with_label("Regresar");
     miApp.btoSeccSig = gtk_button_new_with_label("Siguiente");
 
