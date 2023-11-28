@@ -19,17 +19,13 @@ extern void instertarTodo(char tituloLibro[], int numeroSeccion, refsApp *refs)
     newLibro->inicio = NULL;
     newLibro->fin = NULL;
     newLibro->aux = NULL;
-    strncpy(newLibro->titulo, tituloLibro, sizeof(newLibro->titulo) - 1);
-    newLibro->titulo[sizeof(newLibro->titulo) - 1] = '\0';
+    strcpy(newLibro->titulo, tituloLibro);
     newLibro->numSeccs = numeroSeccion;
-
 
     for (int cont = 1; cont <= numeroSeccion; cont++) 
     {
         secc *newSecc = (secc *)malloc(sizeof(secc));
         if (newSecc == NULL) {
-            // Liberar memoria previamente asignada
-            free(newLibro);
             printf("\nNo hay memoria suficiente para la sección\n");
             return;
         }
@@ -46,10 +42,14 @@ extern void instertarTodo(char tituloLibro[], int numeroSeccion, refsApp *refs)
         if (newPag == NULL) 
         {
             printf("\nNo hay memoria suficiente para la página\n");
-            // Aquí deberías liberar la memoria previamente asignada
             return;
         }
         newPag->next = NULL;
+        strcpy(newPag->titSeccion,newSecc->titSeccion);
+        strcpy(newPag->titSeccion,newSecc->titSeccion);
+        newPag->numSecc = newSecc->numSecc;
+        strcpy(newPag->titulo, newLibro->titulo);
+        newPag->numero = 1;
 
         newSecc->primPag = newPag;
         newSecc->ultPag = newPag;
