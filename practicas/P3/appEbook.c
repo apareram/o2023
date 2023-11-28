@@ -11,6 +11,8 @@ void visualizarVentanaEscribir(GtkWidget *botEditar, gpointer pVentana);
 void tomarTexto(GtkButton *was_clicked, gpointer *pmiApp);
 void crearTodo(GtkWidget *n, gpointer *pmiApp);
 void nombrarSecciones(GtkWidget *n, gpointer *pmiApp);
+void guardarEnBin(GtkWidget *was_clicked, gpointer *pmiApp);
+void guardarEnTxt(GtkWidget *was_clicked, gpointer *pmiApp);
 
 /*
 void print_and_quit(GtkButton *was_clicked, gpointer user_data);
@@ -40,6 +42,7 @@ int main(int argc, char *argv[])
     miApp.fin = NULL;
     miApp.aux = NULL;
     miApp.aux = miApp.inicio;
+    miApp.libroActual = NULL;
 
     //1. inicializar entorno
     gtk_init(&argc, &argv);
@@ -163,7 +166,9 @@ int main(int argc, char *argv[])
     g_signal_connect(G_OBJECT(miApp.botReg), "clicked", G_CALLBACK(regresarAVentanaAnterior), window1);
 
     g_signal_connect(G_OBJECT(miApp.botGurdaryVer), "clicked", G_CALLBACK(tomarTexto), &miApp);
-
+    g_signal_connect(G_OBJECT(miApp.botGurdaryVer), "clicked", G_CALLBACK(guardarEnBin), &miApp);
+    g_signal_connect(G_OBJECT(miApp.botGurdaryVer), "clicked", G_CALLBACK(guardarEnTxt), &miApp);
+    
     //4. Definiendo jerarquias
     gtk_box_pack_start_defaults(GTK_BOX(vBox1), bienvenidoLbl);
     gtk_box_pack_start_defaults(GTK_BOX(vBox1), introLbl);

@@ -2,6 +2,9 @@
 
 void instertarTodo(char tituloLibro[], int numeroSeccion, refsApp *refs);
 void imprimirRepisa(refsApp refs);
+void modificarNomSeccion(rep *libro, char nomSecc[]);
+void guardarLibroEnBin(rep *libro);
+void guardarLibroEnTxt(rep *libro);
 
 extern gboolean delete_event_handler(GtkWidget *widget, GdkEvent *event, gpointer user_data)
 {
@@ -85,19 +88,13 @@ extern void crearTodo(GtkWidget *n, gpointer *pmiApp)
 extern void nombrarSecciones(GtkWidget *n, gpointer *pmiApp)
 {   
     refsApp *refs;
-    rep *libro;
-    
+    char newNomSecc[40];
+
     refs = (refsApp *)pmiApp;
 
-    refs->aux = refs->fin;
-    refs->aux->aux = refs->aux->inicio;
+    strcpy(newNomSecc, gtk_entry_get_text(GTK_ENTRY(refs->nomSecc)));        
 
-    while(refs->aux->aux != NULL)
-    {
-        strcpy(refs->aux->aux->titSeccion, gtk_entry_get_text(GTK_ENTRY(refs->nomSecc)));        
-        refs->aux->aux = refs->aux->aux->der;
-    }
-
+    modificarNomSeccion(refs->libroActual, newNomSecc);
 
     return;
 }
@@ -125,4 +122,32 @@ extern void tomarTexto(GtkButton *was_clicked, gpointer *pmiApp)
     printf("\n%s\n", refs->aux->aux->primPag->texto);
 
     return; 
+}
+
+extern void guardarEnBin(GtkWidget *was_clicked, gpointer *pmiApp)
+{
+    refsApp *refs;
+    refs = (refsApp *)pmiApp;
+
+    if(refs->libroActual == NULL)
+    {
+        printf("\no un un libro actualmente en edición\n");
+        return;
+    }
+
+    guardarLibroEnBin(refs->libroActual);
+}
+
+extern void guardarEnTxt(GtkWidget *was_clicked, gpointer *pmiApp)
+{
+    refsApp *refs;
+    refs = (refsApp *)pmiApp;
+
+    if(refs->libroActual == NULL)
+    {
+        printf("\no un un libro actualmente en edición\n");
+        return;
+    }
+
+    guardarLibroEnTxt(refs->libroActual);
 }
