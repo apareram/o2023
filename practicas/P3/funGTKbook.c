@@ -101,3 +101,28 @@ extern void nombrarSecciones(GtkWidget *n, gpointer *pmiApp)
 
     return;
 }
+
+extern void tomarTexto(GtkButton *was_clicked, gpointer *pmiApp) 
+{
+    GtkTextBuffer *buffer; 
+    GtkTextIter inicio, fin; 
+    const gchar *textoEnVentana;
+    refsApp *refs;
+    refs = (refsApp *)pmiApp;
+
+    if (!refs || !refs->aux || !refs->aux->aux || !refs->aux->aux->primPag) {
+        printf("Error: puntero NULL encontrado.\n");
+        return;
+    }
+
+    buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(refs->texto));
+    gtk_text_buffer_get_bounds(GTK_TEXT_BUFFER(buffer), &inicio, &fin);
+    textoEnVentana = gtk_text_buffer_get_text(GTK_TEXT_BUFFER(buffer), &inicio, &fin, FALSE); 
+
+    strncpy(refs->aux->aux->primPag->texto, textoEnVentana, sizeof(refs->aux->aux->primPag->texto) - 1);
+    refs->aux->aux->primPag->texto[sizeof(refs->aux->aux->primPag->texto) - 1] = '\0';
+   
+    printf("\n%s\n", refs->aux->aux->primPag->texto);
+
+    return; 
+}

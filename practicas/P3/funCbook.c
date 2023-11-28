@@ -19,6 +19,7 @@ extern void instertarTodo(char tituloLibro[], int numeroSeccion, refsApp *refs)
     newLibro->inicio = NULL;
     newLibro->fin = NULL;
     newLibro->aux = NULL;
+    newLibro->aux = newLibro->fin;
     strcpy(newLibro->titulo, tituloLibro);
     newLibro->numSeccs = numeroSeccion;
 
@@ -124,4 +125,19 @@ extern void imprimirRepisa(refsApp refs)
     }
 
     return;
+}
+
+extern void guardarArchivoBin(char *texto)
+{
+  FILE *fp;
+  
+  fp = fopen("pagina.bin", "w+b");
+    if(fp == NULL)
+    {
+        printf("\nArchivo no disponible\n");
+        exit(1);
+    }
+    
+    fwrite(&texto, sizeof(char *), 1, fp);
+    fclose(fp);
 }
