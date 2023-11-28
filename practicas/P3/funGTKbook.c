@@ -6,6 +6,7 @@ void modificarNomSeccion(rep *libro, char nomSecc[]);
 void guardarLibroEnBin(rep *libro);
 void guardarLibroEnTxt(rep *libro);
 void moverPagina(rep *libro);
+void siguienteSec(rep *libro);
 
 extern gboolean delete_event_handler(GtkWidget *widget, GdkEvent *event, gpointer user_data)
 {
@@ -96,6 +97,15 @@ extern void nombrarSecciones(GtkWidget *n, gpointer *pmiApp)
     strcpy(newNomSecc, gtk_entry_get_text(GTK_ENTRY(refs->nomSecc)));        
 
     modificarNomSeccion(refs->libroActual, newNomSecc);
+
+    return;
+}
+void moverSeccion(GtkWidget *was_clicked, gpointer *pmiApp)
+{
+    refsApp *refs;
+    refs = (refsApp *)pmiApp;
+
+    siguienteSec(refs->libroActual);
 
     return;
 }

@@ -14,6 +14,7 @@ void nombrarSecciones(GtkWidget *n, gpointer *pmiApp);
 void guardarEnBin(GtkWidget *was_clicked, gpointer *pmiApp);
 void guardarEnTxt(GtkWidget *was_clicked, gpointer *pmiApp);
 void siguientePagina(GtkWidget *was_clicked, gpointer *pmiApp);
+void moverSeccion(GtkWidget *was_clicked, gpointer *pmiApp);
 
 int main(int argc, char *argv[]) 
 {
@@ -167,6 +168,8 @@ int main(int argc, char *argv[])
 
     g_signal_connect(G_OBJECT(miApp.botSigSecc), "clicked", G_CALLBACK(visualizarVentanaSecc), window5);
     g_signal_connect(G_OBJECT(miApp.botSigSecc), "clicked", G_CALLBACK(tomarTexto), &miApp);
+    g_signal_connect(G_OBJECT(miApp.botSigSecc), "clicked", G_CALLBACK(moverSeccion), &miApp);
+    g_signal_connect(G_OBJECT(miApp.botSigSecc), "clicked", G_CALLBACK(visualizarVentanaSecc), window5);
     g_signal_connect(G_OBJECT(miApp.btoSeccSig), "clicked", G_CALLBACK(nombrarSecciones), &miApp);
     g_signal_connect(G_OBJECT(miApp.btoSeccSig), "clicked", G_CALLBACK(regresarAVentanaAnterior), window6);    
 

@@ -148,6 +148,27 @@ extern void modificarNomSeccion(rep *libro, char nomSecc[])
     }
 }
 
+extern void siguienteSec(rep *libro) 
+{
+    secc *seccionActual;
+
+    if (libro == NULL || libro->inicio == NULL) 
+    {
+        printf("Libro no válido o vacío.\n");
+        return;
+    }
+
+    seccionActual = libro->inicio;
+    if (seccionActual->der != NULL) 
+    {
+        libro->inicio = seccionActual->der;
+    } 
+    else 
+    {
+        printf("Ya estás en la última sección.\n");
+    }
+}
+
 extern void moverPagina(rep *libro)
 {
     secc *seccionActual;
