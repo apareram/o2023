@@ -1,4 +1,21 @@
+/*
+@file funCbook.c
+@brief El codigo utiliza la biblioteca GTK para construir una interfaz gráfica que facilita la creación y edición de libros
+       electrónicos, guiando al usuario a través de diferentes etapas del proceso.
+@author Alberto Parera Méndez, Diego Altamirano Tovar Y Ariadna Berenice Pedraza Rodriguez.
+@date 28/11/2023
+*/
 #include "tiposGTK.h"
+
+/*
+@brief Esta función crea una estructura de datos jerárquica para representar libros con secciones y páginas, 
+       manejando la asignación de memoria y la conexión de estructuras en un sistema de lista circular doblemente enlazada.
+@author Alberto Parera Méndez, Diego Altamirano Tovar Y Ariadna Berenice Pedraza Rodriguez.
+@date 28/11/2023
+@param char tituloLibro[]: Un arreglo de caracteres que representa el título del libro que se va a insertar
+@param int numeroSeccion: Un entero que indica el número de secciones que se deben crear en el libro.
+@param refsApp *refs: Un puntero a una estructura refsApp, que contiene referencias a libros. 
+*/
 
 extern void instertarTodo(char tituloLibro[], int numeroSeccion, refsApp *refs)
 {
@@ -19,7 +36,8 @@ extern void instertarTodo(char tituloLibro[], int numeroSeccion, refsApp *refs)
     newLibro->inicio = NULL;
     newLibro->fin = NULL;
     newLibro->aux = NULL;
-    newLibro->aux = newLibro->fin;
+    newLibro->der = NULL;
+    newLibro->izq = NULL;
     strcpy(newLibro->titulo, tituloLibro);
     newLibro->numSeccs = numeroSeccion;
 
@@ -46,7 +64,6 @@ extern void instertarTodo(char tituloLibro[], int numeroSeccion, refsApp *refs)
             return;
         }
         newPag->next = NULL;
-        strcpy(newPag->titSeccion,newSecc->titSeccion);
         strcpy(newPag->titSeccion,newSecc->titSeccion);
         newPag->numSecc = newSecc->numSecc;
         strcpy(newPag->titulo, newLibro->titulo);
@@ -84,11 +101,21 @@ extern void instertarTodo(char tituloLibro[], int numeroSeccion, refsApp *refs)
         refs->inicio->izq = newLibro;
         refs->fin = newLibro;
     }
-
+    refs->aux=refs->inicio;
+    refs->aux->aux=refs->inicio->inicio;
     // Asignar el nuevo libro al puntero libroActual
     refs->libroActual = newLibro;
 }
 
+/*
+@brief La función esencialmente recorre las secciones del libro e imprime el nombre y el número de cada sección. 
+       Si la lista de secciones está vacía, también imprime un mensaje indicando que la lista está vacía.
+@author Alberto Parera Méndez, Diego Altamirano Tovar Y Ariadna Berenice Pedraza Rodriguez.
+@date 28/11/2023
+@param rep refs: Un parámetro de tipo rep, que representa un libro. 
+       La función utiliza esta estructura para acceder a la información sobre las secciones del libro que se imprimirán.
+@param 
+*/
 
 void imprimirLibro(rep refs)
 {
@@ -107,6 +134,14 @@ void imprimirLibro(rep refs)
 
     return;
 }
+
+/*
+@brief La función imprimirRepisa itera a través de la lista circular doblemente enlazada de libros e imprime información sobre cada libro, incluyendo su título, el número de secciones y la información detallada de las secciones a través de la llamada a la función imprimirLibro. También maneja el caso en que la repisa está vacía.
+@author Alberto Parera Méndez, Diego Altamirano Tovar Y Ariadna Berenice Pedraza Rodriguez.
+@date 28/11/2023
+@param refsApp refs: Un parámetro de tipo refsApp, que es una estructura que contiene referencias a libros. 
+       La función utiliza esta estructura para acceder a la información sobre la lista de libros que se imprimirán en la repisa.
+*/
 
 extern void imprimirRepisa(refsApp refs)
 {
@@ -130,6 +165,17 @@ extern void imprimirRepisa(refsApp refs)
     return;
 }
 
+/*
+@brief La función intenta modificar el nombre de la primera sección de un libro con el nombre proporcionado (nomSecc). 
+       Si el libro o el nombre de la sección son nulos o si no hay secciones en el libro, la función imprime un mensaje de error 
+       y no realiza ninguna modificación.
+@author Alberto Parera Méndez, Diego Altamirano Tovar Y Ariadna Berenice Pedraza Rodriguez.
+@date 28/11/2023
+@param rep *libro: Un puntero a una estructura rep que representa un libro. 
+       Este puntero permite a la función acceder y modificar la información del libro.
+@param char nomSecc[]: Un arreglo de caracteres que representa el nuevo nombre que se desea asignar a la primera sección del libro.
+*/
+
 extern void modificarNomSeccion(rep *libro, char nomSecc[]) 
 {
     secc *seccionActual;
@@ -140,13 +186,21 @@ extern void modificarNomSeccion(rep *libro, char nomSecc[])
         return;
     }
 
-    seccionActual = libro->inicio;
+    seccionActual = libro->aux;
     if (seccionActual != NULL) 
     {
         strcpy(seccionActual->titSeccion, nomSecc);
-        seccionActual = seccionActual->der;
     }
 }
+
+/*
+@brief la función avanza al usuario a la siguiente sección en un libro, siempre que haya una sección siguiente. 
+       Si el libro es nulo o está vacío o si ya está en la última sección, se imprime un mensaje de error o informativo.
+@author Alberto Parera Méndez, Diego Altamirano Tovar Y Ariadna Berenice Pedraza Rodriguez.
+@date 28/11/2023
+@param rep *libro: Un puntero a una estructura rep que representa un libro. 
+       Este puntero permite a la función acceder y modificar la información del libro.
+*/
 
 extern void siguienteSec(rep *libro) 
 {
@@ -168,6 +222,16 @@ extern void siguienteSec(rep *libro)
         printf("Ya estás en la última sección.\n");
     }
 }
+
+/*
+@brief La función agrega una nueva página al final de la sección actual de un libro, asignando automáticamente 
+       el número siguiente y copiando información relevante del libro y la sección actual a la nueva página.
+@author Alberto Parera Méndez, Diego Altamirano Tovar Y Ariadna Berenice Pedraza Rodriguez.
+@date 28/11/2023
+@param rep *libro: Un puntero a una estructura rep que representa un libro. 
+       Este puntero permite a la función acceder y modificar la información del libro sobre el cual se realizará 
+       la acción de agregar una nueva página.
+*/
 
 extern void moverPagina(rep *libro)
 {
@@ -209,6 +273,14 @@ extern void moverPagina(rep *libro)
     seccionActual->ultPag = nuevaPagina;
 }
 
+/*
+@brief la función guarda la información del libro (títulos de libro y sección, número de página, y texto de la página) en un archivo binario. 
+       El nombre del archivo se construye a partir del título del libro, y la información se almacena de manera estructurada.
+@author Alberto Parera Méndez, Diego Altamirano Tovar Y Ariadna Berenice Pedraza Rodriguez.
+@date 28/11/2023
+@param rep *libro: Un puntero a una estructura rep que representa un libro. Este puntero permite a la función acceder y leer la información del libro que se guardará en el archivo binario.
+*/
+
 extern void guardarLibroEnBin(rep *libro) 
 {
     FILE *archivo;
@@ -245,6 +317,13 @@ extern void guardarLibroEnBin(rep *libro)
     }
     fclose(archivo);
 }
+
+/*
+@brief la función crea un archivo de texto con el nombre del libro y escribe en él la información estructurada del libro, incluyendo título, secciones, números de página y texto de las páginas.
+@author Alberto Parera Méndez, Diego Altamirano Tovar Y Ariadna Berenice Pedraza Rodriguez.
+@date 28/11/2023
+@param rep *libro: Este parámetro es un puntero a una estructura que representa un libro. La estructura rep  contiene información sobre el libro, como su título y referencias a las secciones y páginas del mismo. La función utiliza esta información para escribir en un archivo de texto.
+*/
 
 extern void guardarLibroEnTxt(rep *libro) 
 {

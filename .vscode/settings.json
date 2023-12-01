@@ -8,6 +8,7 @@
         "string.h": "c",
         "tiposaereos.h": "c",
         "deftiposgtk.h": "c",
-        "tiposgtk.h": "c"
+        "tiposgtk.h": "c",
+        "defgtk.h": "c"
     }
 }
