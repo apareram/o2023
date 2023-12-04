@@ -1,0 +1,12 @@
+Título: libro1
+Sección: introduccion
+Número de página: 1
+Texto: esta es la introduccion del libro
+Título: libro1
+Sección: introduccion
+Número de página: 2
+Texto: 
+Título: libro1
+Sección: ��5V
+Número de página: 1
+Texto: 
