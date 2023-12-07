@@ -19,14 +19,17 @@
 
 extern void instertarTodo(char tituloLibro[], int numeroSeccion, refsApp *refs)
 {
-    if (numeroSeccion <= 0) 
+    rep *newLibro;
+  
+    if(numeroSeccion <= 0) 
     {
         printf("Número de secciones debe ser mayor a 0.\n");
+	//el usuario aqui no se entero de nada
         return;
     }
 
-    rep *newLibro = (rep *)malloc(sizeof(rep));
-    if (newLibro == NULL)
+    newLibro = (rep *)malloc(sizeof(rep));
+    if(newLibro == NULL)
     {
         printf("\nNo hay memoria suficiente para el libro\n");
         return;
@@ -41,38 +44,43 @@ extern void instertarTodo(char tituloLibro[], int numeroSeccion, refsApp *refs)
     strcpy(newLibro->titulo, tituloLibro);
     newLibro->numSeccs = numeroSeccion;
 
-    for (int cont = 1; cont <= numeroSeccion; cont++) 
+    for(int cont = 1; cont <= numeroSeccion; cont++) 
     {
-        secc *newSecc = (secc *)malloc(sizeof(secc));
+        secc *newSecc;
+        newSecc = (secc *)malloc(sizeof(secc));
+	
         if (newSecc == NULL) {
             printf("\nNo hay memoria suficiente para la sección\n");
             return;
         }
 
-        // Inicialización de la estructura secc
-        newSecc->izq = NULL;
+        newSecc->izq = NULL;      
         newSecc->der = NULL;
         newSecc->primPag = NULL;
         newSecc->ultPag = NULL;
         newSecc->numSecc = cont;
+        strcpy(newSecc->titSeccion, "Titulo por defecto"); // Añadir un título por defecto
 
-        // Crear y inicializar la primera página
-        hoja *newPag = (hoja *)malloc(sizeof(hoja));
+        // Crear e inicializar la primera página
+        hoja *newPag;
+        newPag = (hoja *)malloc(sizeof(hoja));
         if (newPag == NULL) 
         {
             printf("\nNo hay memoria suficiente para la página\n");
             return;
         }
+
         newPag->next = NULL;
-        strcpy(newPag->titSeccion,newSecc->titSeccion);
         strcpy(newPag->titulo, newLibro->titulo);
-        newPag->numero = 1;
+        strcpy(newPag->titSeccion, newSecc->titSeccion); // Copiar el título de la sección
+        strcpy(newPag->texto, "Texto por defecto"); // Añadir un texto por defecto
+        newPag->numero = 1; // Establecer el número de la página
 
         newSecc->primPag = newPag;
         newSecc->ultPag = newPag;
 
         // Enlazar la nueva sección en el libro
-        if (newLibro->inicio == NULL) 
+        if(newLibro->inicio == NULL) 
         {
             newLibro->inicio = newSecc;
             newLibro->fin = newSecc;
@@ -85,7 +93,7 @@ extern void instertarTodo(char tituloLibro[], int numeroSeccion, refsApp *refs)
         }
     }
 
-    if (refs->inicio == NULL) 
+    if(refs->inicio == NULL) 
     {
         refs->inicio = newLibro;
         refs->fin = newLibro;
@@ -100,8 +108,8 @@ extern void instertarTodo(char tituloLibro[], int numeroSeccion, refsApp *refs)
         refs->inicio->izq = newLibro;
         refs->fin = newLibro;
     }
-    refs->aux=refs->inicio;
-    refs->aux->aux=refs->inicio->inicio;
+    refs->aux = newLibro;
+    refs->aux->aux = newLibro->inicio;
     // Asignar el nuevo libro al puntero libroActual
     refs->libroActual = newLibro;
 }
@@ -115,20 +123,57 @@ extern void instertarTodo(char tituloLibro[], int numeroSeccion, refsApp *refs)
        La función utiliza esta estructura para acceder a la información sobre las secciones del libro que se imprimirán.
 @param 
 */
+void imprimirPags(secc refs)
+{
+    while(refs.primPag != NULL)
+    {
+        printf("\nTítulo del libro: %s",refs.primPag->titulo);
+        printf("\tTítulo de la sección: %s",refs.primPag->titSeccion);  
+        printf("\tNúmero de página %i",refs.primPag->numero);
+        printf("\tEl texto guardado: %s\n\n\n",refs.primPag->texto);
+        refs.primPag = refs.primPag->next;
+    }
+    return;
+}
 
-void imprimirLibro(rep refs)
+void imprimirSecc(rep refs)
 {
     refs.aux = refs.inicio;
 
     while(refs.aux != NULL)
     {
         printf("\nNombre de sección: %s\t", refs.aux->titSeccion);
-        printf("Número de sección: %d\n", refs.aux->numSecc);
+        printf("Número de sección: %d\n\n", refs.aux->numSecc);
+        imprimirPags(*(refs.aux));
         refs.aux = refs.aux->der;
     }
     if((refs.inicio == NULL) && (refs.fin == NULL))
     {
         printf("\nLista vacía.\n");
+    }
+
+    return;
+}
+
+
+extern void imprimirLibro(refsApp refs)
+{
+    system("clear");
+    refs.aux = refs.inicio;
+
+    if((refs.inicio == NULL) && (refs.fin == NULL))
+    {
+        printf("\nNo puedo imprimir una repisa vacía.\n");
+    }
+    else
+    {
+        do
+       {
+            printf("\nTítulo del libro: %s", refs.aux->titulo);
+            printf("\tNúmero de secciones: %d\n\n", refs.aux->numSeccs);
+            imprimirSecc(*(refs.aux));
+            refs.aux = refs.aux->der;
+       }while(refs.aux != refs.inicio); 
     }
 
     return;
@@ -144,6 +189,7 @@ void imprimirLibro(rep refs)
 
 extern void imprimirRepisa(refsApp refs)
 {
+
     secc *seccionActual;
     hoja *paginaActual;
 
@@ -151,7 +197,10 @@ extern void imprimirRepisa(refsApp refs)
  
     do
     {
-        seccionActual = refs.inicio->inicio;
+        printf("\nTítulo del libro: %s", refs.aux->titulo);
+        printf("\nTítulo de la sección: %s", refs.aux->aux->titSeccion);
+        //printf("\nNúmero de página: %d", refs.aux->aux->);
+        seccionActual = refs.aux->aux;
         while (seccionActual != NULL) 
         {
             paginaActual = seccionActual->primPag;
@@ -165,7 +214,7 @@ extern void imprimirRepisa(refsApp refs)
             }
             seccionActual = seccionActual->der;
         }
-        refs.inicio = refs.inicio->der;
+        refs.aux = refs.aux->der;
     }while(refs.aux != refs.inicio); 
 
     return;
@@ -196,6 +245,7 @@ extern void modificarNomSeccion(rep *libro, char nomSecc[])
     if (seccionActual != NULL) 
     {
         strcpy(seccionActual->titSeccion, nomSecc);
+        strcpy(seccionActual->ultPag->titSeccion, seccionActual->titSeccion);
     }
 }
 
@@ -210,7 +260,6 @@ extern void modificarNomSeccion(rep *libro, char nomSecc[])
 
 extern void siguienteSec(rep *libro) 
 {
-    secc *seccionActual;
 
     if (libro == NULL || libro->aux == NULL) 
     {
@@ -218,13 +267,13 @@ extern void siguienteSec(rep *libro)
         return;
     }
 
-    seccionActual = libro->aux;
-    if (seccionActual->der != NULL) 
+    if(libro->aux->der != NULL) 
     {
-        libro->aux = seccionActual->der;
+        libro->aux = libro->aux->der;
     } 
     else 
     {
+        //El usuario no se entera de que ya es la última sección
         printf("Ya estás en la última sección.\n");
     }
 }
@@ -274,8 +323,8 @@ extern void moverPagina(rep *libro)
     else 
     {
         seccionActual->ultPag->next = nuevaPagina;
+        seccionActual->ultPag = nuevaPagina;
     }
-    seccionActual->ultPag = nuevaPagina;
 }
 
 /*
@@ -312,8 +361,8 @@ extern void guardarLibroEnBin(rep *libro)
         paginaActual = seccionActual->primPag;
         while (paginaActual != NULL) 
         {
-            fwrite(libro->titulo, sizeof(libro->titulo), 1, archivo);
-            fwrite(seccionActual->titSeccion, sizeof(seccionActual->titSeccion), 1, archivo);
+            fwrite(paginaActual->titulo, sizeof(paginaActual->titulo), 1, archivo);
+            fwrite(paginaActual->titSeccion, sizeof(paginaActual->titSeccion), 1, archivo);
             fwrite(&(paginaActual->numero), sizeof(paginaActual->numero), 1, archivo);
             fwrite(paginaActual->texto, sizeof(paginaActual->texto), 1, archivo);
             paginaActual = paginaActual->next;
@@ -356,10 +405,10 @@ extern void guardarLibroEnTxt(rep *libro)
         paginaActual = seccionActual->primPag;
         while (paginaActual != NULL) 
         {
-            fprintf(archivo, "Título: %s\n", libro->titulo);
-            fprintf(archivo, "Sección: %s\n", seccionActual->titSeccion);
+            fprintf(archivo, "Título: %s\n", paginaActual->titulo);
+            fprintf(archivo, "Sección: %s\n", paginaActual->titSeccion);
             fprintf(archivo, "Número de página: %d\n", paginaActual->numero);
-            fprintf(archivo, "Texto: %s\n", paginaActual->texto);
+            fprintf(archivo, "Texto: %s\n\n", paginaActual->texto);
             paginaActual = paginaActual->next;
         }
         seccionActual = seccionActual->der;
@@ -467,4 +516,61 @@ extern void cargarTodosLosbinarios(refsApp *refs) {
         }
     }
     closedir(d); // Cierra el directorio
+}
+
+extern void buscandoAnemo(char tit[], char sec[], int pagNum, refsApp refs)
+{       
+    refs.aux = refs.inicio;
+    
+    if(refs.aux == NULL)
+    {
+        printf("\nNO NEMO\n.");
+    }
+    else
+    {
+        while(refs.aux != NULL)
+        {
+            if(strcmp(tit, refs.aux->titulo) == 0)
+            {
+                refs.libroActual = refs.aux;
+                refs.libroActual->aux = refs.libroActual->inicio; 
+                if(refs.libroActual->aux == NULL)
+                {
+                    printf("\nNO DORY\n.");
+                }
+                else
+                {
+                    while(refs.libroActual->aux != NULL)
+                    {
+                        if (strcmp(sec, refs.libroActual->aux->titSeccion) == 0)
+                        {
+                            refs.secActual = refs.libroActual->aux;
+                            while(refs.secActual->primPag != NULL)
+                            {
+                                if(refs.secActual->primPag->numero == pagNum)
+                                {
+                                    refs.nemo = refs.secActual->primPag;
+                                }
+                                else
+                                {
+                                    refs.secActual->primPag = refs.secActual->primPag->next;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            refs.libroActual->aux = refs.libroActual->aux->der;
+                        }
+                        
+                    }
+                }
+            }
+            else
+            {
+                refs.aux = refs.aux->der;
+            }
+        }
+    }
+
+    return;
 }

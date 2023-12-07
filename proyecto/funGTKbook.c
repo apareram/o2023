@@ -14,6 +14,8 @@ void guardarLibroEnBin(rep *libro);
 void guardarLibroEnTxt(rep *libro);
 void moverPagina(rep *libro);
 void siguienteSec(rep *libro);
+void imprimirLibro(refsApp refs);
+void buscandoAnemo(char tit[], char sec[], int pagNum, refsApp refs);
 
 /*
 @brief la función se encarga de cerrar la aplicación correctamente cuando el usuario intenta cerrar la ventana principal.
@@ -284,6 +286,34 @@ extern void siguientePagina(GtkWidget *was_clicked, gpointer *pmiApp)
     refs = (refsApp *)pmiApp;
 
     moverPagina(refs->libroActual);
+
+    return;
+}
+
+extern void revisar(GtkWidget *was_clicked, gpointer *pmiApp)
+{
+    refsApp *refs;
+    refs = (refsApp *)pmiApp;
+
+    imprimirLibro(*refs);
+
+    return;
+}
+
+extern void tocoYmeMuevo(GtkWidget *was_clicked, gpointer *pmiApp)
+{
+    refsApp *refs;
+    char buscTit[40];
+    char buscNomSecc[40];
+    int buscPagNum;
+    
+    refs = (refsApp *)pmiApp;
+
+    strcpy(buscTit, gtk_entry_get_text(GTK_ENTRY(refs->edTitLbl)));
+    strcpy(buscNomSecc, gtk_entry_get_text(GTK_ENTRY(refs->edSeccLbl)));  
+    sscanf(gtk_entry_get_text(GTK_ENTRY(refs->edPagLbl)), "%d", &buscPagNum);      
+
+    buscandoAnemo(buscTit, buscNomSecc, buscPagNum, *refs);
 
     return;
 }

@@ -36,6 +36,8 @@ struct appGTK
 {
   rep *inicio, *fin, *aux;
   rep *libroActual;
+  secc *secActual;
+  hoja *nemo;
   GtkWidget *titulo, *numSecc, *botRegresar, *botCrear;
   GtkWidget *avBotReg, *avBotSig;
   GtkWidget *edTitLbl, *edSeccLbl, *edPagLbl, *edBotReg, *edBotEdit;
