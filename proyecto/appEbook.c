@@ -20,6 +20,8 @@ void nombrarSecciones(GtkWidget *n, gpointer *pmiApp);
 void guardarEnBin(GtkWidget *was_clicked, gpointer *pmiApp);
 void guardarEnTxt(GtkWidget *was_clicked, gpointer *pmiApp);
 void siguientePagina(GtkWidget *was_clicked, gpointer *pmiApp);
+void cargarTodosLosbinarios(refsApp *refs);
+void imprimirRepisa(refsApp refs);
 
 int main(int argc, char *argv[])
 {
@@ -46,6 +48,9 @@ int main(int argc, char *argv[])
     miApp.aux = NULL;
 
     miApp.libroActual = NULL;
+
+    cargarTodosLosbinarios(&miApp);
+    imprimirRepisa(miApp);
 
     // 1. inicializar entorno
     gtk_init(&argc, &argv);

@@ -360,7 +360,7 @@ extern void guardarLibroEnTxt(rep *libro)
     fclose(archivo);
 }
 
-void cargarTodosLosbinarios(refsApp *refs)
+extern void cargarTodosLosbinarios(refsApp *refs)
 {
     DIR *d;
     struct dirent *dir;
@@ -488,4 +488,106 @@ void cargarTodosLosbinarios(refsApp *refs)
     closedir(d); // Cierra el directorio
 
     return;
+}
+
+extern void cargarTodosLosbinarios(refsApp *refs) {
+    DIR *d;
+    struct dirent *dir;
+    char filepath[512];
+
+    // Abrir el directorio "proyecto"
+    d = opendir("proyecto");
+    if (d == NULL) {
+        perror("Error al abrir el directorio");
+        return;
+    }
+
+    while ((dir = readdir(d)) != NULL) {
+        if (strcmp(dir->d_name, ".") == 0 || strcmp(dir->d_name, "..") == 0) 
+            continue;
+
+        if (dir->d_type == DT_REG && strstr(dir->d_name, ".bin") != NULL) {
+            snprintf(filepath, sizeof(filepath), "proyecto/%s", dir->d_name);
+            FILE *file = fopen(filepath, "rb");
+            if (file == NULL) {
+                perror("Error al abrir el archivo");
+                continue;
+            }
+
+            rep *newLibro = (rep *)malloc(sizeof(rep));
+            if (newLibro == NULL) {
+                fclose(file);
+                continue; // Manejo de error
+            }
+            // Inicializar newLibro aquí...
+            newLibro->inicio = NULL;
+            newLibro->fin = NULL;
+            newLibro->aux = NULL;
+            newLibro->izq = NULL;
+            newLibro->der = NULL;
+            strcpy(newLibro->titulo, dir->d_name); // Usando el nombre del archivo como título del libro
+
+            secc *ultimaSeccion = NULL;
+            hoja tempHoja;
+
+            while(fread(&tempHoja, sizeof(hoja), 1, file) == 1) {
+                if (ultimaSeccion == NULL || strcmp(ultimaSeccion->titSeccion, tempHoja.titSeccion) != 0) {
+                    // Crear una nueva sección
+                    secc *nuevaSeccion = (secc *)malloc(sizeof(secc));
+                    if (nuevaSeccion == NULL) {
+                        // Manejar error de memoria
+                        break;
+                    }
+                    strcpy(nuevaSeccion->titSeccion, tempHoja.titSeccion);
+                    nuevaSeccion->izq = ultimaSeccion;
+                    nuevaSeccion->der = NULL;
+                    nuevaSeccion->primPag = NULL;
+                    nuevaSeccion->ultPag = NULL;
+                    
+                    if (ultimaSeccion != NULL) {
+                        ultimaSeccion->der = nuevaSeccion;
+                    }
+
+                    if (newLibro->inicio == NULL) {
+                        newLibro->inicio = nuevaSeccion;
+                    }
+                    newLibro->fin = nuevaSeccion;
+                    ultimaSeccion = nuevaSeccion;
+                }
+
+                // Agregar la página a la última sección
+                hoja *nuevaPagina = (hoja *)malloc(sizeof(hoja));
+                if (nuevaPagina == NULL) {
+                    // Manejar error de memoria
+                    break;
+                }
+                *nuevaPagina = tempHoja; // Copiar la información
+                nuevaPagina->next = NULL;
+
+                if (ultimaSeccion->primPag == NULL) {
+                    ultimaSeccion->primPag = nuevaPagina;
+                } else {
+                    ultimaSeccion->ultPag->next = nuevaPagina;
+                }
+                ultimaSeccion->ultPag = nuevaPagina;
+            }
+
+            fclose(file); // Cierra el archivo
+
+            // Enlazar el nuevo libro en refs
+            if (refs->inicio == NULL) {
+                refs->inicio = newLibro;
+                refs->fin = newLibro;
+                newLibro->izq = newLibro;
+                newLibro->der = newLibro;
+            } else {
+                refs->fin->der = newLibro;
+                newLibro->izq = refs->fin;
+                refs->inicio->izq = newLibro;
+                newLibro->der = refs->inicio;
+                refs->fin = newLibro;
+            }
+        }
+    }
+    closedir(d); // Cierra el directorio
 }
