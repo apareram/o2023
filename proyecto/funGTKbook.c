@@ -380,3 +380,13 @@ void cargar_y_mostrar(GtkWidget *widget, gpointer *pmiApp) {
 
     cargarTexto(refs);
 }
+
+void moverIzq(GtkWidget *widget, gpointer *pmiApp)
+{
+
+}
+
+void moverDer(GtkWidget *widget, gpointer *pmiApp)
+{
+
+}

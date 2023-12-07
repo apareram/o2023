@@ -23,16 +23,20 @@ void siguientePagina(GtkWidget *was_clicked, gpointer *pmiApp);
 void moverSeccion(GtkWidget *was_clicked, gpointer *pmiApp);
 void revisar(GtkWidget *was_clicked, gpointer *pmiApp);
 void cargarTodosLosbinarios(refsApp *refs);
+void cargarLectura(refsApp *refs);
 void imprimirLibro(refsApp refs);
 void tocoYmeMuevo(GtkWidget *was_clicked, gpointer *pmiApp);
 void cargarTexto(GtkWidget *widget, gpointer *pmiApp);
+void moverIzq(GtkWidget *widget, gpointer *pmiApp);
+void moverDer(GtkWidget *widget, gpointer *pmiApp);
 
 int main(int argc, char *argv[])
 {
     refsApp miApp;
-    GtkWidget *window1, *window2, *window3, *window4, *window5, *window6, *window7, *window8;
+    GtkWidget *window1, *window2, *window3, *window4;
+    GtkWidget *window5, *window6, *window7, *window8, *window9;
     GtkWidget *bienvenidoLbl, *introLbl;
-    GtkWidget *botEditar, *botCrear, *botSalir;
+    GtkWidget *botEditar, *botCrear, *botSalir, *botLeer;
     GtkWidget *hBox1, *vBox1;    
     GtkWidget *hBox21, *hBox22, *hBox23, *vBox2;    
     GtkWidget *numSeccLbl, *titLbl;
@@ -47,7 +51,8 @@ int main(int argc, char *argv[])
     GtkWidget *hBox61, *hBox62, *hBox63, *vBox6; 
     GtkWidget *vBox7, *hBox7, *editLbl;
     GtkWidget *scrollWin2, *separator2;
-     GtkWidget *hBox81, *hBox82, *hBox83, *vBox8;
+    GtkWidget *hBox81, *hBox82, *hBox83, *hBox84, *vBox8;
+    GtkWidget *hBox91, *hBox92, *hBox93, *vBox9;
 
     miApp.inicio = NULL;
     miApp.fin = NULL;
@@ -56,6 +61,7 @@ int main(int argc, char *argv[])
     miApp.libroActual = NULL;
 
     cargarTodosLosbinarios(&miApp);
+    cargarLectura(&miApp);
     imprimirLibro(miApp);
     
     //1. inicializar entorno
@@ -67,9 +73,10 @@ int main(int argc, char *argv[])
     vBox1 = gtk_vbox_new(FALSE, 10);
     botEditar = gtk_button_new_with_label("Editar Libro");
     botCrear = gtk_button_new_with_label("Crear Libro");
+    botLeer = gtk_button_new_with_label("Leer Libro");
     botSalir = gtk_button_new_with_label("Salir");
     bienvenidoLbl = gtk_label_new("Bienvenido");
-    introLbl = gtk_label_new("Con esta app puedes crear un libro o editar un libro existente");
+    introLbl = gtk_label_new("Con esta app puedes leer, crear o editar un libro.");
 
     window2 = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     hBox21 = gtk_hbox_new(FALSE, 10);
@@ -148,18 +155,36 @@ int main(int argc, char *argv[])
     miApp.boteditsave=gtk_button_new_with_label("Guardar cambios");
     miApp.editBotreg=gtk_button_new_with_label("Regresar");
 
+
     window8 = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     hBox81 = gtk_hbox_new(FALSE, 10);
     hBox82 = gtk_hbox_new(FALSE, 10);
     hBox83 = gtk_hbox_new(FALSE, 10);
+    hBox84 = gtk_hbox_new(FALSE, 10);
     vBox8 = gtk_vbox_new(FALSE, 10);
-    miApp.lblModif = gtk_label_new("Modifa esto segun lo que necesite el programa");
-    miApp.Anexar = gtk_entry_new();
-    miApp.botMarc = gtk_button_new_with_label("Marcador");
-    miApp.botsalyGuar = gtk_button_new_with_label("Salir & Guardar");
-    miApp.botAnex = gtk_button_new_with_label("Anexar en índice");
+    miApp.titLbl = gtk_label_new("título");
+    miApp.seccLbl = gtk_label_new("seccón");
+    miApp.lblTexto = gtk_label_new("La respuesta rápida es por mi hija, por mi esposa, porque tengo una familia catalana. Pero si me preguntan en serio por qué sigo acá, en Barcelona, en estas épocas horribles y aburridas, es porque estoy a cuarenta minutos en tren del mejor fútbol de la historia. \nQuiero decir: si mi esposa y mi hija decidieran irse a vivir a Argentina ahora mismo, yo me divorciaría y me quedaría acá por lo menos hasta la final de la Champions. Y es que nunca se vio algo parecido adentro de una cancha de fútbol, en ninguna época, y es muy posible que no ocurra más. Es verdad, estoy escribiendo en caliente. Redacto esto la misma semana en que Messi hizo tres para Argentina, cinco para el Barça en Champions y dos para el Barça en Liga. \nDiez goles en tres partidos de tres competiciones diferentes. La prensa catalana no habla de otra cosa. Durante un rato, la crisis económica no es el tema de inicio en los noticieros. Internet explota. Y en medio de todo esto a mí me acaba de pasar por la cabeza una teoría extraña, muy difícil de explicar. Justamente por eso intentaré escribirla, a ver si termino de darle vuelo. Todo empezó esta mañana: estoy mirando sin parar goles de Messi en Youtube, lo hago con culpa porque estoy en mitad del cierre de la revista número seis. No debería estar haciendo esto.");
+    miApp.pagLbl = gtk_label_new("página");
+    miApp.entryAnexar = gtk_entry_new();
+    miApp.botMarcar = gtk_button_new_with_label("Marcar");
+    miApp.botsalyGuar = gtk_button_new_with_label("Salir y Guardar");
+    miApp.botAnexar = gtk_button_new_with_label("Anexar en índice");
     miApp.botIzq = gtk_button_new_with_label("<-");
     miApp.botDer = gtk_button_new_with_label("->");
+    miApp.butReg = gtk_button_new_with_label("Regresar");
+
+    window9 = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    hBox91 = gtk_hbox_new(FALSE, 10);
+    hBox92 = gtk_hbox_new(FALSE, 10);
+    hBox93 = gtk_hbox_new(FALSE, 10);
+    vBox9 = gtk_vbox_new(FALSE, 10);
+    miApp.labelTitulo = gtk_label_new("Plce holder");
+    miApp.btnSiguiente = gtk_button_new_with_label("->");
+    miApp.btnAnterior = gtk_button_new_with_label("<-");
+    miApp.btnContinuar = gtk_button_new_with_label("Continuar Lectura");
+    miApp.btnEmpezar = gtk_button_new_with_label("Empezar Lectura");
+    miApp.btnRegresar = gtk_button_new_with_label("Regresar");
 
     gtk_window_set_title(GTK_WINDOW(window1), "app Ebook");
     gtk_container_set_border_width(GTK_CONTAINER(window1), 100);
@@ -185,6 +210,9 @@ int main(int argc, char *argv[])
     gtk_window_set_title(GTK_WINDOW(window8), "Lector de Libro");
     gtk_container_set_border_width(GTK_CONTAINER(window8), 100);
 
+    gtk_window_set_title(GTK_WINDOW(window9), "Selector de Libros");
+    gtk_container_set_border_width(GTK_CONTAINER(window9), 100);
+
     //3. Registro de callbacks
 
     //callbacks primera ventana
@@ -192,6 +220,7 @@ int main(int argc, char *argv[])
     g_signal_connect(G_OBJECT(botSalir), "clicked", GTK_SIGNAL_FUNC(closeTheApp), NULL);
     g_signal_connect(G_OBJECT(botCrear), "clicked", GTK_SIGNAL_FUNC(visualizarVentanaSiguiente), window2);
     g_signal_connect(G_OBJECT(botEditar), "clicked", GTK_SIGNAL_FUNC(visualizarVentanaSiguiente), window3);
+    g_signal_connect(G_OBJECT(botLeer), "clicked", GTK_SIGNAL_FUNC(visualizarVentanaSiguiente), window9);
 
     //callbacks segunda ventana
     g_signal_connect(G_OBJECT(miApp.botRegresar), "clicked", G_CALLBACK(regresarAVentanaAnterior), window1);
@@ -236,11 +265,22 @@ int main(int argc, char *argv[])
     g_signal_connect(G_OBJECT(miApp.boteditsave), "clicked", GTK_SIGNAL_FUNC(guardarEnBin), &miApp);
     g_signal_connect(G_OBJECT(miApp.boteditsave), "clicked", GTK_SIGNAL_FUNC(guardarEnTxt), &miApp);
 
+    //callbacks novena ventana
+    g_signal_connect(G_OBJECT(miApp.btnContinuar), "clicked", G_CALLBACK(regresarAVentanaAnterior), window8);
+    g_signal_connect(G_OBJECT(miApp.btnEmpezar), "clicked", G_CALLBACK(regresarAVentanaAnterior), window8);
+    g_signal_connect(G_OBJECT(miApp.btnRegresar), "clicked", GTK_SIGNAL_FUNC(visualizarVentanaSiguiente), window1);
+    g_signal_connect(G_OBJECT(miApp.btnAnterior), "clicked", G_CALLBACK(moverIzq), &miApp);
+    g_signal_connect(G_OBJECT(miApp.btnSiguiente), "clicked", G_CALLBACK(moverDer), &miApp);
+
     //callbacks octava ventana
+    g_signal_connect(G_OBJECT(miApp.butReg), "clicked", G_CALLBACK(regresarAVentanaAnterior), window9);
+    g_signal_connect(G_OBJECT(miApp.butReg), "clicked", G_CALLBACK(regresarAVentanaAnterior), window1);
+
     
     //4. Definiendo jerarquias
     gtk_box_pack_start_defaults(GTK_BOX(vBox1), bienvenidoLbl);
     gtk_box_pack_start_defaults(GTK_BOX(vBox1), introLbl);
+    gtk_box_pack_start_defaults(GTK_BOX(vBox1), botLeer);
     gtk_box_pack_start_defaults(GTK_BOX(hBox1), botEditar);
     gtk_box_pack_start_defaults(GTK_BOX(hBox1), botCrear);
     gtk_box_pack_start_defaults(GTK_BOX(vBox1), hBox1);
@@ -313,6 +353,37 @@ int main(int argc, char *argv[])
     gtk_box_pack_start_defaults(GTK_BOX(hBox7), miApp.boteditsave);
     gtk_box_pack_start_defaults(GTK_BOX(vBox7), hBox7);
     gtk_container_add(GTK_CONTAINER(window7), vBox7);
+
+    //leer 
+    gtk_box_pack_start_defaults(GTK_BOX(hBox81), miApp.titLbl);
+    gtk_box_pack_start_defaults(GTK_BOX(hBox81), miApp.seccLbl);
+    gtk_box_pack_start_defaults(GTK_BOX(vBox8), hBox81);
+    gtk_label_set_line_wrap(GTK_LABEL(miApp.lblTexto), TRUE);
+    gtk_label_set_line_wrap_mode(GTK_LABEL(miApp.lblTexto), PANGO_WRAP_WORD);
+    gtk_widget_set_size_request(miApp.lblTexto, 500, 700); // Replace 200 and 100 with your desired dimensions
+    gtk_box_pack_start(GTK_BOX(vBox8), miApp.lblTexto, FALSE, FALSE, 0);
+    gtk_box_pack_start_defaults(GTK_BOX(vBox8), miApp.pagLbl);
+    gtk_box_pack_start_defaults(GTK_BOX(hBox82), miApp.botIzq);
+    gtk_box_pack_start_defaults(GTK_BOX(hBox82), miApp.botDer);
+    gtk_box_pack_start_defaults(GTK_BOX(vBox8), hBox82);
+    gtk_box_pack_start_defaults(GTK_BOX(hBox83), miApp.entryAnexar);
+    gtk_box_pack_start_defaults(GTK_BOX(hBox83), miApp.botAnexar);
+    gtk_box_pack_start_defaults(GTK_BOX(vBox8), hBox83);
+    gtk_box_pack_start_defaults(GTK_BOX(hBox84), miApp.butReg);
+    gtk_box_pack_start_defaults(GTK_BOX(hBox84), miApp.botMarcar);
+    gtk_box_pack_start_defaults(GTK_BOX(hBox84), miApp.botsalyGuar);
+    gtk_box_pack_start_defaults(GTK_BOX(vBox8), hBox84);
+    gtk_container_add(GTK_CONTAINER(window8), vBox8);
+
+    //repisa de libros
+    gtk_box_pack_start_defaults(GTK_BOX(vBox9), miApp.labelTitulo);
+    gtk_box_pack_start_defaults(GTK_BOX(hBox91), miApp.btnAnterior);
+    gtk_box_pack_start_defaults(GTK_BOX(hBox91), miApp.btnSiguiente);
+    gtk_box_pack_start_defaults(GTK_BOX(vBox9), hBox91);
+    gtk_box_pack_start_defaults(GTK_BOX(vBox9), miApp.btnEmpezar);
+    gtk_box_pack_start_defaults(GTK_BOX(vBox9), miApp.btnContinuar);
+    gtk_box_pack_start_defaults(GTK_BOX(vBox9), miApp.btnRegresar);
+    gtk_container_add(GTK_CONTAINER(window9), vBox9);
 
     //5. Mostrar los widgets
     gtk_widget_show_all(window1);

@@ -4,6 +4,16 @@
 #include <string.h>
 #include <dirent.h>
 
+struct element
+{
+    char titulo[40];
+    char titSeccion[40];
+    int numero;
+    char texto[1800];
+    struct element *izq, *der;
+};
+typedef struct element dubCircPag;
+
 struct elemento
 {
     char titulo[40];
@@ -41,10 +51,21 @@ struct repisa
 };
 typedef struct repisa rep;
 
+struct otroLibro
+{
+    char titulo[40];
+    dubCircPag *inicio, *fin, *aux;
+    struct otroLibro *izq, *der;
+    //falta agregar la referencia a la raìz del àrbol 
+};
+typedef struct otroLibro libroLeer;
+
 struct appGTK
 {
   rep *inicio, *fin, *aux;
   rep *libroActual;
+  libroLeer *inicioLeer, *finLeer, *auxLeer;
+  libroLeer *lectura;
   GtkWidget *titulo, *numSecc, *botRegresar, *botCrear;
   GtkWidget *avBotReg, *avBotSig;
   GtkWidget *edTitLbl, *edSeccLbl, *edPagLbl, *edBotReg, *edBotEdit;
@@ -53,7 +74,8 @@ struct appGTK
   GtkWidget *capNom, *numHoj;
   GtkWidget *texto2;
   GtkWidget *editBotreg, *boteditsave;
-  GtkWidget *botMarc, *botsalyGuar, *botAnex, *botDer, *botIzq;
-  GtkWidget *Anexar, *lblModif;
+  GtkWidget *botMarcar, *botsalyGuar, *botAnexar, *botDer, *botIzq;
+  GtkWidget *entryAnexar, *lblTexto, *butReg, *titLbl, *seccLbl, *pagLbl;
+  GtkWidget *labelTitulo, *btnSiguiente, *btnAnterior, *btnContinuar, *btnEmpezar, *btnRegresar;
 };
 typedef struct appGTK refsApp;

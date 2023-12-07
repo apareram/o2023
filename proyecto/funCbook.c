@@ -583,3 +583,111 @@ extern void buscandoAnemo(char tit[], char sec[], int pagNum, refsApp *refs)
 
     return;
 }
+
+extern void cargarLectura(refsApp *refs)
+{
+    DIR *d;
+    struct dirent *dir;
+    char filepath[512];
+    int cont=1;
+    
+    d = opendir(".");
+    if (d == NULL) {
+        perror("Error al abrir el directorio");
+        // Opcional: crear el directorio si no existe
+        return;
+    }
+
+    while ((dir = readdir(d)) != NULL) {
+        if (strcmp(dir->d_name, ".") == 0 || strcmp(dir->d_name, "..") == 0) 
+            continue;
+
+        if (dir->d_type == DT_REG && strstr(dir->d_name, ".bin") != NULL) 
+        {
+            snprintf(filepath, sizeof(filepath), "%s", dir->d_name);
+
+            FILE *file;
+            
+            file = fopen(filepath, "rb");
+
+            if (file == NULL) 
+            {
+                perror("Error al abrir el archivo");
+                continue;
+            }
+
+            libroLeer *newLibro;
+
+            newLibro = (libroLeer *)malloc(sizeof(libroLeer));
+            if (newLibro == NULL) 
+            {
+                fclose(file);
+                continue; // Manejo de error
+            }
+            // Inicializar newLibro aquí...
+            newLibro->inicio = NULL;
+            newLibro->fin = NULL;
+            newLibro->aux = NULL;
+            newLibro->izq = NULL;
+            newLibro->der = NULL;
+            strcpy(newLibro->titulo, dir->d_name);
+
+            tipohoja tempHoja;
+
+            while(fread(&tempHoja, sizeof(tipohoja), 1, file) == 1)
+            {
+                dubCircPag *nuevaPagina;
+                nuevaPagina= (dubCircPag *)malloc(sizeof(dubCircPag));
+                if (nuevaPagina == NULL) {
+                    // Manejar error de memoria
+                    break;
+                }
+                nuevaPagina->izq = NULL;
+                nuevaPagina->der = NULL;
+                strcpy(nuevaPagina->titulo, tempHoja.titulo); // Copiar la información
+                strcpy(nuevaPagina->titSeccion, tempHoja.titSeccion); // Copiar la información
+                nuevaPagina->numero = cont; // Copiar la información
+                strcpy(nuevaPagina->texto, tempHoja.texto); // Copiar la información
+
+                if (newLibro->inicio == NULL) 
+                {
+                    newLibro->inicio = nuevaPagina;
+                    newLibro->fin = nuevaPagina;
+                    nuevaPagina->izq = nuevaPagina;
+                    nuevaPagina->der = nuevaPagina;
+                } 
+                else 
+                {
+                    newLibro->fin->der = nuevaPagina;
+                    nuevaPagina->izq = newLibro->fin;
+                    newLibro->inicio->izq = nuevaPagina;
+                    nuevaPagina->der = newLibro->inicio;
+                    newLibro->fin = nuevaPagina;
+                }
+                
+            }
+            fclose(file); // Cierra el archivo
+
+            // Enlazar el nuevo libro en refs
+            if (refs->inicioLeer == NULL) 
+            {
+                refs->inicioLeer = newLibro;
+                refs->finLeer = newLibro;
+                newLibro->izq = newLibro;
+                newLibro->der = newLibro;
+            } 
+            else 
+            {
+                refs->finLeer->der = newLibro;
+                newLibro->izq = refs->finLeer;
+                refs->inicioLeer->izq = newLibro;
+                newLibro->der = refs->inicioLeer;
+                refs->finLeer = newLibro;
+            }
+            
+        }
+
+    }
+    closedir(d);
+    return; 
+}
