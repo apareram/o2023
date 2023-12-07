@@ -20,8 +20,6 @@ void nombrarSecciones(GtkWidget *n, gpointer *pmiApp);
 void guardarEnBin(GtkWidget *was_clicked, gpointer *pmiApp);
 void guardarEnTxt(GtkWidget *was_clicked, gpointer *pmiApp);
 void siguientePagina(GtkWidget *was_clicked, gpointer *pmiApp);
-
-
 void mostrarLibro(Aplicacion* app);
 void siguienteLibro(GtkWidget* widget, gpointer data);
 void anteriorLibro(GtkWidget* widget, gpointer data);

@@ -20,32 +20,31 @@ void nombrarSecciones(GtkWidget *n, gpointer *pmiApp);
 void guardarEnBin(GtkWidget *was_clicked, gpointer *pmiApp);
 void guardarEnTxt(GtkWidget *was_clicked, gpointer *pmiApp);
 void siguientePagina(GtkWidget *was_clicked, gpointer *pmiApp);
-
-
 void mostrarLibro(Aplicacion* app);
 void siguienteLibro(GtkWidget* widget, gpointer data);
 void anteriorLibro(GtkWidget* widget, gpointer data);
 void continuarLectura(GtkWidget* widget, gpointer data);
 
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     refsApp miApp;
     GtkWidget *window1, *window2, *window3, *window4, *window5, *window6, *window7;
     GtkWidget *bienvenidoLbl, *introLbl;
     GtkWidget *botEditar, *botCrear, *botSalir;
     GtkWidget *hBox1, *vBox1;
-   
+    // ... (Otras variables relacionadas)
+
+    // Estructuras y variables relacionadas con la aplicación de lectura de libros
     Libro libro1 = { "Libro 1", NULL, NULL };
     Libro libro2 = { "Libro 2", NULL, &libro1 };
     Libro libro3 = { "Libro 3", NULL, &libro2 };
-    
+    // ... (Otras variables relacionadas)
 
-   
+    // Inicialización de la aplicación de lectura de libros
     Aplicacion app;
     app.inicio = &libro1;
     app.libroActual = app.inicio;
- 
+    // ... (Otras inicializaciones)
 
     // Inicializar entorno GTK
     gtk_init(&argc, &argv);
@@ -60,17 +59,18 @@ int main(int argc, char *argv[])
     bienvenidoLbl = gtk_label_new("Bienvenido");
     introLbl = gtk_label_new("Con esta app puedes crear un libro o editar un libro existente");
 
-   
+    // ... (Creación de otros widgets)
 
+    // Ventana de lectura de libros
     app.ventana = gtk_window_new(GTK_WINDOW_TOPLEVEL);
- 
+    // ... (Creación de widgets relacionados con la lectura de libros)
 
-   
+    // Conectar callbacks
     g_signal_connect(G_OBJECT(app.btnSiguiente), "clicked", G_CALLBACK(siguienteLibro), &app);
     g_signal_connect(G_OBJECT(app.btnAnterior), "clicked", G_CALLBACK(anteriorLibro), &app);
     g_signal_connect(G_OBJECT(app.btnContinuar), "clicked", G_CALLBACK(continuarLectura), &app);
 
-  
+    // Crear contenedor y añadir widgets
     GtkWidget* vbox = gtk_vbox_new(TRUE, 5);
     gtk_box_pack_start(GTK_BOX(vbox), app.labelTitulo, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(vbox), app.btnSiguiente, TRUE, TRUE, 0);
@@ -78,11 +78,12 @@ int main(int argc, char *argv[])
     gtk_box_pack_start(GTK_BOX(vbox), app.btnContinuar, TRUE, TRUE, 0);
     gtk_container_add(GTK_CONTAINER(app.ventana), vbox);
 
-  
+    // Mostrar ventanas
     gtk_widget_show_all(window7);
     gtk_widget_show_all(app.ventana);
     gtk_widget_show_all(window1);
 
+    // Bucle principal de GTK
     gtk_main();
 
     return 0; 
