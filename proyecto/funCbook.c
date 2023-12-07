@@ -144,7 +144,6 @@ void imprimirLibro(rep refs)
 
 extern void imprimirRepisa(refsApp refs)
 {
-
     secc *seccionActual;
     hoja *paginaActual;
 
@@ -152,10 +151,7 @@ extern void imprimirRepisa(refsApp refs)
  
     do
     {
-        printf("\nTítulo del libro: %s", refs.aux->titulo);
-        printf("\nTítulo de la sección: %s", refs.aux->aux->titSeccion);
-        //printf("\nNúmero de página: %d", refs.aux->aux->);
-        seccionActual = refs.aux->aux;
+        seccionActual = refs.inicio->inicio;
         while (seccionActual != NULL) 
         {
             paginaActual = seccionActual->primPag;
@@ -169,7 +165,7 @@ extern void imprimirRepisa(refsApp refs)
             }
             seccionActual = seccionActual->der;
         }
-        refs.aux = refs.aux->der;
+        refs.inicio = refs.inicio->der;
     }while(refs.aux != refs.inicio); 
 
     return;
