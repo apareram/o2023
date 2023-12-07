@@ -16,7 +16,8 @@ void moverPagina(rep *libro);
 void siguienteSec(rep *libro);
 void imprimirLibro(refsApp refs);
 void buscandoAnemo(char tit[], char sec[], int pagNum, refsApp *refs);
-
+void moverIzquierda(refsApp *refs);
+void moverDerecha(refsApp *refs);
 
 /*
 @brief la función se encarga de cerrar la aplicación correctamente cuando el usuario intenta cerrar la ventana principal.
@@ -381,12 +382,27 @@ void cargar_y_mostrar(GtkWidget *widget, gpointer *pmiApp) {
     cargarTexto(refs);
 }
 
-void moverIzq(GtkWidget *widget, gpointer *pmiApp)
+extern void moverIzq(GtkWidget *btnAnterior, gpointer pMiApp)
 {
+    refsApp *refs; 
+    refs = (refsApp *)pMiApp;
 
+    moverIzquierda(refs);
+
+    gtk_label_set_text(GTK_LABEL(refs->labelTitulo), refs->inicioLeer->titulo);
+
+    return;
 }
 
-void moverDer(GtkWidget *widget, gpointer *pmiApp)
+extern void moverDer(GtkWidget *btnSiguiente, gpointer pMiApp)
 {
+    refsApp *refs; 
 
+    refs = (refsApp *)pMiApp;
+
+    moverDerecha(refs);
+
+    gtk_label_set_text(GTK_LABEL(refs->labelTitulo), refs->inicioLeer->titulo);
+
+    return;
 }

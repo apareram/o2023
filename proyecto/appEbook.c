@@ -27,8 +27,8 @@ void cargarLectura(refsApp *refs);
 void imprimirLibro(refsApp refs);
 void tocoYmeMuevo(GtkWidget *was_clicked, gpointer *pmiApp);
 void cargarTexto(GtkWidget *widget, gpointer *pmiApp);
-void moverIzq(GtkWidget *widget, gpointer *pmiApp);
-void moverDer(GtkWidget *widget, gpointer *pmiApp);
+void moverIzq(GtkWidget *btnAnterior, gpointer *pMiApp);
+void moverDer(GtkWidget *btnSiguienteet, gpointer *pMiApp);
 
 int main(int argc, char *argv[])
 {
@@ -57,6 +57,10 @@ int main(int argc, char *argv[])
     miApp.inicio = NULL;
     miApp.fin = NULL;
     miApp.aux = NULL;
+
+    miApp.inicioLeer = NULL;
+    miApp.finLeer = NULL;
+    miApp.auxLeer = NULL;
 
     miApp.libroActual = NULL;
 
@@ -179,7 +183,7 @@ int main(int argc, char *argv[])
     hBox92 = gtk_hbox_new(FALSE, 10);
     hBox93 = gtk_hbox_new(FALSE, 10);
     vBox9 = gtk_vbox_new(FALSE, 10);
-    miApp.labelTitulo = gtk_label_new("Plce holder");
+    miApp.labelTitulo = gtk_label_new(miApp.inicioLeer->titulo);
     miApp.btnSiguiente = gtk_button_new_with_label("->");
     miApp.btnAnterior = gtk_button_new_with_label("<-");
     miApp.btnContinuar = gtk_button_new_with_label("Continuar Lectura");

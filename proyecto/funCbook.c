@@ -584,110 +584,100 @@ extern void buscandoAnemo(char tit[], char sec[], int pagNum, refsApp *refs)
     return;
 }
 
-extern void cargarLectura(refsApp *refs)
-{
-    DIR *d;
-    struct dirent *dir;
-    char filepath[512];
-    int cont=1;
-    
-    d = opendir(".");
-    if (d == NULL) {
-        perror("Error al abrir el directorio");
-        // Opcional: crear el directorio si no existe
+extern void cargarLectura(refsApp *refs) {
+    if (refs == NULL) {
+        fprintf(stderr, "Error: refsApp es NULL.\n");
         return;
     }
 
+    DIR *d = opendir(".");
+    if (d == NULL) {
+        perror("Error al abrir el directorio");
+        return;
+    }
+
+    struct dirent *dir;
+    char filepath[512];
+
     while ((dir = readdir(d)) != NULL) {
-        if (strcmp(dir->d_name, ".") == 0 || strcmp(dir->d_name, "..") == 0) 
-            continue;
-
-        if (dir->d_type == DT_REG && strstr(dir->d_name, ".bin") != NULL) 
-        {
+        if (dir->d_type == DT_REG && strstr(dir->d_name, ".bin") != NULL) {
             snprintf(filepath, sizeof(filepath), "%s", dir->d_name);
-
-            FILE *file;
-            
-            file = fopen(filepath, "rb");
-
-            if (file == NULL) 
-            {
+            FILE *file = fopen(filepath, "rb");
+            if (file == NULL) {
                 perror("Error al abrir el archivo");
                 continue;
             }
 
-            libroLeer *newLibro;
-
-            newLibro = (libroLeer *)malloc(sizeof(libroLeer));
-            if (newLibro == NULL) 
-            {
+            libroLeer *newLibro = malloc(sizeof(libroLeer));
+            if (newLibro == NULL) {
                 fclose(file);
-                continue; // Manejo de error
+                continue;
             }
-            // Inicializar newLibro aquí...
-            newLibro->inicio = NULL;
-            newLibro->fin = NULL;
-            newLibro->aux = NULL;
-            newLibro->izq = NULL;
-            newLibro->der = NULL;
-            strcpy(newLibro->titulo, dir->d_name);
+
+            // Inicialización de newLibro
+            memset(newLibro, 0, sizeof(libroLeer));
+            strncpy(newLibro->titulo, dir->d_name, sizeof(newLibro->titulo) - 1);
 
             tipohoja tempHoja;
-
-            while(fread(&tempHoja, sizeof(tipohoja), 1, file) == 1)
-            {
-                dubCircPag *nuevaPagina;
-                nuevaPagina= (dubCircPag *)malloc(sizeof(dubCircPag));
+            while(fread(&tempHoja, sizeof(tipohoja), 1, file) == 1) {
+                dubCircPag *nuevaPagina = malloc(sizeof(dubCircPag));
                 if (nuevaPagina == NULL) {
-                    // Manejar error de memoria
+                    fclose(file);
+                    free(newLibro);
                     break;
                 }
-                nuevaPagina->izq = NULL;
-                nuevaPagina->der = NULL;
-                strcpy(nuevaPagina->titulo, tempHoja.titulo); // Copiar la información
-                strcpy(nuevaPagina->titSeccion, tempHoja.titSeccion); // Copiar la información
-                nuevaPagina->numero = cont; // Copiar la información
-                strcpy(nuevaPagina->texto, tempHoja.texto); // Copiar la información
 
-                if (newLibro->inicio == NULL) 
-                {
-                    newLibro->inicio = nuevaPagina;
-                    newLibro->fin = nuevaPagina;
-                    nuevaPagina->izq = nuevaPagina;
-                    nuevaPagina->der = nuevaPagina;
-                } 
-                else 
-                {
+                // Inicialización de nuevaPagina
+                memset(nuevaPagina, 0, sizeof(dubCircPag));
+                strncpy(nuevaPagina->titulo, tempHoja.titulo, sizeof(nuevaPagina->titulo) - 1);
+                strncpy(nuevaPagina->titSeccion, tempHoja.titSeccion, sizeof(nuevaPagina->titSeccion) - 1);
+                nuevaPagina->numero = tempHoja.numero;
+                strncpy(nuevaPagina->texto, tempHoja.texto, sizeof(nuevaPagina->texto) - 1);
+
+                // Manejo de la lista
+                if (newLibro->inicio == NULL) {
+                    newLibro->inicio = newLibro->fin = nuevaPagina;
+                    nuevaPagina->izq = nuevaPagina->der = nuevaPagina; // Para manejar la lista como circular
+                } else {
                     newLibro->fin->der = nuevaPagina;
                     nuevaPagina->izq = newLibro->fin;
-                    newLibro->inicio->izq = nuevaPagina;
-                    nuevaPagina->der = newLibro->inicio;
                     newLibro->fin = nuevaPagina;
+                    nuevaPagina->der = newLibro->inicio; // Enlazar con el inicio para la lista circular
                 }
-                
             }
-            fclose(file); // Cierra el archivo
+            fclose(file);
 
-            // Enlazar el nuevo libro en refs
+            // Enlace del nuevo libro con refs
             if (refs->inicioLeer == NULL) 
             {
-                refs->inicioLeer = newLibro;
-                refs->finLeer = newLibro;
-                newLibro->izq = newLibro;
-                newLibro->der = newLibro;
+                refs->inicioLeer = refs->finLeer = newLibro;
+                newLibro->izq = newLibro->der = newLibro; // Para manejar la lista como circular
             } 
             else 
             {
-                refs->finLeer->der = newLibro;
-                newLibro->izq = refs->finLeer;
-                refs->inicioLeer->izq = newLibro;
-                newLibro->der = refs->inicioLeer;
+                if (refs->finLeer != NULL) 
+                {
+                    refs->finLeer->der = newLibro;
+                    newLibro->izq = refs->finLeer;
+                }
                 refs->finLeer = newLibro;
+                newLibro->der = refs->inicioLeer; // Enlazar con el inicio para la lista circular
             }
-            
         }
-
     }
     closedir(d);
-    return; 
+}
+
+extern void moverIzquierda(refsApp *refs)
+{
+    refs->inicioLeer =refs->inicioLeer->izq;
+
+    return;
+}
+
+extern void moverDerecha(refsApp *refs)
+{
+    refs->inicioLeer = refs->inicioLeer->der;
+
+    return;
 }
