@@ -144,22 +144,33 @@ void imprimirLibro(rep refs)
 
 extern void imprimirRepisa(refsApp refs)
 {
-    refs.aux = refs.inicio;
 
-    if((refs.inicio == NULL) && (refs.fin == NULL))
+    secc *seccionActual;
+    hoja *paginaActual;
+
+    refs.aux = refs.inicio;
+ 
+    do
     {
-        printf("\nNo puedo imprimir una repisa vacía.\n");
-    }
-    else
-    {
-        do
-       {
-            printf("\nTítulo del libro: %s", refs.aux->titulo);
-            printf("\tNúmero de secciones: %d\n", refs.aux->numSeccs);
-            imprimirLibro(*(refs.aux));
-            refs.aux = refs.aux->der;
-       }while(refs.aux != refs.inicio); 
-    }
+        printf("\nTítulo del libro: %s", refs.aux->titulo);
+        printf("\nTítulo de la sección: %s", refs.aux->aux->titSeccion);
+        //printf("\nNúmero de página: %d", refs.aux->aux->);
+        seccionActual = refs.aux->aux;
+        while (seccionActual != NULL) 
+        {
+            paginaActual = seccionActual->primPag;
+            while (paginaActual != NULL) 
+            {
+                printf("\nTítulo del libro: %s", refs.aux->titulo);
+                printf("\nTítulo de la sección: %s", seccionActual->titSeccion);
+                printf("\nNúmero de página: %d", paginaActual->numero);
+                printf("\nTexto: %s\n\n", paginaActual->texto);
+                paginaActual = paginaActual->next;
+            }
+            seccionActual = seccionActual->der;
+        }
+        refs.aux = refs.aux->der;
+    }while(refs.aux != refs.inicio); 
 
     return;
 }
@@ -360,145 +371,15 @@ extern void guardarLibroEnTxt(rep *libro)
     fclose(archivo);
 }
 
-extern void cargarTodosLosbinarios(refsApp *refs)
-{
-    DIR *d;
-    struct dirent *dir;
-    char filepath[512];
-
-    // Abrir el directorio "proyecto"
-    d = opendir("proyecto");
-    if (d == NULL) {
-        perror("Error al abrir el directorio");
-        return;
-    }
-
-    // Leer las entradas en el directorio
-    while ((dir = readdir(d)) != NULL) 
-    {
-        rep *newLibro;
-        hoja *maxchunksize;
-        FILE *file;
-
-        newLibro = (rep *)malloc(sizeof(rep));
-        maxchunksize = (hoja *)malloc(sizeof(hoja));
-
-        newLibro->inicio = NULL;
-        newLibro->fin = NULL;
-        newLibro->aux = NULL;
-        newLibro->der = NULL;
-        newLibro->izq = NULL;
-
-        // Ignorar los directorios "." y ".."
-        if (strcmp(dir->d_name, ".") == 0 || strcmp(dir->d_name, "..") == 0) 
-        {
-            continue;
-        }
-
-        // Comprobar si la entrada es un archivo regular y tiene extensión .bin
-        if (dir->d_type == DT_REG && strstr(dir->d_name, ".bin") != NULL) 
-        {
-            // Construir la ruta completa del archivo
-            snprintf(filepath, sizeof(filepath), "proyecto/%s", dir->d_name);
-
-            // Abrir el archivo en modo lectura binaria
-            file = fopen(filepath, "rb");
-            if (file == NULL)
-            {
-                perror("Error al abrir el archivo");
-                continue;
-            }
-
-            secc *seccion;
-            seccion = (secc *)malloc(sizeof(secc));
-            seccion->izq = NULL;
-            seccion->der = NULL;
-            seccion->primPag = NULL;
-            seccion->ultPag = NULL;
-            // Leer datos del archivo
-            while(fread(&maxchunksize, sizeof(hoja), 1, file) == 1)
-            {   
-                if (strcmp(maxchunksize->titSeccion, seccion->titSeccion) == 0)
-                {
-                    // Enlazar la nueva sección en el libro
-                    if (newLibro->inicio == NULL) 
-                    {
-                        newLibro->inicio = seccion;
-                        newLibro->fin = seccion;
-                    } 
-                    else 
-                    {
-                        newLibro->fin->der = seccion;
-                        seccion->izq = newLibro->fin;
-                        newLibro->fin = seccion;
-                    }
-                }
-                strcpy(seccion->titSeccion, maxchunksize->titSeccion); // Inicializar el texto con una cadena vacía
-
-                hoja *nuevaPagina;
-                nuevaPagina = (hoja *)malloc(sizeof(hoja));
-                if (nuevaPagina == NULL) 
-                {
-                    printf("No se pudo asignar memoria para una nueva página.\n");
-                    return;
-                }
-
-                // Inicializar la nueva página
-                nuevaPagina->next = NULL;
-                nuevaPagina->numero = maxchunksize->numero;
-                strcpy(nuevaPagina->titulo, maxchunksize->titulo);
-                strcpy(nuevaPagina->titSeccion, maxchunksize->titSeccion);
-                strcpy(nuevaPagina->texto, maxchunksize->texto); // Inicializar el texto con una cadena vacía
-
-                // Agregar la nueva página al final de la lista de páginas
-                if (seccion->ultPag == NULL) 
-                {
-                    seccion->primPag = nuevaPagina;
-                } 
-                else 
-                {
-                    seccion->ultPag->next = nuevaPagina;
-                }
-                seccion->ultPag = nuevaPagina;
-            }
-                
-            fclose(file); // Cierra el archivo
-            
-            if (refs->inicio == NULL) 
-            {
-                refs->inicio = newLibro;
-                refs->fin = newLibro;
-                newLibro->izq = newLibro;
-                newLibro->der = newLibro;
-            } 
-            else
-            {
-                newLibro->izq = refs->fin;
-                refs->fin->der = newLibro;
-                newLibro->der = refs->inicio;
-                refs->inicio->izq = newLibro;
-                refs->fin = newLibro;
-            }
-            refs->aux=refs->inicio;
-            refs->aux->aux=refs->inicio->inicio;
-            strcpy(seccion->primPag->titulo, newLibro->titulo); // Inicializar el texto con una cadena vacía
-        }
-    
-    }
-    closedir(d); // Cierra el directorio
-
-    return;
-}
-
 extern void cargarTodosLosbinarios(refsApp *refs) {
     DIR *d;
     struct dirent *dir;
     char filepath[512];
-
-    // Abrir el directorio "proyecto"
-    d = opendir("proyecto");
+    
+    d = opendir(".");
     if (d == NULL) {
         perror("Error al abrir el directorio");
+        // Opcional: crear el directorio si no existe
         return;
     }
 
@@ -507,7 +388,7 @@ extern void cargarTodosLosbinarios(refsApp *refs) {
             continue;
 
         if (dir->d_type == DT_REG && strstr(dir->d_name, ".bin") != NULL) {
-            snprintf(filepath, sizeof(filepath), "proyecto/%s", dir->d_name);
+            snprintf(filepath, sizeof(filepath), "%s", dir->d_name);
             FILE *file = fopen(filepath, "rb");
             if (file == NULL) {
                 perror("Error al abrir el archivo");

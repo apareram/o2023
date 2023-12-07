@@ -4,6 +4,28 @@
 #include <string.h>
 
 
+struct libro {
+    char titulo[40];
+    struct libro* siguiente;
+    struct libro* anterior;
+};
+
+typedef struct libro Libro;
+
+struct aplicacion {
+    Libro* libroActual;
+    Libro* inicio;
+    GtkWidget* ventana;
+    GtkWidget* labelTitulo;
+    GtkWidget* btnSiguiente;
+    GtkWidget* btnAnterior;
+    GtkWidget* btnContinuar;
+};
+
+typedef struct aplicacion Aplicacion;
+
+
+
 struct elemnto 
 {
   char titSeccion[40];
