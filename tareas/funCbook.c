@@ -17,6 +17,32 @@
 @param refsApp *refs: Un puntero a una estructura refsApp, que contiene referencias a libros. 
 */
 
+
+extern mostrarLibro(Aplicacion* app) {
+    gtk_label_set_text(GTK_LABEL(app->labelTitulo), app->libroActual->titulo);
+}
+
+extern siguienteLibro(GtkWidget* widget, gpointer data) {
+    Aplicacion* app = (Aplicacion*)data;
+    if (app->libroActual->siguiente != NULL) {
+        app->libroActual = app->libroActual->siguiente;
+        mostrarLibro(app);
+    }
+}
+
+extern anteriorLibro(GtkWidget* widget, gpointer data) {
+    Aplicacion* app = (Aplicacion*)data;
+    if (app->libroActual->anterior != NULL) {
+        app->libroActual = app->libroActual->anterior;
+        mostrarLibro(app);
+    }
+}
+
+extern continuarLectura(GtkWidget* widget, gpointer data) {
+    g_print("Continuando la lectura...\n");
+}
+
+
 extern void instertarTodo(char tituloLibro[], int numeroSeccion, refsApp *refs)
 {
     if (numeroSeccion <= 0) 

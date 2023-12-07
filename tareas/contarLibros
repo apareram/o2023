@@ -1,0 +1,54 @@
+#include <gtk-2.0/gtk/gtk.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+rep* crearLibro(const char *titulo) {
+    rep *nuevoLibro = (rep*)malloc(sizeof(rep));
+    if (nuevoLibro == NULL) {
+        perror("Error al asignar memoria para el libro");
+        exit(EXIT_FAILURE);
+    }
+
+    strcpy(nuevoLibro->titulo, titulo);
+    nuevoLibro->numSeccs = 0;
+    nuevoLibro->inicio = nuevoLibro->fin = nuevoLibro->aux = NULL;
+    nuevoLibro->izq = nuevoLibro->der = NULL;
+
+    return nuevoLibro;
+}
+
+
+void agregarLibro(refsApp *miApp, const char *titulo) {
+    rep *nuevoLibro = crearLibro(titulo);
+    if (miApp->inicio == NULL) {
+        miApp->inicio = miApp->fin = miApp->aux = nuevoLibro;
+    } else {
+        miApp->fin->der = nuevoLibro;
+        nuevoLibro->izq = miApp->fin;
+        miApp->fin = nuevoLibro;
+    }
+}
+
+
+void inicializarLibros(refsApp *miApp) {
+    agregarLibro(miApp, "Libro 1");
+    agregarLibro(miApp, "Libro 2");
+    agregarLibro(miApp, "Libro 3");
+   
+
+int main(int argc, char *argv[]) {
+    
+    g_signal_connect(G_OBJECT(window7), "show", G_CALLBACK(inicializarLibros), &miApp);
+    g_signal_connect(G_OBJECT(miApp.botDer), "clicked", G_CALLBACK(siguienteLibro), &miApp);
+    g_signal_connect(G_OBJECT(miApp.botIzq), "clicked", G_CALLBACK(anteriorLibro), &miApp);
+    g_signal_connect(G_OBJECT(miApp.botsalyGuar), "clicked", G_CALLBACK(continuarLectura), &miApp);
+
+    // 4. Mostrar los widgets
+    gtk_widget_show_all(window7);
+
+    // 5. El programa se queda en loop
+    gtk_main();
+
+    return 0;
+}

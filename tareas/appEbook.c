@@ -27,84 +27,9 @@ void siguienteLibro(GtkWidget* widget, gpointer data);
 void anteriorLibro(GtkWidget* widget, gpointer data);
 void continuarLectura(GtkWidget* widget, gpointer data);
 
-// Funciones de Callback
-void mostrarLibro(Aplicacion* app) {
-    // Actualizar la etiqueta del título con el título del libro actual
-    gtk_label_set_text(GTK_LABEL(app->labelTitulo), app->libroActual->titulo);
-}
-
-void siguienteLibro(GtkWidget* widget, gpointer data) {
-    Aplicacion* app = (Aplicacion*)data;
-    if (app->libroActual->siguiente != NULL) {
-        app->libroActual = app->libroActual->siguiente;
-        mostrarLibro(app);
-    }
-}
-
-void anteriorLibro(GtkWidget* widget, gpointer data) {
-    Aplicacion* app = (Aplicacion*)data;
-    if (app->libroActual->anterior != NULL) {
-        app->libroActual = app->libroActual->anterior;
-        mostrarLibro(app);
-    }
-}
-
-void continuarLectura(GtkWidget* widget, gpointer data) {
-    // Implementa la lógica para continuar la lectura aquí
-    g_print("Continuando la lectura...\n");
-}
-
-
-
 
 int main(int argc, char *argv[])
 {
-
-
-
-gtk_init(&argc, &argv);
-
-    // Crear algunos libros de ejemplo
-    Libro libro1 = { "Libro 1", NULL, NULL };
-    Libro libro2 = { "Libro 2", NULL, &libro1 };
-    Libro libro3 = { "Libro 3", NULL, &libro2 };
-
-    libro1.siguiente = &libro2;
-    libro2.siguiente = &libro3;
-
-    // Inicializar la aplicación
-    Aplicacion app;
-    app.inicio = &libro1;
-    app.libroActual = app.inicio;
-
-    // Crear la ventana principal
-    app.ventana = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    gtk_window_set_title(GTK_WINDOW(app.ventana), "Selector de Libros");
-    gtk_container_set_border_width(GTK_CONTAINER(app.ventana), 10);
-    gtk_widget_set_size_request(app.ventana, 300, 150);
-    g_signal_connect(G_OBJECT(app.ventana), "destroy", G_CALLBACK(gtk_main_quit), NULL);
-
-    // Crear widgets
-    app.labelTitulo = gtk_label_new(app.libroActual->titulo);
-    app.btnSiguiente = gtk_button_new_with_label("Siguiente Libro");
-    app.btnAnterior = gtk_button_new_with_label("Anterior Libro");
-    app.btnContinuar = gtk_button_new_with_label("Continuar Lectura");
-
-    // Conectar callbacks
-    g_signal_connect(G_OBJECT(app.btnSiguiente), "clicked", G_CALLBACK(siguienteLibro), &app);
-    g_signal_connect(G_OBJECT(app.btnAnterior), "clicked", G_CALLBACK(anteriorLibro), &app);
-    g_signal_connect(G_OBJECT(app.btnContinuar), "clicked", G_CALLBACK(continuarLectura), &app);
-
-    // Crear contenedor y añadir widgets
-    GtkWidget* vbox = gtk_vbox_new(TRUE, 5);
-    gtk_box_pack_start(GTK_BOX(vbox), app.labelTitulo, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(vbox), app.btnSiguiente, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(vbox), app.btnAnterior, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(vbox), app.btnContinuar, TRUE, TRUE, 0);
-
-    gtk_container_add(GTK_CONTAINER(app.ventana), vbox);
-
-
 
 
     refsApp miApp;
@@ -361,12 +286,60 @@ gtk_init(&argc, &argv);
      gtk_box_pack_start_defaults(GTK_BOX(vBox7), hBox73);
      gtk_container_add(GTK_CONTAINER(window7), vBox7);
      
+
+
+//gtk_init(&argc, &argv);
+
+    // Crear algunos libros de ejemplo
+    Libro libro1 = { "Libro 1", NULL, NULL };
+    Libro libro2 = { "Libro 2", NULL, &libro1 };
+    Libro libro3 = { "Libro 3", NULL, &libro2 };
+
+    libro1.siguiente = &libro2;
+    libro2.siguiente = &libro3;
+
+    // Inicializar la aplicación
+    Aplicacion app;
+    app.inicio = &libro1;
+    app.libroActual = app.inicio;
+
+    // Crear la ventana principal
+    app.ventana = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    gtk_window_set_title(GTK_WINDOW(app.ventana), "Selector de Libros");
+    gtk_container_set_border_width(GTK_CONTAINER(app.ventana), 10);
+    gtk_widget_set_size_request(app.ventana, 300, 150);
+    g_signal_connect(G_OBJECT(app.ventana), "destroy", G_CALLBACK(gtk_main_quit), NULL);
+
+    // Crear widgets
+    app.labelTitulo = gtk_label_new(app.libroActual->titulo);
+    app.btnSiguiente = gtk_button_new_with_label("Siguiente Libro");
+    app.btnAnterior = gtk_button_new_with_label("Anterior Libro");
+    app.btnContinuar = gtk_button_new_with_label("Continuar Lectura");
+
+    // Conectar callbacks
+    g_signal_connect(G_OBJECT(app.btnSiguiente), "clicked", G_CALLBACK(siguienteLibro), &app);
+    g_signal_connect(G_OBJECT(app.btnAnterior), "clicked", G_CALLBACK(anteriorLibro), &app);
+    g_signal_connect(G_OBJECT(app.btnContinuar), "clicked", G_CALLBACK(continuarLectura), &app);
+
+    // Crear contenedor y añadir widgets
+    GtkWidget* vbox = gtk_vbox_new(TRUE, 5);
+    gtk_box_pack_start(GTK_BOX(vbox), app.labelTitulo, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(vbox), app.btnSiguiente, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(vbox), app.btnAnterior, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(vbox), app.btnContinuar, TRUE, TRUE, 0);
+
+    gtk_container_add(GTK_CONTAINER(app.ventana), vbox);
+ 
+
+
+
      //  5. Mostrar los widgets
 
-gtk_widget_show_all(app.ventana);
+     gtk_widget_show_all(window7);
+     gtk_widget_show_all(app.ventana);
+     gtk_widget_show_all(window1);
 
-       gtk_widget_show_all(window1);
-       gtk_widget_show_all(window7);
+     
     
      //   6. El programa se queda en loop
     gtk_main();
