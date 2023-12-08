@@ -635,34 +635,36 @@ extern void cargarLectura(refsApp *refs) {
                 strncpy(nuevaPagina->texto, tempHoja.texto, sizeof(nuevaPagina->texto) - 1);
 
                 // Manejo de la lista
-                if (newLibro->inicio == NULL) {
-                    newLibro->inicio = newLibro->fin = nuevaPagina;
-                    nuevaPagina->izq = nuevaPagina->der = nuevaPagina; // Para manejar la lista como circular
-                } else {
-                    newLibro->fin->der = nuevaPagina;
-                    nuevaPagina->izq = newLibro->fin;
+                if ((newLibro->inicio == NULL) && (newLibro->fin == NULL)) {
+                    nuevaPagina->izq = nuevaPagina;
+                    nuevaPagina->der = nuevaPagina; // Para manejar la lista como circular
+                    newLibro->inicio = nuevaPagina;
                     newLibro->fin = nuevaPagina;
+                } else {
+                    nuevaPagina->izq = newLibro->fin;
                     nuevaPagina->der = newLibro->inicio; // Enlazar con el inicio para la lista circular
+                    newLibro->fin->der = nuevaPagina;
+                    newLibro->inicio->izq = nuevaPagina;
+                    newLibro->fin = nuevaPagina;
                 }
+                newLibro->aux = newLibro->inicio;
             }
             fclose(file);
 
             // Enlace del nuevo libro con refs
-            if (refs->inicioLeer == NULL) 
-            {
-                refs->inicioLeer = refs->finLeer = newLibro;
-                newLibro->izq = newLibro->der = newLibro; // Para manejar la lista como circular
-            } 
-            else 
-            {
-                if (refs->finLeer != NULL) 
-                {
-                    refs->finLeer->der = newLibro;
-                    newLibro->izq = refs->finLeer;
-                }
+            if ((refs->inicioLeer == NULL)&&(refs->finLeer ==NULL)) {
+                newLibro->der = newLibro;
+                newLibro->izq = newLibro;
+                refs->inicioLeer = newLibro;
                 refs->finLeer = newLibro;
-                newLibro->der = refs->inicioLeer; // Enlazar con el inicio para la lista circular
+            } else {
+                newLibro->izq = refs->finLeer;
+                newLibro->der = refs->inicioLeer; // Enlazar con el inicioLeer para la lista circular
+                refs->finLeer->der = newLibro;
+                refs->inicioLeer->izq = newLibro;
+                refs->finLeer = newLibro;
             }
+            refs->auxLeer = refs->inicioLeer;
         }
     }
     closedir(d);
@@ -670,14 +672,28 @@ extern void cargarLectura(refsApp *refs) {
 
 extern void moverIzquierda(refsApp *refs)
 {
-    refs->inicioLeer =refs->inicioLeer->izq;
+    refs->auxLeer =refs->auxLeer->izq;
 
     return;
 }
 
 extern void moverDerecha(refsApp *refs)
 {
-    refs->inicioLeer = refs->inicioLeer->der;
+    refs->auxLeer = refs->auxLeer->der;
+
+    return;
+}
+
+void moverPagDer(refsApp *refs)
+{
+    refs->auxLeer->aux = refs->auxLeer->aux->der;
+
+    return;
+}
+
+void moverPagIzq(refsApp *refs)
+{
+    refs->auxLeer->aux = refs->auxLeer->aux->izq;
 
     return;
 }

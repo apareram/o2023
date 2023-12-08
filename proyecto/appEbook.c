@@ -26,13 +26,16 @@ void cargarTodosLosbinarios(refsApp *refs);
 void cargarLectura(refsApp *refs);
 void imprimirLibro(refsApp refs);
 void tocoYmeMuevo(GtkWidget *was_clicked, gpointer *pmiApp);
-void cargarTexto(GtkWidget *widget, gpointer *pmiApp);
+void cargar_y_mostrar(GtkWidget *widget, gpointer *pmiApp);
 void moverIzq(GtkWidget *btnAnterior, gpointer *pMiApp);
-void moverDer(GtkWidget *btnSiguienteet, gpointer *pMiApp);
+void moverDer(GtkWidget *btnSiguiente, gpointer *pMiApp);
+void leerMoverPagIzq(GtkWidget *botIzq, gpointer *pMiApp);
+void leerMoverPagDer(GtkWidget *botDer, gpointer *pMiApp);
 
 int main(int argc, char *argv[])
 {
     refsApp miApp;
+    char leerNumPag[10];
     GtkWidget *window1, *window2, *window3, *window4;
     GtkWidget *window5, *window6, *window7, *window8, *window9;
     GtkWidget *bienvenidoLbl, *introLbl;
@@ -67,6 +70,8 @@ int main(int argc, char *argv[])
     cargarTodosLosbinarios(&miApp);
     cargarLectura(&miApp);
     imprimirLibro(miApp);
+
+    sprintf(leerNumPag, "%d", miApp.auxLeer->aux->numero);
     
     //1. inicializar entorno
     gtk_init(&argc, &argv);
@@ -166,10 +171,10 @@ int main(int argc, char *argv[])
     hBox83 = gtk_hbox_new(FALSE, 10);
     hBox84 = gtk_hbox_new(FALSE, 10);
     vBox8 = gtk_vbox_new(FALSE, 10);
-    miApp.titLbl = gtk_label_new("título");
-    miApp.seccLbl = gtk_label_new("seccón");
-    miApp.lblTexto = gtk_label_new("La respuesta rápida es por mi hija, por mi esposa, porque tengo una familia catalana. Pero si me preguntan en serio por qué sigo acá, en Barcelona, en estas épocas horribles y aburridas, es porque estoy a cuarenta minutos en tren del mejor fútbol de la historia. \nQuiero decir: si mi esposa y mi hija decidieran irse a vivir a Argentina ahora mismo, yo me divorciaría y me quedaría acá por lo menos hasta la final de la Champions. Y es que nunca se vio algo parecido adentro de una cancha de fútbol, en ninguna época, y es muy posible que no ocurra más. Es verdad, estoy escribiendo en caliente. Redacto esto la misma semana en que Messi hizo tres para Argentina, cinco para el Barça en Champions y dos para el Barça en Liga. \nDiez goles en tres partidos de tres competiciones diferentes. La prensa catalana no habla de otra cosa. Durante un rato, la crisis económica no es el tema de inicio en los noticieros. Internet explota. Y en medio de todo esto a mí me acaba de pasar por la cabeza una teoría extraña, muy difícil de explicar. Justamente por eso intentaré escribirla, a ver si termino de darle vuelo. Todo empezó esta mañana: estoy mirando sin parar goles de Messi en Youtube, lo hago con culpa porque estoy en mitad del cierre de la revista número seis. No debería estar haciendo esto.");
-    miApp.pagLbl = gtk_label_new("página");
+    miApp.titLbl = gtk_label_new(miApp.auxLeer->aux->titulo);
+    miApp.seccLbl = gtk_label_new(miApp.auxLeer->aux->titSeccion);
+    miApp.lblTexto = gtk_label_new(miApp.auxLeer->aux->texto);
+    miApp.pagLbl = gtk_label_new(leerNumPag);
     miApp.entryAnexar = gtk_entry_new();
     miApp.botMarcar = gtk_button_new_with_label("Marcar");
     miApp.botsalyGuar = gtk_button_new_with_label("Salir y Guardar");
@@ -234,7 +239,7 @@ int main(int argc, char *argv[])
     //callbacks tercera ventana
     g_signal_connect(G_OBJECT(miApp.edBotReg), "clicked", G_CALLBACK(regresarAVentanaAnterior), window1);
     g_signal_connect(G_OBJECT(miApp.edBotEdit), "clicked", GTK_SIGNAL_FUNC(tocoYmeMuevo), &miApp);
-    //g_signal_connect(G_OBJECT(miApp.edBotEdit), "clicked", GTK_SIGNAL_FUNC(cargarTexto), &miApp);
+    g_signal_connect(G_OBJECT(miApp.edBotEdit), "clicked", GTK_SIGNAL_FUNC(cargar_y_mostrar), &miApp);
     g_signal_connect(G_OBJECT(miApp.edBotEdit), "clicked", GTK_SIGNAL_FUNC(visualizarVentanaSiguiente), window7);
 
     //callbacks cuarta ventana
@@ -278,9 +283,9 @@ int main(int argc, char *argv[])
 
     //callbacks octava ventana
     g_signal_connect(G_OBJECT(miApp.butReg), "clicked", G_CALLBACK(regresarAVentanaAnterior), window9);
-    g_signal_connect(G_OBJECT(miApp.butReg), "clicked", G_CALLBACK(regresarAVentanaAnterior), window1);
+    g_signal_connect(G_OBJECT(miApp.botIzq), "clicked", G_CALLBACK(leerMoverPagIzq), &miApp);
+    g_signal_connect(G_OBJECT(miApp.botDer), "clicked", G_CALLBACK(leerMoverPagDer), &miApp);
 
-    
     //4. Definiendo jerarquias
     gtk_box_pack_start_defaults(GTK_BOX(vBox1), bienvenidoLbl);
     gtk_box_pack_start_defaults(GTK_BOX(vBox1), introLbl);
@@ -364,7 +369,7 @@ int main(int argc, char *argv[])
     gtk_box_pack_start_defaults(GTK_BOX(vBox8), hBox81);
     gtk_label_set_line_wrap(GTK_LABEL(miApp.lblTexto), TRUE);
     gtk_label_set_line_wrap_mode(GTK_LABEL(miApp.lblTexto), PANGO_WRAP_WORD);
-    gtk_widget_set_size_request(miApp.lblTexto, 500, 700); // Replace 200 and 100 with your desired dimensions
+    gtk_widget_set_size_request(miApp.lblTexto, 425, 350); 
     gtk_box_pack_start(GTK_BOX(vBox8), miApp.lblTexto, FALSE, FALSE, 0);
     gtk_box_pack_start_defaults(GTK_BOX(vBox8), miApp.pagLbl);
     gtk_box_pack_start_defaults(GTK_BOX(hBox82), miApp.botIzq);

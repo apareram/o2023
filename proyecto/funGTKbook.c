@@ -18,6 +18,8 @@ void imprimirLibro(refsApp refs);
 void buscandoAnemo(char tit[], char sec[], int pagNum, refsApp *refs);
 void moverIzquierda(refsApp *refs);
 void moverDerecha(refsApp *refs);
+void moverPagDer(refsApp *refs);
+void moverPagIzq(refsApp *refs);
 
 /*
 @brief la función se encarga de cerrar la aplicación correctamente cuando el usuario intenta cerrar la ventana principal.
@@ -377,9 +379,11 @@ void cargar_y_mostrar(GtkWidget *widget, gpointer *pmiApp) {
     refsApp *refs;
     refs = (refsApp *)pmiApp;
 
-    printf("Texto a cargar: %s", refs->libroActual->aux->primPag->texto);
+    GtkTextBuffer *buffer;
+    system("clear");
 
-    cargarTexto(refs);
+    buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(refs->texto2));
+    gtk_text_buffer_set_text(buffer, refs->libroActual->aux->primPag->texto, -1);
 }
 
 extern void moverIzq(GtkWidget *btnAnterior, gpointer pMiApp)
@@ -389,7 +393,7 @@ extern void moverIzq(GtkWidget *btnAnterior, gpointer pMiApp)
 
     moverIzquierda(refs);
 
-    gtk_label_set_text(GTK_LABEL(refs->labelTitulo), refs->inicioLeer->titulo);
+    gtk_label_set_text(GTK_LABEL(refs->labelTitulo), refs->auxLeer->titulo);
 
     return;
 }
@@ -402,7 +406,40 @@ extern void moverDer(GtkWidget *btnSiguiente, gpointer pMiApp)
 
     moverDerecha(refs);
 
-    gtk_label_set_text(GTK_LABEL(refs->labelTitulo), refs->inicioLeer->titulo);
+    gtk_label_set_text(GTK_LABEL(refs->labelTitulo), refs->auxLeer->titulo);
+
+    return;
+}
+
+void leerMoverPagIzq(GtkWidget *botIzq, gpointer *pMiApp)
+{
+    refsApp *refs; 
+    refs = (refsApp *)pMiApp;
+    char leerNumPag[10];
+
+    moverPagIzq(refs);
+
+    gtk_label_set_text(GTK_LABEL(refs->titLbl), refs->auxLeer->aux->titulo);
+    gtk_label_set_text(GTK_LABEL(refs->seccLbl), refs->auxLeer->aux->titSeccion);
+    gtk_label_set_text(GTK_LABEL(refs->lblTexto), refs->auxLeer->aux->texto);
+    sprintf(leerNumPag, "%d", refs->auxLeer->aux->numero);
+    gtk_label_set_text(GTK_LABEL(refs->pagLbl), leerNumPag);
+
+    return;
+}
+void leerMoverPagDer(GtkWidget *botDer, gpointer *pMiApp)
+{
+    refsApp *refs; 
+    refs = (refsApp *)pMiApp;
+    char leerNumPag[10];
+    
+    moverPagDer(refs);
+
+    gtk_label_set_text(GTK_LABEL(refs->titLbl), refs->auxLeer->aux->titulo);
+    gtk_label_set_text(GTK_LABEL(refs->seccLbl), refs->auxLeer->aux->titSeccion);
+    gtk_label_set_text(GTK_LABEL(refs->lblTexto), refs->auxLeer->aux->texto);
+    sprintf(leerNumPag, "%d", refs->auxLeer->aux->numero);
+    gtk_label_set_text(GTK_LABEL(refs->pagLbl), leerNumPag);
 
     return;
 }
