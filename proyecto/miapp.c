@@ -1,11 +1,11 @@
-#include <gtk-2.0/gtk/gtk.h>
+
 #include "tiposGTK.h"
 
 
 typedef struct {
-    gchar* title;
-    gchar* author;
-    gchar* content;  
+    gchar* titulo;
+    gchar* autor;
+    gchar* contenido;  
 } Book;
 
 typedef struct {
