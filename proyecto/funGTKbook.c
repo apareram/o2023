@@ -20,6 +20,12 @@ void moverIzquierda(refsApp *refs);
 void moverDerecha(refsApp *refs);
 void moverPagDer(refsApp *refs);
 void moverPagIzq(refsApp *refs);
+void seMarcarMarcadorMarcadoMarcadisimoMuyMarcado(refsApp *refs);
+void buscarMarcador(refsApp *refs);
+arbolote *insetarEnArbol(char indice[], int numPag, arbolote *root);
+void imprimirEnTxt(arbolote *aux, FILE *fp);
+void crearMarcadoresBin(refsApp *refs);
+
 
 /*
 @brief la función se encarga de cerrar la aplicación correctamente cuando el usuario intenta cerrar la ventana principal.
@@ -440,6 +446,95 @@ void leerMoverPagDer(GtkWidget *botDer, gpointer *pMiApp)
     gtk_label_set_text(GTK_LABEL(refs->lblTexto), refs->auxLeer->aux->texto);
     sprintf(leerNumPag, "%d", refs->auxLeer->aux->numero);
     gtk_label_set_text(GTK_LABEL(refs->pagLbl), leerNumPag);
+
+    return;
+}
+
+void marcarMarcadorMarcado(GtkWidget *botMarcar, gpointer *pMiApp)
+{
+    refsApp *refs; 
+    refs = (refsApp *)pMiApp;
+
+    seMarcarMarcadorMarcadoMarcadisimoMuyMarcado(refs);
+
+    return;
+}
+
+void continuarLeyendo(GtkWidget *btnContinuar, gpointer *pMiApp)
+{
+    refsApp *refs; 
+    char leerNumPag[10];
+
+    refs = (refsApp *)pMiApp;
+
+    buscarMarcador(refs);
+
+    gtk_label_set_text(GTK_LABEL(refs->titLbl), refs->auxLeer->aux->titulo);
+    gtk_label_set_text(GTK_LABEL(refs->seccLbl), refs->auxLeer->aux->titSeccion);
+    gtk_label_set_text(GTK_LABEL(refs->lblTexto), refs->auxLeer->aux->texto);
+    sprintf(leerNumPag, "%d", refs->auxLeer->aux->numero);
+    gtk_label_set_text(GTK_LABEL(refs->pagLbl), leerNumPag);
+
+    return;
+}
+
+void empezarAleer(GtkWidget *btnEmpezar, gpointer *pMiApp)
+{
+    refsApp *refs; 
+    refs = (refsApp *)pMiApp;
+    char leerNumPag[10];
+
+    sprintf(leerNumPag, "%d", refs->auxLeer->inicio->numero);
+
+    gtk_label_set_text(GTK_LABEL(refs->titLbl), refs->auxLeer->inicio->titulo);
+    gtk_label_set_text(GTK_LABEL(refs->seccLbl), refs->auxLeer->inicio->titSeccion);
+    gtk_label_set_text(GTK_LABEL(refs->lblTexto), refs->auxLeer->inicio->texto);
+    sprintf(leerNumPag, "%d", refs->auxLeer->inicio->numero);
+    gtk_label_set_text(GTK_LABEL(refs->pagLbl), leerNumPag);
+
+    return;
+}
+
+void anexarIndice(GtkWidget *botAnexar, gpointer *pMiApp)
+{
+    refsApp *refs; 
+    char indice[100];
+
+    refs = (refsApp *)pMiApp;
+
+    strcpy(indice, gtk_entry_get_text(GTK_ENTRY(refs->titulo)));
+
+    refs->raiz = insetarEnArbol(indice, refs->auxLeer->aux->numero, refs->raiz);
+
+    return;
+}
+
+void guardarArbolTxt(GtkWidget *botsalyGuar, gpointer *pMiApp)
+{
+    refsApp *refs; 
+    FILE *fp;
+    refs = (refsApp *)pMiApp;
+
+
+    fp = fopen("índices.txt", "w");
+    if(fp == NULL)
+    {
+        printf("Archivo no disponible\n");
+        exit(1);
+    }
+    fprintf(fp,"Índice de referencias\n");
+    imprimirEnTxt(refs->raiz, fp);
+    fclose(fp);
+
+    return;
+}
+
+void guardarMarcadores(GtkWidget *botsalyGuar, gpointer *pMiApp)
+{
+    refsApp *refs; 
+    refs = (refsApp *)pMiApp;
+
+    crearMarcadoresBin(refs);
 
     return;
 }

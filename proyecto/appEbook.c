@@ -31,6 +31,12 @@ void moverIzq(GtkWidget *btnAnterior, gpointer *pMiApp);
 void moverDer(GtkWidget *btnSiguiente, gpointer *pMiApp);
 void leerMoverPagIzq(GtkWidget *botIzq, gpointer *pMiApp);
 void leerMoverPagDer(GtkWidget *botDer, gpointer *pMiApp);
+void marcarMarcadorMarcado(GtkWidget *botMarcar, gpointer *pMiApp);
+void continuarLeyendo(GtkWidget *btnContinuar, gpointer *pMiApp);
+void empezarAleer(GtkWidget *btnEmpezar, gpointer *pMiApp);
+void anexarIndice(GtkWidget *botAnexar, gpointer *pMiApp);
+void guardarArbolTxt(GtkWidget *botsalyGuar, gpointer *pMiApp);
+void guardarMarcadores(GtkWidget *botsalyGuar, gpointer *pMiApp);
 
 int main(int argc, char *argv[])
 {
@@ -70,6 +76,7 @@ int main(int argc, char *argv[])
     cargarTodosLosbinarios(&miApp);
     cargarLectura(&miApp);
     imprimirLibro(miApp);
+
 
     sprintf(leerNumPag, "%d", miApp.auxLeer->aux->numero);
     
@@ -277,9 +284,15 @@ int main(int argc, char *argv[])
     //callbacks novena ventana
     g_signal_connect(G_OBJECT(miApp.btnContinuar), "clicked", G_CALLBACK(regresarAVentanaAnterior), window8);
     g_signal_connect(G_OBJECT(miApp.btnEmpezar), "clicked", G_CALLBACK(regresarAVentanaAnterior), window8);
+    g_signal_connect(G_OBJECT(miApp.btnEmpezar), "clicked", G_CALLBACK(empezarAleer), &miApp);
     g_signal_connect(G_OBJECT(miApp.btnRegresar), "clicked", GTK_SIGNAL_FUNC(visualizarVentanaSiguiente), window1);
     g_signal_connect(G_OBJECT(miApp.btnAnterior), "clicked", G_CALLBACK(moverIzq), &miApp);
     g_signal_connect(G_OBJECT(miApp.btnSiguiente), "clicked", G_CALLBACK(moverDer), &miApp);
+    g_signal_connect(G_OBJECT(miApp.botMarcar), "clicked", G_CALLBACK(marcarMarcadorMarcado), &miApp);
+    g_signal_connect(G_OBJECT(miApp.btnContinuar), "clicked", G_CALLBACK(continuarLeyendo), &miApp);
+    g_signal_connect(G_OBJECT(miApp.botAnexar), "clicked", G_CALLBACK(anexarIndice), &miApp);
+    g_signal_connect(G_OBJECT(miApp.botsalyGuar), "clicked", G_CALLBACK(guardarArbolTxt), &miApp);
+    g_signal_connect(G_OBJECT(miApp.botsalyGuar), "clicked", G_CALLBACK(guardarMarcadores), &miApp);
 
     //callbacks octava ventana
     g_signal_connect(G_OBJECT(miApp.butReg), "clicked", G_CALLBACK(regresarAVentanaAnterior), window9);

@@ -584,7 +584,12 @@ extern void buscandoAnemo(char tit[], char sec[], int pagNum, refsApp *refs)
     return;
 }
 
-extern void cargarLectura(refsApp *refs) {
+extern void cargarLectura(refsApp *refs) 
+{
+    int cont = 1;
+    struct dirent *dir;
+    char filepath[512];
+
     if (refs == NULL) {
         fprintf(stderr, "Error: refsApp es NULL.\n");
         return;
@@ -596,20 +601,22 @@ extern void cargarLectura(refsApp *refs) {
         return;
     }
 
-    struct dirent *dir;
-    char filepath[512];
-
-    while ((dir = readdir(d)) != NULL) {
-        if (dir->d_type == DT_REG && strstr(dir->d_name, ".bin") != NULL) {
+    while ((dir = readdir(d)) != NULL) 
+    {
+        if (dir->d_type == DT_REG && strstr(dir->d_name, ".bin") != NULL) 
+        {
             snprintf(filepath, sizeof(filepath), "%s", dir->d_name);
             FILE *file = fopen(filepath, "rb");
-            if (file == NULL) {
+            
+            if (file == NULL) 
+            {
                 perror("Error al abrir el archivo");
                 continue;
             }
 
             libroLeer *newLibro = malloc(sizeof(libroLeer));
-            if (newLibro == NULL) {
+            if (newLibro == NULL) 
+            {
                 fclose(file);
                 continue;
             }
@@ -619,9 +626,11 @@ extern void cargarLectura(refsApp *refs) {
             strncpy(newLibro->titulo, dir->d_name, sizeof(newLibro->titulo) - 1);
 
             tipohoja tempHoja;
-            while(fread(&tempHoja, sizeof(tipohoja), 1, file) == 1) {
+            while(fread(&tempHoja, sizeof(tipohoja), 1, file) == 1) 
+            {
                 dubCircPag *nuevaPagina = malloc(sizeof(dubCircPag));
-                if (nuevaPagina == NULL) {
+                if (nuevaPagina == NULL) 
+                {
                     fclose(file);
                     free(newLibro);
                     break;
@@ -631,16 +640,20 @@ extern void cargarLectura(refsApp *refs) {
                 memset(nuevaPagina, 0, sizeof(dubCircPag));
                 strncpy(nuevaPagina->titulo, tempHoja.titulo, sizeof(nuevaPagina->titulo) - 1);
                 strncpy(nuevaPagina->titSeccion, tempHoja.titSeccion, sizeof(nuevaPagina->titSeccion) - 1);
-                nuevaPagina->numero = tempHoja.numero;
+                nuevaPagina->numero = cont++;
                 strncpy(nuevaPagina->texto, tempHoja.texto, sizeof(nuevaPagina->texto) - 1);
+                nuevaPagina->marcador = 0;
 
                 // Manejo de la lista
-                if ((newLibro->inicio == NULL) && (newLibro->fin == NULL)) {
+                if ((newLibro->inicio == NULL) && (newLibro->fin == NULL))
+                 {
                     nuevaPagina->izq = nuevaPagina;
                     nuevaPagina->der = nuevaPagina; // Para manejar la lista como circular
                     newLibro->inicio = nuevaPagina;
                     newLibro->fin = nuevaPagina;
-                } else {
+                } 
+                else 
+                {
                     nuevaPagina->izq = newLibro->fin;
                     nuevaPagina->der = newLibro->inicio; // Enlazar con el inicio para la lista circular
                     newLibro->fin->der = nuevaPagina;
@@ -652,12 +665,15 @@ extern void cargarLectura(refsApp *refs) {
             fclose(file);
 
             // Enlace del nuevo libro con refs
-            if ((refs->inicioLeer == NULL)&&(refs->finLeer ==NULL)) {
+            if ((refs->inicioLeer == NULL)&&(refs->finLeer ==NULL)) 
+            {
                 newLibro->der = newLibro;
                 newLibro->izq = newLibro;
                 refs->inicioLeer = newLibro;
                 refs->finLeer = newLibro;
-            } else {
+            } 
+            else 
+            {
                 newLibro->izq = refs->finLeer;
                 newLibro->der = refs->inicioLeer; // Enlazar con el inicioLeer para la lista circular
                 refs->finLeer->der = newLibro;
@@ -696,4 +712,98 @@ void moverPagIzq(refsApp *refs)
     refs->auxLeer->aux = refs->auxLeer->aux->izq;
 
     return;
+}
+
+extern void seMarcarMarcadorMarcadoMarcadisimoMuyMarcado(refsApp *refs)
+{
+    dubCircPag *laux;
+    laux = malloc(sizeof(dubCircPag));
+
+    laux = refs->auxLeer->inicio;
+
+    do    
+    {
+        if(laux->marcador == 1)
+        {
+            laux->marcador = 0;
+        }
+        else
+        {
+            laux = laux->der;
+        }
+
+    }while(laux != refs->auxLeer->inicio);
+
+    refs->auxLeer->aux->marcador = 1;
+
+    return;
+}
+
+void buscarMarcador(refsApp *refs)
+{
+    refs->auxLeer->aux = refs->auxLeer->inicio;
+
+    do    
+    {
+        if(refs->auxLeer->aux->marcador == 1)
+        {
+            return;
+        }
+        else
+        {
+            refs->auxLeer->aux = refs->auxLeer->aux->der;
+        }
+
+    }while(refs->auxLeer->aux != refs->auxLeer->inicio);
+}
+
+extern arbolote *insetarEnArbol(char indice[], int numPag, arbolote *root)
+{
+    arbolote *nuevo, *aux;
+    nuevo = (arbolote *)malloc(sizeof(arbolote));
+    
+    aux = root;
+
+    if(nuevo == NULL)
+    {
+        printf("\nNo hay memoria disponible.");
+        exit(1);
+    }
+    nuevo->arbNumPag = numPag;
+    strcpy(nuevo->indice, indice);
+    nuevo->izq = NULL;
+    nuevo->der = NULL;
+
+    if(aux == NULL)
+    {
+        aux = nuevo;
+        return aux;  // Retorna el nuevo nodo cuando el árbol está vacío
+    }
+    
+    else if(strcmp(indice, nuevo->indice) < 0) 
+    {
+        aux->der = insetarEnArbol(indice, numPag, aux->der);
+    } 
+    else if (strcmp(indice, nuevo->indice) > 0)
+    {
+        aux->izq = insetarEnArbol(indice, numPag, aux->izq);
+    }
+    
+    return aux;
+}
+
+extern void imprimirEnTxt(arbolote *aux, FILE *fp)
+{
+    if(aux != NULL)
+    {
+        imprimirEnTxt(aux->izq, fp);  
+        fprintf(fp, "%s\t %d\n", aux->indice, aux->arbNumPag);
+        imprimirEnTxt(aux->der, fp);  
+    }
+    return;
+}
+
+void crearMarcadoresBin(refsApp *refs)
+{
+    
 }
