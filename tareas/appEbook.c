@@ -24,6 +24,7 @@ void mostrarLibro(Aplicacion* app);
 void siguienteLibro(GtkWidget* widget, gpointer data);
 void anteriorLibro(GtkWidget* widget, gpointer data);
 void continuarLectura(GtkWidget* widget, gpointer data);
+void on_anexar_clicked(GtkWidget *widget, gpointer data);
 
 
 int main(int argc, char *argv[])
@@ -146,6 +147,29 @@ int main(int argc, char *argv[])
     miApp.botMarc = gtk_button_new_with_label("Marcador");
     miApp.botsalyGuar = gtk_button_new_with_label("Salir & Guardar");
     miApp.botAnex = gtk_button_new_with_label("Anexar en índice");
+
+
+    miApp.AnexarEntry = gtk_entry_new();
+    // Conectar la señal "clicked" del botón "Anexar en índice"
+    refsApp(miApp.Anexar, "clicked", G_CALLBACK(on_anexar_clicked), miApp);
+
+    // Conectar la señal "activate" del cuadro de entrada
+    g_signal_connect(miApp.AnexarEntry, "activate", G_CALLBACK(on_anexar_clicked), miApp);
+
+
+    void on_anexar_clicked(GtkWidget *widget, gpointer data) 
+    {
+        refsApp* miApp = (refsApp*)data;
+
+        // Obtener el texto del cuadro de entrada
+        const gchar* texto = gtk_entry_get_text(GTK_ENTRY(miApp->AnexarEntry));
+
+        // Implementa la lógica para anexar en el índice aquí con el texto ingresado
+        g_print("Texto ingresado: %s\n", texto);
+        // ... (realiza otras acciones con el texto)
+    }
+
+
     miApp.botIzq = gtk_button_new_with_label("<-");
     miApp.botDer = gtk_button_new_with_label("->");
 
